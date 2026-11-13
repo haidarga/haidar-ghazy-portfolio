@@ -1,0 +1,32 @@
+# Dependencies & builds
+node_modules/
+.next/
+out/
+.vercel/
+tsconfig.tsbuildinfo
+
+# Local caches & logs
+.hyperframes/
+*.log
+.DS_Store
+.env*
+!.env.example
+
+# Raw local scratch / extraction / non-web source dumps
+extracted/
+references/
+.impeccable/
+showreel-hf/
+showreel-test-5s/
+visual-qa-contact-sheet.html
+CV Marketing_Haidar Ghazy Arkan.pdf
+Haidar Ghazy Arkan Portofolio.pdf
+Portofolio haidar.pdf
+cv_text.txt
+haidar_ghazy_portfolio_text.txt
+portfolio_haidar_text.txt
+ASSET-INVENTORY.md
+DESIGN-DIRECTION.md
+LINKS.md
+PLAN.md
+PRODUCT.md

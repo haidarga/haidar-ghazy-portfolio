@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inside Haidar's Creative World — Main Film (30s)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #0e0f14;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #f6f2eb;
+    }
+    #stage {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: radial-gradient(circle at 42% 38%, #211f26 0%, #121319 58%, #0b0c10 100%);
+      perspective: 1800px;
+    }
+
+    /* Continuous Miniature World inside Camera Rig */
+    #camera {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 8400px;
+      height: 1080px;
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+
+    /* Continuous Studio Floor & Wall */
+    .world-wall {
+      position: absolute;
+      left: -400px;
+      top: -300px;
+      width: 9200px;
+      height: 1020px;
+      background: linear-gradient(180deg, #191a22 0%, #13141a 78%, #0f1015 100%);
+    }
+    .world-floor {
+      position: absolute;
+      left: -400px;
+      top: 635px;
+      width: 9200px;
+      height: 800px;
+      background: linear-gradient(180deg, #272424 0%, #1a191b 45%, #121216 100%);
+      border-top: 3px solid rgba(255, 224, 190, 0.18);
+    }
+
+    /* Zone 1: Studio Lamp & Shelves */
+    .wall-shelf {
+      position: absolute;
+      left: 160px;
+      top: 230px;
+      width: 560px;
+      height: 16px;
+      border-radius: 8px;
+      background: #272833;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.45);
+    }
+    .wall-frame {
+      position: absolute;
+      width: 120px;
+      height: 150px;
+      border-radius: 10px;
+      background: #22232d;
+      border: 2px solid rgba(246, 242, 235, 0.14);
+    }
+    .lamp-cone {
+      position: absolute;
+      left: 170px;
+      top: 150px;
+      width: 960px;
+      height: 820px;
+      background: radial-gradient(ellipse at 25% 10%, rgba(255, 198, 138, 0.22) 0%, rgba(255, 90, 38, 0.08) 42%, transparent 72%);
+      pointer-events: none;
+    }
+
+    /* World A (x=2180): Miniature Cinema Screen */
+    .cinema-arch {
+      position: absolute;
+      left: 2150px;
+      top: 110px;
+      width: 780px;
+      height: 760px;
+      border-radius: 36px 36px 18px 18px;
+      background: linear-gradient(180deg, #241e22 0%, #17151a 100%);
+      border: 3px solid rgba(255, 160, 100, 0.28);
+      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.65), 0 0 80px rgba(255, 90, 38, 0.14);
+      padding: 44px 44px 110px;
+    }
+    .cinema-marquee {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 26px;
+      border-radius: 999px;
+      background: #ff5a26;
+      color: #111115;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      box-shadow: 0 10px 28px rgba(255, 90, 38, 0.4);
+    }
+    .cinema-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #090a0d;
+      border: 4px solid #35333d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .cinema-screen video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 22%;
+    }
+    .cinema-seats {
+      position: absolute;
+      left: 52px;
+      right: 52px;
+      bottom: 24px;
+      height: 54px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .seat {
+      flex: 1;
+      height: 54px;
+      border-radius: 16px 16px 6px 6px;
+      background: #2f2326;
+      border-top: 4px solid #4d3538;
+    }
+
+    /* World B (x=3580): Drama Stage Backdrop with Spotlights */
+    .drama-stage {
+      position: absolute;
+      left: 3560px;
+      top: 90px;
+      width: 780px;
+      height: 780px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, #161822 0%, #101218 100%);
+      border: 3px solid rgba(110, 160, 255, 0.25);
+      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.7), 0 0 90px rgba(70, 125, 255, 0.12);
+      overflow: hidden;
+    }
+    .stage-truss {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 58px;
+      background: #202330;
+      border-bottom: 3px solid #32374a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 42px;
+    }
+    .stage-light {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #cfe0ff;
+      box-shadow: 0 0 32px 10px rgba(130, 175, 255, 0.45);
+    }
+    .stage-curtain-l, .stage-curtain-r {
+      position: absolute;
+      top: 58px;
+      bottom: 70px;
+      width: 72px;
+      background: linear-gradient(90deg, #271b24, #1b131b);
+      z-index: 3;
+    }
+    .stage-curtain-l { left: 0; border-right: 2px solid rgba(255,255,255,0.08); }
+    .stage-curtain-r { right: 0; border-left: 2px solid rgba(255,255,255,0.08); }
+    .stage-backdrop {
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      top: 76px;
+      bottom: 86px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #0a0b0f;
+      border: 2px solid rgba(255, 255, 255, 0.14);
+    }
+    .stage-backdrop video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+    .stage-badge {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 20px;
+      border-radius: 999px;
+      background: rgba(16, 18, 26, 0.92);
+      border: 1px solid rgba(130, 175, 255, 0.45);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #dbe8ff;
+      white-space: nowrap;
+    }
+
+    /* World C (x=4960): Illuminated Beauty Billboard */
+    .billboard-rig {
+      position: absolute;
+      left: 4960px;
+      top: 105px;
+      width: 760px;
+      height: 780px;
+    }
+    .billboard-pillar {
+      position: absolute;
+      bottom: 0;
+      width: 28px;
+      height: 220px;
+      background: linear-gradient(180deg, #3c353a, #242024);
+      border-radius: 8px;
+    }
+    .billboard-frame {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 760px;
+      height: 610px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, #2b2226, #1b171b);
+      border: 4px solid rgba(244, 175, 171, 0.42);
+      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.68), 0 0 90px rgba(244, 140, 140, 0.18);
+      padding: 26px;
+    }
+    .billboard-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0d0c0f;
+    }
+    .billboard-screen video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 22%;
+    }
+    .billboard-tag {
+      position: absolute;
+      top: -18px;
+      right: 36px;
+      padding: 8px 20px;
+      border-radius: 999px;
+      background: #f4a59d;
+      color: #161114;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* Zone 4 (x=6220): Miniature Production Studio */
+    .studio-console {
+      position: absolute;
+      left: 6260px;
+      top: 150px;
+      width: 1220px;
+      height: 670px;
+      border-radius: 32px;
+      background: linear-gradient(180deg, #1d1e27 0%, #13141b 100%);
+      border: 3px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+      padding: 36px;
+    }
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .console-title {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 16px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ff6c37;
+    }
+    .console-monitors {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      height: 310px;
+    }
+    .monitor-bay {
+      border-radius: 20px;
+      background: #0e0f14;
+      border: 2px solid rgba(255, 255, 255, 0.14);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .monitor-label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      color: #b7bac6;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .monitor-screen {
+      flex: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #14151c;
+    }
+    .monitor-screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    /* Global SVG Layer spanning entire 8400px world */
+    #world-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 8400px;
+      height: 1080px;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    /* Narrative Caption Bar (fixed to screen bottom-left) */
+    #caption-bar {
+      position: absolute;
+      left: 88px;
+      bottom: 58px;
+      z-index: 40;
+      pointer-events: none;
+    }
+    .cap-eyebrow {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 15px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ff6c37;
+      margin-bottom: 10px;
+    }
+    .cap-line {
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      color: #f6f2eb;
+      text-shadow: 0 8px 28px rgba(0, 0, 0, 0.78);
+    }
+
+    /* Scene 5 End-Card Overlay (clean hold 25.2 - 30.0s) */
+    #end-card {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(920px 520px at 50% 45%, rgba(255, 90, 38, 0.20) 0%, rgba(14, 15, 20, 0.84) 68%);
+      opacity: 0;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .end-name {
+      font-size: 76px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #f6f2eb;
+    }
+    .end-line {
+      width: 140px;
+      height: 3px;
+      background: #ff5a26;
+      margin: 22px 0;
+    }
+    .end-pillars {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 22px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #ffb08e;
+    }
+  </style>
+</head>
+<body>
+  <div
+    id="stage"
+    data-composition-id="root"
+    data-start="0"
+    data-duration="30"
+    data-width="1920"
+    data-height="1080"
+  >
+    <div id="camera">
+      <div class="world-wall"></div>
+      <div class="world-floor"></div>
+
+      <!-- Zone 1 Studio Props -->
+      <div class="wall-shelf"></div>
+      <div class="wall-frame" style="left:190px;top:70px;background:#25232b;"></div>
+      <div class="wall-frame" style="left:340px;top:60px;width:150px;height:160px;border-color:rgba(255,90,38,0.4);"></div>
+      <div class="wall-frame" style="left:520px;top:82px;height:138px;"></div>
+      <div class="lamp-cone"></div>
+
+      <!-- Zone 3A: Miniature Cinema (World A) -->
+      <div class="cinema-arch">
+        <div class="cinema-marquee">World A · AI Animation</div>
+        <div class="cinema-screen">
+          <video id="v-cinema" data-start="7.0" data-duration="7.0" data-media-start="0" src="./clips/acekid-animasi-cut.mp4" muted playsinline></video>
+        </div>
+        <div class="cinema-seats">
+          <div class="seat"></div><div class="seat"></div><div class="seat"></div>
+          <div class="seat"></div><div class="seat"></div><div class="seat"></div>
+        </div>
+      </div>
+
+      <!-- Zone 3B: Drama Stage Backdrop (World B) -->
+      <div class="drama-stage">
+        <div class="stage-truss">
+          <div class="stage-light"></div><div class="stage-light"></div><div class="stage-light"></div>
+        </div>
+        <div class="stage-curtain-l"></div>
+        <div class="stage-curtain-r"></div>
+        <div class="stage-backdrop">
+          <video id="v-stage" data-start="9.8" data-duration="6.5" data-media-start="0" src="./clips/acekid-dracin-cut.mp4" muted playsinline></video>
+        </div>
+        <div class="stage-badge">World B · AI Drama Storytelling</div>
+      </div>
+
+      <!-- Zone 3C: Illuminated Beauty Billboard (World C) -->
+      <div class="billboard-rig">
+        <div class="billboard-pillar" style="left:140px;"></div>
+        <div class="billboard-pillar" style="right:140px;"></div>
+        <div class="billboard-frame">
+          <div class="billboard-tag">World C · Beauty Ad</div>
+          <div class="billboard-screen">
+            <video id="v-billboard" data-start="12.2" data-duration="6.5" data-media-start="0" src="./clips/rahasia-ad-cut.mp4" muted playsinline></video>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zone 4: Miniature Production Studio Console -->
+      <div class="studio-console">
+        <div class="console-header">
+          <div class="console-title">Production Studio · Workflow Engine</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#9ea2b0;">BRIEF → SCRIPT → CREATE → OUTPUT</div>
+        </div>
+        <div class="console-monitors">
+          <div class="monitor-bay">
+            <div class="monitor-label">01 · Script &amp; Angle System (Caketing)</div>
+            <div class="monitor-screen">
+              <img src="./assets/caketing-studio-showcase.webp" alt="Caketing script workflow" />
+            </div>
+          </div>
+          <div class="monitor-bay">
+            <div class="monitor-label">02 · Batch AI Visual Engine (CakVisual)</div>
+            <div class="monitor-screen">
+              <img src="./assets/cakvisual-featured-crop.webp" alt="CakVisual production engine" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Continuous SVG Layer: Character, Briefs, Props, Production Machine, Orange Thread -->
+      <svg id="world-svg" viewBox="0 0 8400 1080">
+        <defs>
+          <filter id="soft-shadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#000000" flood-opacity="0.55" />
+          </filter>
+          <filter id="thread-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <linearGradient id="hoodie-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f5efe6" />
+            <stop offset="100%" stop-color="#d7cfc4" />
+          </linearGradient>
+          <linearGradient id="skin-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e8b896" />
+            <stop offset="100%" stop-color="#d29c78" />
+          </linearGradient>
+        </defs>
+
+        <!-- Desk Lamp -->
+        <g transform="translate(260, 360)">
+          <ellipse cx="45" cy="300" rx="68" ry="16" fill="rgba(0,0,0,0.45)" />
+          <rect x="0" y="284" width="90" height="16" rx="8" fill="#3a3a45" />
+          <path d="M 45 284 L 22 150 L 96 40" fill="none" stroke="#4c4c58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="22" cy="150" r="9" fill="#ff5a26" />
+          <g transform="translate(96, 40) rotate(28)">
+            <path d="M -28 0 L 28 0 L 46 44 L -46 44 Z" fill="#2c2d36" stroke="#5a5b68" stroke-width="2" />
+            <ellipse cx="0" cy="44" rx="42" ry="10" fill="#ffd8a8" />
+          </g>
+        </g>
+
+        <!-- Zone 1 Character Contact Shadow & Haidar Character -->
+        <ellipse id="char-shadow" cx="550" cy="672" rx="145" ry="26" fill="rgba(0,0,0,0.52)" />
+        <g id="haidar-char" transform="translate(550, 460)">
+          <g id="char-torso">
+            <path d="M -86 195 C -88 85, -56 42, 0 42 C 56 42, 88 85, 86 195 Z" fill="url(#hoodie-grad)" filter="url(#soft-shadow)" />
+            <path d="M -42 46 Q 0 74 42 46" fill="none" stroke="#b9b0a4" stroke-width="8" stroke-linecap="round" />
+            <line x1="-14" y1="62" x2="-16" y2="118" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
+            <line x1="14" y1="62" x2="16" y2="118" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
+            <circle cx="38" cy="108" r="8" fill="#ff5a26" />
+          </g>
+          <g transform="translate(-74, 78)">
+            <path d="M 0 0 Q -36 58, -12 108" fill="none" stroke="#dfd7cc" stroke-width="34" stroke-linecap="round" />
+            <circle cx="-12" cy="112" r="17" fill="#e2af8c" />
+          </g>
+          <g id="char-head" transform="translate(0, -18)">
+            <rect x="-18" y="24" width="36" height="36" rx="14" fill="#d29c78" />
+            <rect x="-56" y="-86" width="112" height="122" rx="52" fill="url(#skin-grad)" filter="url(#soft-shadow)" />
+            <circle cx="-56" cy="-22" r="13" fill="#d29c78" />
+            <circle cx="56" cy="-22" r="13" fill="#d29c78" />
+            <path d="M -60 -34 C -64 -92, -16 -112, 16 -108 C 52 -104, 66 -74, 58 -32 C 42 -58, 12 -64, -18 -56 C -40 -50, -52 -42, -60 -34 Z" fill="#171820" />
+            <g stroke="#1b1c24" stroke-width="4" fill="rgba(255,255,255,0.08)">
+              <rect x="-42" y="-36" width="34" height="24" rx="7" />
+              <rect x="8" y="-36" width="34" height="24" rx="7" />
+              <line x1="-8" y1="-24" x2="8" y2="-24" />
+            </g>
+            <g id="char-eyes">
+              <circle cx="-25" cy="-24" r="4.5" fill="#171820" />
+              <circle cx="25" cy="-24" r="4.5" fill="#171820" />
+            </g>
+            <path d="M -38 -45 Q -25 -50 -12 -45" fill="none" stroke="#171820" stroke-width="4" stroke-linecap="round" />
+            <path d="M 12 -45 Q 25 -50 38 -45" fill="none" stroke="#171820" stroke-width="4" stroke-linecap="round" />
+            <path d="M -10 8 Q 2 14 14 7" fill="none" stroke="#8a523c" stroke-width="4" stroke-linecap="round" />
+          </g>
+          <g transform="translate(72, 76)">
+            <path id="arm-r-path" d="M 0 0 Q 52 38, 108 62" fill="none" stroke="#e9e2d8" stroke-width="34" stroke-linecap="round" />
+            <circle id="hand-r" cx="114" cy="64" r="18" fill="#e5b390" />
+          </g>
+        </g>
+
+        <!-- Zone 2 Organized Desk Props -->
+        <g id="prop-audience" transform="translate(1060, 745)">
+          <ellipse cx="0" cy="54" rx="72" ry="12" fill="rgba(0,0,0,0.45)" />
+          <rect x="-64" y="-44" width="128" height="90" rx="14" fill="#232530" stroke="#4c4e5e" stroke-width="2" />
+          <circle cx="-26" cy="-12" r="14" fill="#ff5a26" />
+          <rect x="-2" y="-20" width="46" height="8" rx="4" fill="#f6f2eb" />
+          <rect x="-2" y="-4" width="32" height="6" rx="3" fill="#9a9ca8" />
+          <text x="-44" y="28" fill="#f6f2eb" font-family="JetBrains Mono" font-size="13" font-weight="600">AUDIENCE</text>
+        </g>
+        <g id="prop-idea" transform="translate(1320, 765)">
+          <ellipse cx="0" cy="54" rx="72" ry="12" fill="rgba(0,0,0,0.45)" />
+          <rect x="-64" y="-44" width="128" height="90" rx="14" fill="#232530" stroke="#4c4e5e" stroke-width="2" />
+          <polygon points="-24,-28 -12,-2 -36,-2" fill="#f5b841" />
+          <rect x="-2" y="-20" width="46" height="8" rx="4" fill="#f6f2eb" />
+          <rect x="-2" y="-4" width="34" height="6" rx="3" fill="#9a9ca8" />
+          <text x="-44" y="28" fill="#f6f2eb" font-family="JetBrains Mono" font-size="13" font-weight="600">CONCEPT</text>
+        </g>
+        <g id="prop-script" transform="translate(1580, 740)">
+          <ellipse cx="0" cy="54" rx="72" ry="12" fill="rgba(0,0,0,0.45)" />
+          <rect x="-64" y="-44" width="128" height="90" rx="14" fill="#f6f2eb" stroke="#d5cfc6" stroke-width="2" />
+          <rect x="-46" y="-24" width="92" height="8" rx="4" fill="#1b1c24" />
+          <rect x="-46" y="-8" width="76" height="6" rx="3" fill="#70727e" />
+          <rect x="-46" y="6" width="60" height="6" rx="3" fill="#70727e" />
+          <text x="-46" y="30" fill="#ff5a26" font-family="JetBrains Mono" font-size="13" font-weight="600">SCRIPT</text>
+        </g>
+
+        <!-- Scene 1 Flying Briefs -->
+        <g id="brief-1" filter="url(#soft-shadow)">
+          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#f6f2eb" />
+          <circle cx="-26" cy="-10" r="10" fill="#ff5a26" />
+          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#232530" />
+          <rect x="-8" y="-2" width="32" height="5" rx="2.5" fill="#787a86" />
+        </g>
+        <g id="brief-2" filter="url(#soft-shadow)">
+          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#3a86ff" />
+          <rect x="-36" y="-16" width="20" height="20" rx="5" fill="#ffffff" />
+          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#ffffff" />
+          <rect x="-8" y="-2" width="30" height="5" rx="2.5" fill="rgba(255,255,255,0.7)" />
+        </g>
+        <g id="brief-3" filter="url(#soft-shadow)">
+          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#f4a261" />
+          <polygon points="-26,-18 -16,2 -36,2" fill="#171820" />
+          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#171820" />
+          <rect x="-8" y="-2" width="34" height="5" rx="2.5" fill="rgba(23,24,32,0.65)" />
+        </g>
+        <g id="brief-4" filter="url(#soft-shadow)">
+          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#e76f51" />
+          <circle cx="-26" cy="-10" r="10" fill="#fff5ee" />
+          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#fff5ee" />
+          <rect x="-8" y="-2" width="28" height="5" rx="2.5" fill="rgba(255,245,238,0.75)" />
+        </g>
+        <g id="brief-5" filter="url(#soft-shadow)">
+          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#2a9d8f" />
+          <rect x="-36" y="-16" width="20" height="20" rx="10" fill="#ffffff" />
+          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#ffffff" />
+          <rect x="-8" y="-2" width="34" height="5" rx="2.5" fill="rgba(255,255,255,0.75)" />
+        </g>
+
+        <!-- Zone 4 Production Studio Animated Pipeline (x=6320..7440, y=560..760) -->
+        <g id="studio-pipeline" transform="translate(6320, 560)">
+          <!-- Conveyor track -->
+          <rect x="0" y="130" width="1100" height="24" rx="12" fill="#272936" stroke="#45485c" stroke-width="2" />
+          <!-- Rotating Gears -->
+          <g id="gear-1" transform="translate(320, 110)">
+            <circle cx="0" cy="0" r="32" fill="#2f3242" stroke="#ff5a26" stroke-width="5" stroke-dasharray="14 10" />
+            <circle cx="0" cy="0" r="10" fill="#ff5a26" />
+          </g>
+          <g id="gear-2" transform="translate(760, 110)">
+            <circle cx="0" cy="0" r="32" fill="#2f3242" stroke="#f4a261" stroke-width="5" stroke-dasharray="14 10" />
+            <circle cx="0" cy="0" r="10" fill="#f4a261" />
+          </g>
+          <!-- Animated Brief Token entering & transforming into Output Reels -->
+          <g id="pipe-token-1">
+            <rect x="-34" y="-24" width="68" height="48" rx="10" fill="#ff5a26" />
+            <rect x="-20" y="-10" width="40" height="6" rx="3" fill="#fff5ee" />
+            <rect x="-20" y="2" width="28" height="6" rx="3" fill="rgba(255,245,238,0.75)" />
+          </g>
+          <g id="pipe-out-1">
+            <rect x="-32" y="-44" width="64" height="88" rx="12" fill="#2a9d8f" stroke="#ffffff" stroke-width="2" />
+            <polygon points="-8,-10 12,0 -8,10" fill="#ffffff" />
+          </g>
+          <g id="pipe-out-2">
+            <rect x="-32" y="-44" width="64" height="88" rx="12" fill="#3a86ff" stroke="#ffffff" stroke-width="2" />
+            <polygon points="-8,-10 12,0 -8,10" fill="#ffffff" />
+          </g>
+          <g id="pipe-out-3">
+            <rect x="-32" y="-44" width="64" height="88" rx="12" fill="#ff5a26" stroke="#ffffff" stroke-width="2" />
+            <polygon points="-8,-10 12,0 -8,10" fill="#ffffff" />
+          </g>
+        </g>
+
+        <!-- Zone 4 Haidar at Studio Console (Consistent character!) -->
+        <g id="haidar-studio" transform="translate(7560, 500)">
+          <ellipse cx="0" cy="212" rx="120" ry="22" fill="rgba(0,0,0,0.48)" />
+          <path d="M -78 190 C -80 85, -50 42, 0 42 C 50 42, 80 85, 78 190 Z" fill="url(#hoodie-grad)" filter="url(#soft-shadow)" />
+          <line x1="-12" y1="62" x2="-14" y2="112" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
+          <line x1="12" y1="62" x2="14" y2="112" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
+          <g id="studio-head" transform="translate(0, -18)">
+            <rect x="-16" y="22" width="32" height="34" rx="12" fill="#d29c78" />
+            <rect x="-52" y="-82" width="104" height="114" rx="48" fill="url(#skin-grad)" filter="url(#soft-shadow)" />
+            <path d="M -56 -32 C -60 -88, -14 -106, 14 -102 C 48 -98, 60 -70, 54 -30 C 38 -54, 10 -60, -16 -52 C -36 -46, -48 -38, -56 -32 Z" fill="#171820" />
+            <g stroke="#1b1c24" stroke-width="4" fill="rgba(255,255,255,0.08)">
+              <rect x="-38" y="-34" width="32" height="22" rx="6" />
+              <rect x="6" y="-34" width="32" height="22" rx="6" />
+              <line x1="-6" y1="-23" x2="6" y2="-23" />
+            </g>
+            <circle cx="-22" cy="-23" r="4" fill="#171820" />
+            <circle cx="22" cy="-23" r="4" fill="#171820" />
+            <path d="M -10 8 Q 0 15 12 8" fill="none" stroke="#8a523c" stroke-width="4" stroke-linecap="round" />
+          </g>
+          <g transform="translate(-68, 78)">
+            <path id="studio-arm-l" d="M 0 0 Q -50 20, -100 30" fill="none" stroke="#e9e2d8" stroke-width="30" stroke-linecap="round" />
+            <circle id="studio-hand-l" cx="-106" cy="32" r="16" fill="#e5b390" />
+          </g>
+        </g>
+
+        <!-- CONTINUOUS WARM ORANGE THREAD THROUGH ALL 5 ZONES -->
+        <path
+          id="orange-thread"
+          d="M 735 645
+             C 820 615, 920 680, 1060 700
+             C 1180 715, 1220 655, 1320 715
+             C 1420 770, 1480 665, 1580 690
+             C 1780 735, 1980 560, 2190 520
+             C 2480 465, 2720 820, 3040 740
+             C 3320 670, 3420 530, 3610 510
+             C 3940 480, 4240 820, 4560 720
+             C 4780 650, 4840 500, 5020 490
+             C 5350 470, 5650 780, 5980 710
+             C 6140 675, 6220 695, 6360 695
+             L 7480 695"
+          fill="none"
+          stroke="#ff5a26"
+          stroke-width="9"
+          stroke-linecap="round"
+          filter="url(#thread-glow)"
+        />
+        <circle id="thread-tip" cx="735" cy="645" r="12" fill="#ffb17a" filter="url(#thread-glow)" opacity="0" />
+      </svg>
+    </div>
+
+    <!-- Story Caption -->
+    <div id="caption-bar">
+      <div id="cap-eyebrow" class="cap-eyebrow">01 · THE BRIEF STORM</div>
+      <div id="cap-line" class="cap-line">Different brands. Different problems.</div>
+    </div>
+
+    <!-- Scene 5 Signature End-Card -->
+    <div id="end-card">
+      <div class="end-name">HAIDAR GHAZY ARKAN</div>
+      <div class="end-line"></div>
+      <div class="end-pillars">Strategy. Stories. Systems.</div>
+    </div>
+  </div>
+
+  <script src="./gsap.min.js"></script>
+  <script>
+    const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+    const lerp = (a, b, t) => a + (b - a) * clamp(t);
+    const easeOutCubic = (t) => 1 - Math.pow(1 - clamp(t), 3);
+    const easeInOutCubic = (t) => {
+      t = clamp(t);
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
+    const easeOutBack = (t) => {
+      t = clamp(t);
+      const c1 = 1.70158;
+      const c3 = c1 + 1;
+      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+    };
+
+    const camera = document.getElementById("camera");
+    const haidar = document.getElementById("haidar-char");
+    const charHead = document.getElementById("char-head");
+    const charEyes = document.getElementById("char-eyes");
+    const armPath = document.getElementById("arm-r-path");
+    const handR = document.getElementById("hand-r");
+    const propAudience = document.getElementById("prop-audience");
+    const propIdea = document.getElementById("prop-idea");
+    const propScript = document.getElementById("prop-script");
+    const thread = document.getElementById("orange-thread");
+    const threadTip = document.getElementById("thread-tip");
+    const gear1 = document.getElementById("gear-1");
+    const gear2 = document.getElementById("gear-2");
+    const pipeToken1 = document.getElementById("pipe-token-1");
+    const pipeOut1 = document.getElementById("pipe-out-1");
+    const pipeOut2 = document.getElementById("pipe-out-2");
+    const pipeOut3 = document.getElementById("pipe-out-3");
+    const studioArmL = document.getElementById("studio-arm-l");
+    const studioHandL = document.getElementById("studio-hand-l");
+    const studioHead = document.getElementById("studio-head");
+    const capEyebrow = document.getElementById("cap-eyebrow");
+    const capLine = document.getElementById("cap-line");
+    const capBar = document.getElementById("caption-bar");
+    const endCard = document.getElementById("end-card");
+
+    // Pre-compute thread lookup table at build time (zero DOM measurements during seek!)
+    const threadLen = thread.getTotalLength();
+    const threadPts = Array.from({ length: 201 }, (_, i) => {
+      const p = thread.getPointAtLength((i / 200) * threadLen);
+      return { x: p.x, y: p.y };
+    });
+    thread.style.strokeDasharray = threadLen;
+    thread.style.strokeDashoffset = threadLen;
+
+    const briefs = [
+      ["brief-1", 0.25, 1.35, 1300, -80, 950, 260, 735, 650, -34, -8],
+      ["brief-2", 0.65, 1.75, 160, 120, 480, 220, 760, 642, 28, 7],
+      ["brief-3", 1.05, 2.15, 1520, 40, 1080, 320, 718, 632, -22, -14],
+      ["brief-4", 1.45, 2.55, 1060, -120, 860, 280, 746, 622, 36, 11],
+      ["brief-5", 1.85, 2.95, 1460, 280, 1040, 380, 732, 610, -28, -3]
+    ];
+
+    function bezier(p0, p1, p2, t) {
+      const u = 1 - t;
+      return u * u * p0 + 2 * u * t * p1 + t * t * p2;
+    }
+
+    function renderAt(t) {
+      // 1. CAMERA CHOREOGRAPHY ACROSS THE 8400px WORLD
+      let camX = 0, camY = 0, camScale = 0.9;
+      if (t < 4.0) {
+        // Scene 1: Wide -> Worktable push-in
+        const p = easeInOutCubic(t / 4.0);
+        camX = lerp(40, -60, p);
+        camY = lerp(20, -20, p);
+        camScale = lerp(0.88, 1.08, p);
+      } else if (t < 9.0) {
+        // Scene 2: Follow orange thread across desk toward World A
+        const p = easeInOutCubic((t - 4.0) / 5.0);
+        camX = lerp(-60, -1580, p);
+        camY = lerp(-20, 10, p);
+        camScale = lerp(1.08, 1.0, p);
+      } else if (t < 11.3) {
+        // World A: Cinema (centered at x=2540 -> camX=-1580)
+        const p = easeInOutCubic((t - 9.0) / 1.2);
+        camX = lerp(-1580, -1620, p);
+        camY = lerp(10, 14, p);
+        camScale = lerp(1.0, 1.06, p);
+      } else if (t < 13.7) {
+        // World B: Drama Stage (centered at x=3950 -> camX=-2990)
+        const p = easeInOutCubic((t - 11.3) / 1.0);
+        camX = lerp(-1620, -2990, p);
+        camY = lerp(14, 10, p);
+        camScale = lerp(1.06, 1.04, p);
+      } else if (t < 16.2) {
+        // World C: Beauty Billboard (centered at x=5340 -> camX=-4380)
+        const p = easeInOutCubic((t - 13.7) / 1.0);
+        camX = lerp(-2990, -4380, p);
+        camY = lerp(10, 10, p);
+        camScale = lerp(1.04, 1.05, p);
+      } else if (t < 23.0) {
+        // Scene 4: Production Studio (centered around x=6940 -> camX=-5960)
+        const p = easeInOutCubic((t - 16.2) / 1.8);
+        camX = lerp(-4380, -5960, p);
+        camY = lerp(10, 0, p);
+        camScale = lerp(1.05, 0.98, p);
+      } else {
+        // Scene 5: Pull back fast (23.0 - 24.6s) to reveal the entire connected world!
+        const p = easeInOutCubic((t - 23.0) / 1.6);
+        camX = lerp(-5960, 40, p);
+        camY = lerp(0, 415, p);
+        camScale = lerp(0.98, 0.225, p);
+      }
+      camera.style.transform = `translate3d(${camX.toFixed(1)}px, ${camY.toFixed(1)}px, 0) scale(${camScale.toFixed(4)})`;
+
+      // 2. BRIEF STORM (0 - 4s)
+      for (const [id, sT, eT, sx, sy, cx, cy, ex, ey, sR, eR] of briefs) {
+        const el = document.getElementById(id);
+        const raw = clamp((t - sT) / (eT - sT));
+        const p = easeOutCubic(raw);
+        const x = bezier(sx, cx, ex, p);
+        const y = bezier(sy, cy, ey, p);
+        const bounce = raw >= 1 ? Math.sin((t - eT) * 10) * Math.exp(-(t - eT) * 4) * 5 : 0;
+        const rot = lerp(sR, eR, p);
+        el.setAttribute("transform", `translate(${x.toFixed(1)}, ${(y + bounce).toFixed(1)}) rotate(${rot.toFixed(1)})`);
+        el.setAttribute("opacity", raw > 0.02 ? 1 : 0);
+      }
+
+      // 3. ZONE 1 CHARACTER ACTING
+      const breathY = Math.sin(t * 2.2) * 3;
+      let leanX = 0, headRot = 0, eyeX = 0, eyeY = 0;
+      if (t < 3.8) {
+        const react = easeInOutCubic(t / 3.2);
+        leanX = lerp(0, -14, react);
+        headRot = lerp(-5, 8, Math.sin(t * 2.1) * 0.5 + 0.5);
+        eyeX = lerp(0, 6, react);
+        eyeY = lerp(-2, 2, react);
+      } else if (t < 5.0) {
+        const p = easeInOutCubic((t - 3.8) / 1.2);
+        leanX = lerp(-14, 24, p);
+        headRot = lerp(8, 12, p);
+        eyeX = 6;
+        eyeY = 4;
+      } else {
+        leanX = 12;
+        headRot = 4;
+        eyeX = 7;
+        eyeY = 0;
+      }
+      haidar.setAttribute("transform", `translate(${(550 + leanX).toFixed(1)}, ${(460 + breathY).toFixed(1)})`);
+      charHead.setAttribute("transform", `translate(0, -18) rotate(${headRot.toFixed(1)})`);
+      charEyes.setAttribute("transform", `translate(${eyeX.toFixed(1)}, ${eyeY.toFixed(1)})`);
+
+      let handRelX = 114, handRelY = 64;
+      if (t >= 3.6 && t < 4.5) {
+        const p = easeOutBack((t - 3.6) / 0.9);
+        handRelX = lerp(114, 178, p);
+        handRelY = lerp(64, 104, p);
+      } else if (t >= 4.5 && t < 5.5) {
+        const p = easeInOutCubic((t - 4.5) / 1.0);
+        handRelX = lerp(178, 130, p);
+        handRelY = lerp(104, 72, p);
+      } else if (t >= 5.5) {
+        handRelX = 130;
+        handRelY = 72;
+      }
+      armPath.setAttribute("d", `M 0 0 Q ${(handRelX * 0.48).toFixed(1)} ${(handRelY * 0.65).toFixed(1)}, ${handRelX.toFixed(1)} ${handRelY.toFixed(1)}`);
+      handR.setAttribute("cx", handRelX.toFixed(1));
+      handR.setAttribute("cy", handRelY.toFixed(1));
+
+      // 4. CONTINUOUS ORANGE THREAD TRAVEL (4.4s -> 22.0s)
+      let threadProg = 0;
+      if (t >= 4.4 && t < 9.0) {
+        threadProg = lerp(0, 0.16, easeInOutCubic((t - 4.4) / 4.6));
+      } else if (t >= 9.0 && t < 16.2) {
+        threadProg = lerp(0.16, 0.72, easeInOutCubic((t - 9.0) / 7.2));
+      } else if (t >= 16.2 && t < 22.0) {
+        threadProg = lerp(0.72, 1.0, easeOutCubic((t - 16.2) / 5.8));
+      } else if (t >= 22.0) {
+        threadProg = 1.0;
+      }
+      const drawLen = threadLen * threadProg;
+      thread.style.strokeDashoffset = (threadLen - drawLen).toFixed(1);
+
+      if (threadProg > 0.01 && threadProg < 0.99) {
+        const idx = Math.min(200, Math.round(threadProg * 200));
+        const pt = threadPts[idx];
+        threadTip.setAttribute("cx", pt.x.toFixed(1));
+        threadTip.setAttribute("cy", pt.y.toFixed(1));
+        threadTip.setAttribute("opacity", "1");
+      } else {
+        threadTip.setAttribute("opacity", "0");
+      }
+
+      // Organize Desk Objects when thread reaches them
+      const pAud = easeOutBack(clamp((t - 5.1) / 0.6));
+      propAudience.setAttribute("transform", `translate(1060, ${lerp(758, 740, pAud).toFixed(1)}) rotate(${lerp(-14, 0, pAud).toFixed(1)})`);
+      const pIdea = easeOutBack(clamp((t - 5.9) / 0.6));
+      propIdea.setAttribute("transform", `translate(1320, ${lerp(780, 748, pIdea).toFixed(1)}) rotate(${lerp(18, 0, pIdea).toFixed(1)})`);
+      const pScript = easeOutBack(clamp((t - 6.7) / 0.6));
+      propScript.setAttribute("transform", `translate(1580, ${lerp(762, 735, pScript).toFixed(1)}) rotate(${lerp(-11, 0, pScript).toFixed(1)})`);
+
+      // 5. ZONE 4 PRODUCTION STUDIO ACTION (16.2s - 23.0s)
+      const studioT = clamp((t - 16.5) / 5.5);
+      const gearDeg = studioT * 360;
+      gear1.setAttribute("transform", `translate(320, 110) rotate(${gearDeg.toFixed(1)})`);
+      gear2.setAttribute("transform", `translate(760, 110) rotate(${(-gearDeg * 1.2).toFixed(1)})`);
+
+      // Brief token enters left -> disappears into engine -> 3 output reels emerge
+      const inP = clamp((t - 17.0) / 1.8);
+      pipeToken1.setAttribute("transform", `translate(${lerp(60, 520, easeInOutCubic(inP)).toFixed(1)}, 112) scale(${inP > 0.92 ? 0 : 1})`);
+      pipeToken1.setAttribute("opacity", inP > 0.02 && inP < 0.95 ? "1" : "0");
+
+      const out1 = easeOutBack(clamp((t - 18.8) / 1.4));
+      const out2 = easeOutBack(clamp((t - 19.4) / 1.4));
+      const out3 = easeOutBack(clamp((t - 20.0) / 1.4));
+      pipeOut1.setAttribute("transform", `translate(${lerp(560, 840, out1).toFixed(1)}, 90)`);
+      pipeOut1.setAttribute("opacity", clamp((t - 18.8) / 0.3));
+      pipeOut2.setAttribute("transform", `translate(${lerp(560, 940, out2).toFixed(1)}, 90)`);
+      pipeOut2.setAttribute("opacity", clamp((t - 19.4) / 0.3));
+      pipeOut3.setAttribute("transform", `translate(${lerp(560, 1040, out3).toFixed(1)}, 90)`);
+      pipeOut3.setAttribute("opacity", clamp((t - 20.0) / 0.3));
+
+      // Studio Haidar hand adjustment
+      const adj = Math.sin(clamp((t - 17.5) / 3.0) * Math.PI * 2) * 14;
+      studioArmL.setAttribute("d", `M 0 0 Q -50 ${(20 + adj).toFixed(1)}, -100 ${(30 + adj).toFixed(1)}`);
+      studioHandL.setAttribute("cy", (32 + adj).toFixed(1));
+      studioHead.setAttribute("transform", `translate(0, -18) rotate(${lerp(-6, 4, easeInOutCubic(studioT)).toFixed(1)})`);
+
+      // 6. STORY CAPTIONS & END CARD
+      if (t < 4.0) {
+        capEyebrow.textContent = "01 · THE BRIEF STORM";
+        capLine.textContent = "Different brands. Different problems.";
+        capBar.style.opacity = clamp(t / 0.5);
+      } else if (t < 9.0) {
+        capEyebrow.textContent = "02 · FINDING THE CONNECTION";
+        capLine.textContent = "Find the audience. Shape the idea.";
+        capBar.style.opacity = 1;
+      } else if (t < 16.2) {
+        capEyebrow.textContent = "03 · CREATIVE WORLDS";
+        capLine.textContent = "Different stories. Different worlds.";
+        capBar.style.opacity = 1;
+      } else if (t < 23.0) {
+        capEyebrow.textContent = "04 · PRODUCTION SYSTEMS";
+        capLine.textContent = "Build a better way to create.";
+        capBar.style.opacity = 1;
+      } else {
+        capEyebrow.textContent = "05 · ONE CONNECTED WORLD";
+        capLine.textContent = "From signal to story to system.";
+        capBar.style.opacity = clamp(1 - (t - 25.0) / 0.7);
+      }
+
+      // End card reveal (25.8s -> 30.0s)
+      endCard.style.opacity = clamp((t - 25.8) / 0.9);
+    }
+
+    renderAt(0);
+
+    const state = { t: 0 };
+    const tl = gsap.timeline({ paused: true });
+    tl.to(state, {
+      t: 30,
+      duration: 30,
+      ease: "none",
+      onUpdate: () => renderAt(state.t)
+    }, 0);
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["root"] = tl;
+  </script>
+</body>
+</html>

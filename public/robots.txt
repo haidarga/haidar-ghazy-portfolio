@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# [ISI: ganti domain produksi saat deploy]
+Sitemap: https://haidarghazy.com/sitemap.xml

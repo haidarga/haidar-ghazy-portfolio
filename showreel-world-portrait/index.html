@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inside Haidar's Creative World — Social Portrait (1080x1920)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: #0e0f14;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #f6f2eb;
+    }
+    #stage {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 42%, #211f26 0%, #121319 60%, #0b0c10 100%);
+    }
+    /* Vertical S-curve Miniature World: 1080px wide x 7200px tall */
+    #camera {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 7200px;
+      transform-origin: 540px 0;
+      will-change: transform;
+    }
+    .world-bg {
+      position: absolute;
+      inset: -400px -600px;
+      background: linear-gradient(180deg, #191a22 0%, #13141a 50%, #101116 100%);
+    }
+
+    /* Top Story Header (fixed in portrait safe zone above TikTok/Reels UI) */
+    #caption-bar {
+      position: absolute;
+      left: 64px;
+      right: 64px;
+      top: 110px;
+      text-align: center;
+      z-index: 40;
+      pointer-events: none;
+    }
+    .cap-eyebrow {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 18px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #ff6c37;
+      margin-bottom: 12px;
+    }
+    .cap-line {
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      color: #f6f2eb;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Zone 1 Desk (y: 680 - 1450) */
+    .p-desk {
+      position: absolute;
+      left: 60px;
+      top: 980px;
+      width: 960px;
+      height: 440px;
+      border-radius: 32px;
+      background: linear-gradient(180deg, #2b2727 0%, #1a191c 100%);
+      border-top: 3px solid rgba(255, 224, 190, 0.22);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+    }
+    .p-lamp-cone {
+      position: absolute;
+      left: 80px;
+      top: 520px;
+      width: 780px;
+      height: 680px;
+      background: radial-gradient(ellipse at 24% 14%, rgba(255, 198, 138, 0.24) 0%, rgba(255, 90, 38, 0.08) 44%, transparent 72%);
+      pointer-events: none;
+    }
+
+    /* Portrait-framed Creative Worlds (y: 1750, 2950, 4150) */
+    .p-world-card {
+      position: absolute;
+      left: 140px;
+      width: 800px;
+      height: 1020px;
+      border-radius: 36px;
+      background: #17171e;
+      padding: 36px 36px 96px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.72);
+    }
+    .p-world-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #0a0b0f;
+    }
+    .p-world-screen video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .p-world-pill {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 24px;
+      border-radius: 999px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* Zone 4 Vertical Production Console (y: 5350 - 6500) */
+    .p-console {
+      position: absolute;
+      left: 80px;
+      top: 5380px;
+      width: 920px;
+      height: 1060px;
+      border-radius: 34px;
+      background: linear-gradient(180deg, #1d1e27 0%, #13141b 100%);
+      border: 3px solid rgba(255, 255, 255, 0.14);
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.75);
+    }
+    .p-mon {
+      flex: 1;
+      border-radius: 20px;
+      background: #0d0e13;
+      border: 2px solid rgba(255, 255, 255, 0.14);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .p-mon-lbl {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 15px;
+      letter-spacing: 0.12em;
+      color: #b7bac6;
+      text-transform: uppercase;
+    }
+    .p-mon-img {
+      flex: 1;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .p-mon-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    #world-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 7200px;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    /* Social Portrait End-Card with verified portfolio URL */
+    #end-card {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 72px;
+      background: radial-gradient(680px 680px at 50% 45%, rgba(255, 90, 38, 0.22) 0%, rgba(14, 15, 20, 0.88) 70%);
+      opacity: 0;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .end-name {
+      font-size: 74px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.02;
+      color: #f6f2eb;
+    }
+    .end-line {
+      width: 120px;
+      height: 4px;
+      background: #ff5a26;
+      margin: 26px 0;
+    }
+    .end-pillars {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 22px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffb08e;
+    }
+    .end-cta {
+      margin-top: 44px;
+      padding: 16px 32px;
+      border-radius: 999px;
+      background: #ff5a26;
+      color: #111115;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+  <div
+    id="stage"
+    data-composition-id="root"
+    data-start="0"
+    data-duration="30"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div id="camera">
+      <div class="world-bg"></div>
+      <div class="p-lamp-cone"></div>
+      <div class="p-desk"></div>
+
+      <!-- World A: Cinema (Portrait) -->
+      <div class="p-world-card" style="top:1740px;border:3px solid rgba(255,130,80,0.35);">
+        <div class="p-world-screen">
+          <video id="v-cinema" data-start="7.0" data-duration="7.0" data-media-start="0" src="./clips/acekid-animasi-cut.mp4" muted playsinline></video>
+        </div>
+        <div class="p-world-pill" style="background:#ff5a26;color:#111115;">World A · AI Animation</div>
+      </div>
+
+      <!-- World B: Drama Stage (Portrait) -->
+      <div class="p-world-card" style="top:2960px;border:3px solid rgba(110,160,255,0.35);">
+        <div class="p-world-screen">
+          <video id="v-stage" data-start="9.8" data-duration="6.5" data-media-start="0" src="./clips/acekid-dracin-cut.mp4" muted playsinline></video>
+        </div>
+        <div class="p-world-pill" style="background:#263455;color:#dbe8ff;border:1px solid rgba(130,175,255,0.5);">World B · AI Drama</div>
+      </div>
+
+      <!-- World C: Beauty Billboard (Portrait) -->
+      <div class="p-world-card" style="top:4180px;border:3px solid rgba(244,175,171,0.4);">
+        <div class="p-world-screen">
+          <video id="v-billboard" data-start="12.2" data-duration="6.5" data-media-start="0" src="./clips/rahasia-ad-cut.mp4" muted playsinline></video>
+        </div>
+        <div class="p-world-pill" style="background:#f4a59d;color:#161114;">World C · Beauty Ad</div>
+      </div>
+
+      <!-- Zone 4: Vertical Production Console -->
+      <div class="p-console">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:17px;letter-spacing:0.16em;color:#ff6c37;text-transform:uppercase;">
+          Production Studio · Workflow Engine
+        </div>
+        <div class="p-mon">
+          <div class="p-mon-lbl">01 · Script &amp; Angle System (Caketing)</div>
+          <div class="p-mon-img"><img src="./assets/caketing-studio-showcase.webp" alt="Caketing" /></div>
+        </div>
+        <div class="p-mon">
+          <div class="p-mon-lbl">02 · Batch AI Visual Engine (CakVisual)</div>
+          <div class="p-mon-img"><img src="./assets/cakvisual-featured-crop.webp" alt="CakVisual" /></div>
+        </div>
+        <div style="height:170px;"></div>
+      </div>
+
+      <svg id="world-svg" viewBox="0 0 1080 7200">
+        <defs>
+          <filter id="soft-shadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#000000" flood-opacity="0.55" />
+          </filter>
+          <filter id="thread-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="7" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <linearGradient id="hoodie-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f5efe6" />
+            <stop offset="100%" stop-color="#d7cfc4" />
+          </linearGradient>
+          <linearGradient id="skin-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e8b896" />
+            <stop offset="100%" stop-color="#d29c78" />
+          </linearGradient>
+        </defs>
+
+        <!-- Desk Lamp -->
+        <g transform="translate(150, 700)">
+          <ellipse cx="45" cy="300" rx="68" ry="16" fill="rgba(0,0,0,0.45)" />
+          <rect x="0" y="284" width="90" height="16" rx="8" fill="#3a3a45" />
+          <path d="M 45 284 L 22 150 L 96 40" fill="none" stroke="#4c4c58" stroke-width="12" stroke-linecap="round" />
+          <circle cx="22" cy="150" r="9" fill="#ff5a26" />
+          <g transform="translate(96, 40) rotate(28)">
+            <path d="M -28 0 L 28 0 L 46 44 L -46 44 Z" fill="#2c2d36" stroke="#5a5b68" stroke-width="2" />
+            <ellipse cx="0" cy="44" rx="42" ry="10" fill="#ffd8a8" />
+          </g>
+        </g>
+
+        <!-- Haidar Character at Desk -->
+        <ellipse cx="420" cy="1012" rx="145" ry="26" fill="rgba(0,0,0,0.52)" />
+        <g id="haidar-char" transform="translate(420, 800)">
+          <path d="M -86 195 C -88 85, -56 42, 0 42 C 56 42, 88 85, 86 195 Z" fill="url(#hoodie-grad)" filter="url(#soft-shadow)" />
+          <path d="M -42 46 Q 0 74 42 46" fill="none" stroke="#b9b0a4" stroke-width="8" stroke-linecap="round" />
+          <line x1="-14" y1="62" x2="-16" y2="118" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
+          <line x1="14" y1="62" x2="16" y2="118" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
+          <circle cx="38" cy="108" r="8" fill="#ff5a26" />
+          <g transform="translate(-74, 78)">
+            <path d="M 0 0 Q -36 58, -12 108" fill="none" stroke="#dfd7cc" stroke-width="34" stroke-linecap="round" />
+            <circle cx="-12" cy="112" r="17" fill="#e2af8c" />
+          </g>
+          <g id="char-head" transform="translate(0, -18)">
+            <rect x="-18" y="24" width="36" height="36" rx="14" fill="#d29c78" />
+            <rect x="-56" y="-86" width="112" height="122" rx="52" fill="url(#skin-grad)" filter="url(#soft-shadow)" />
+            <path d="M -60 -34 C -64 -92, -16 -112, 16 -108 C 52 -104, 66 -74, 58 -32 C 42 -58, 12 -64, -18 -56 C -40 -50, -52 -42, -60 -34 Z" fill="#171820" />
+            <g stroke="#1b1c24" stroke-width="4" fill="rgba(255,255,255,0.08)">
+              <rect x="-42" y="-36" width="34" height="24" rx="7" />
+              <rect x="8" y="-36" width="34" height="24" rx="7" />
+              <line x1="-8" y1="-24" x2="8" y2="-24" />
+            </g>
+            <g id="char-eyes">
+              <circle cx="-25" cy="-24" r="4.5" fill="#171820" />
+              <circle cx="25" cy="-24" r="4.5" fill="#171820" />
+            </g>
+            <path d="M -10 8 Q 2 14 14 7" fill="none" stroke="#8a523c" stroke-width="4" stroke-linecap="round" />
+          </g>
+          <g transform="translate(72, 76)">
+            <path id="arm-r-path" d="M 0 0 Q 52 38, 108 62" fill="none" stroke="#e9e2d8" stroke-width="34" stroke-linecap="round" />
+            <circle id="hand-r" cx="114" cy="64" r="18" fill="#e5b390" />
+          </g>
+        </g>
+
+        <!-- Organized Desk Cards -->
+        <g id="prop-audience" transform="translate(260, 1250)">
+          <rect x="-90" y="-48" width="180" height="96" rx="16" fill="#232530" stroke="#4c4e5e" stroke-width="2" />
+          <circle cx="-50" cy="-12" r="14" fill="#ff5a26" />
+          <text x="-22" y="-5" fill="#f6f2eb" font-family="JetBrains Mono" font-size="18" font-weight="600">AUDIENCE</text>
+        </g>
+        <g id="prop-idea" transform="translate(540, 1280)">
+          <rect x="-90" y="-48" width="180" height="96" rx="16" fill="#232530" stroke="#4c4e5e" stroke-width="2" />
+          <polygon points="-50,-26 -36,-2 -64,-2" fill="#f5b841" />
+          <text x="-22" y="-5" fill="#f6f2eb" font-family="JetBrains Mono" font-size="18" font-weight="600">CONCEPT</text>
+        </g>
+        <g id="prop-script" transform="translate(820, 1250)">
+          <rect x="-90" y="-48" width="180" height="96" rx="16" fill="#f6f2eb" stroke="#d5cfc6" stroke-width="2" />
+          <text x="-48" y="6" fill="#ff5a26" font-family="JetBrains Mono" font-size="20" font-weight="700">SCRIPT</text>
+        </g>
+
+        <!-- Briefs -->
+        <g id="brief-1" filter="url(#soft-shadow)"><rect x="-54" y="-36" width="108" height="72" rx="10" fill="#f6f2eb" /><circle cx="-26" cy="-10" r="10" fill="#ff5a26" /></g>
+        <g id="brief-2" filter="url(#soft-shadow)"><rect x="-54" y="-36" width="108" height="72" rx="10" fill="#3a86ff" /><rect x="-36" y="-16" width="20" height="20" rx="5" fill="#fff" /></g>
+        <g id="brief-3" filter="url(#soft-shadow)"><rect x="-54" y="-36" width="108" height="72" rx="10" fill="#f4a261" /><polygon points="-26,-18 -16,2 -36,2" fill="#171820" /></g>
+        <g id="brief-4" filter="url(#soft-shadow)"><rect x="-54" y="-36" width="108" height="72" rx="10" fill="#e76f51" /><circle cx="-26" cy="-10" r="10" fill="#fff5ee" /></g>
+
+        <!-- Zone 4 Conveyor & Gears -->
+        <g transform="translate(130, 6260)">
+          <rect x="0" y="70" width="820" height="22" rx="11" fill="#272936" stroke="#45485c" stroke-width="2" />
+          <g id="gear-1" transform="translate(220, 50)">
+            <circle cx="0" cy="0" r="30" fill="#2f3242" stroke="#ff5a26" stroke-width="5" stroke-dasharray="14 10" />
+            <circle cx="0" cy="0" r="9" fill="#ff5a26" />
+          </g>
+          <g id="gear-2" transform="translate(560, 50)">
+            <circle cx="0" cy="0" r="30" fill="#2f3242" stroke="#f4a261" stroke-width="5" stroke-dasharray="14 10" />
+            <circle cx="0" cy="0" r="9" fill="#f4a261" />
+          </g>
+          <g id="pipe-out-1"><rect x="-28" y="-38" width="56" height="76" rx="10" fill="#2a9d8f" stroke="#fff" stroke-width="2" /></g>
+          <g id="pipe-out-2"><rect x="-28" y="-38" width="56" height="76" rx="10" fill="#3a86ff" stroke="#fff" stroke-width="2" /></g>
+          <g id="pipe-out-3"><rect x="-28" y="-38" width="56" height="76" rx="10" fill="#ff5a26" stroke="#fff" stroke-width="2" /></g>
+        </g>
+
+        <!-- Continuous Vertical Orange Thread -->
+        <path
+          id="orange-thread"
+          d="M 615 995
+             C 560 1120, 320 1160, 260 1250
+             C 220 1320, 440 1340, 540 1280
+             C 660 1210, 800 1180, 820 1250
+             C 860 1440, 380 1560, 540 1740
+             C 760 2250, 260 2640, 540 2960
+             C 780 3450, 280 3860, 540 4180
+             C 760 4680, 140 5080, 56 5440
+             L 56 6260
+             Q 56 6340 140 6340
+             L 540 6340"
+          fill="none"
+          stroke="#ff5a26"
+          stroke-width="10"
+          stroke-linecap="round"
+          filter="url(#thread-glow)"
+        />
+        <circle id="thread-tip" cx="615" cy="995" r="14" fill="#ffb17a" filter="url(#thread-glow)" opacity="0" />
+      </svg>
+    </div>
+
+    <div id="caption-bar">
+      <div id="cap-eyebrow" class="cap-eyebrow">01 · THE BRIEF STORM</div>
+      <div id="cap-line" class="cap-line">Different brands.<br />Different problems.</div>
+    </div>
+
+    <div id="end-card">
+      <div class="end-name">HAIDAR GHAZY<br />ARKAN</div>
+      <div class="end-line"></div>
+      <div class="end-pillars">Strategy. Stories. Systems.</div>
+      <div class="end-cta">haidarghazy.com</div>
+    </div>
+  </div>
+
+  <script src="./gsap.min.js"></script>
+  <script>
+    const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+    const lerp = (a, b, t) => a + (b - a) * clamp(t);
+    const easeOutCubic = (t) => 1 - Math.pow(1 - clamp(t), 3);
+    const easeInOutCubic = (t) => {
+      t = clamp(t);
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
+    const easeOutBack = (t) => {
+      t = clamp(t);
+      const c1 = 1.70158;
+      const c3 = c1 + 1;
+      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+    };
+
+    const camera = document.getElementById("camera");
+    const haidar = document.getElementById("haidar-char");
+    const charHead = document.getElementById("char-head");
+    const charEyes = document.getElementById("char-eyes");
+    const armPath = document.getElementById("arm-r-path");
+    const handR = document.getElementById("hand-r");
+    const propAudience = document.getElementById("prop-audience");
+    const propIdea = document.getElementById("prop-idea");
+    const propScript = document.getElementById("prop-script");
+    const thread = document.getElementById("orange-thread");
+    const threadTip = document.getElementById("thread-tip");
+    const gear1 = document.getElementById("gear-1");
+    const gear2 = document.getElementById("gear-2");
+    const pipeOut1 = document.getElementById("pipe-out-1");
+    const pipeOut2 = document.getElementById("pipe-out-2");
+    const pipeOut3 = document.getElementById("pipe-out-3");
+    const capEyebrow = document.getElementById("cap-eyebrow");
+    const capLine = document.getElementById("cap-line");
+    const capBar = document.getElementById("caption-bar");
+    const endCard = document.getElementById("end-card");
+
+    const threadLen = thread.getTotalLength();
+    const threadPts = Array.from({ length: 201 }, (_, i) => {
+      const p = thread.getPointAtLength((i / 200) * threadLen);
+      return { x: p.x, y: p.y };
+    });
+    thread.style.strokeDasharray = threadLen;
+    thread.style.strokeDashoffset = threadLen;
+
+    const briefs = [
+      ["brief-1", 0.25, 1.35, 920, 320, 740, 620, 610, 990, -34, -8],
+      ["brief-2", 0.70, 1.80, 120, 380, 360, 620, 635, 982, 28, 7],
+      ["brief-3", 1.15, 2.25, 960, 560, 780, 740, 595, 972, -22, -14],
+      ["brief-4", 1.60, 2.70, 540, 260, 580, 620, 622, 962, 32, 10]
+    ];
+
+    function bezier(p0, p1, p2, t) {
+      const u = 1 - t;
+      return u * u * p0 + 2 * u * t * p1 + t * t * p2;
+    }
+
+    function renderAt(t) {
+      // Dedicated Portrait Vertical Camera Pan & Pullback
+      let camY = -200, camScale = 0.94;
+      if (t < 4.0) {
+        const p = easeInOutCubic(t / 4.0);
+        camY = lerp(-240, -180, p);
+        camScale = lerp(0.92, 1.04, p);
+      } else if (t < 9.0) {
+        const p = easeInOutCubic((t - 4.0) / 5.0);
+        camY = lerp(-180, -1240, p);
+        camScale = lerp(1.04, 1.0, p);
+      } else if (t < 11.4) {
+        const p = easeInOutCubic((t - 9.0) / 1.2);
+        camY = lerp(-1240, -1290, p);
+        camScale = lerp(1.0, 1.02, p);
+      } else if (t < 13.8) {
+        const p = easeInOutCubic((t - 11.4) / 1.0);
+        camY = lerp(-1290, -2510, p);
+        camScale = 1.02;
+      } else if (t < 16.2) {
+        const p = easeInOutCubic((t - 13.8) / 1.0);
+        camY = lerp(-2510, -3730, p);
+        camScale = 1.02;
+      } else if (t < 23.0) {
+        const p = easeInOutCubic((t - 16.2) / 1.8);
+        camY = lerp(-3730, -4960, p);
+        camScale = lerp(1.02, 0.96, p);
+      } else {
+        // Pull back to reveal vertical connected world
+        const p = easeInOutCubic((t - 23.0) / 1.6);
+        camY = lerp(-4960, -120, p);
+        camScale = lerp(0.96, 0.255, p);
+      }
+      camera.style.transform = `translate3d(0, ${camY.toFixed(1)}px, 0) scale(${camScale.toFixed(4)})`;
+
+      // Briefs
+      for (const [id, sT, eT, sx, sy, cx, cy, ex, ey, sR, eR] of briefs) {
+        const el = document.getElementById(id);
+        const raw = clamp((t - sT) / (eT - sT));
+        const p = easeOutCubic(raw);
+        const x = bezier(sx, cx, ex, p);
+        const y = bezier(sy, cy, ey, p);
+        const bounce = raw >= 1 ? Math.sin((t - eT) * 10) * Math.exp(-(t - eT) * 4) * 5 : 0;
+        el.setAttribute("transform", `translate(${x.toFixed(1)}, ${(y + bounce).toFixed(1)}) rotate(${lerp(sR, eR, p).toFixed(1)})`);
+        el.setAttribute("opacity", raw > 0.02 ? 1 : 0);
+      }
+
+      // Character
+      const breathY = Math.sin(t * 2.2) * 3;
+      const leanX = t < 3.8 ? lerp(0, -12, easeInOutCubic(t / 3.2)) : lerp(-12, 18, clamp((t - 3.8) / 1.2));
+      haidar.setAttribute("transform", `translate(${(420 + leanX).toFixed(1)}, ${(800 + breathY).toFixed(1)})`);
+      charHead.setAttribute("transform", `translate(0, -18) rotate(${lerp(-4, 9, clamp(t / 3.5)).toFixed(1)})`);
+      charEyes.setAttribute("transform", `translate(${lerp(0, 6, clamp(t / 2.5)).toFixed(1)}, 2)`);
+
+      let handRelX = 114, handRelY = 64;
+      if (t >= 3.6 && t < 4.5) {
+        const p = easeOutBack((t - 3.6) / 0.9);
+        handRelX = lerp(114, 178, p);
+        handRelY = lerp(64, 104, p);
+      } else if (t >= 4.5) {
+        handRelX = 135;
+        handRelY = 76;
+      }
+      armPath.setAttribute("d", `M 0 0 Q ${(handRelX * 0.48).toFixed(1)} ${(handRelY * 0.65).toFixed(1)}, ${handRelX.toFixed(1)} ${handRelY.toFixed(1)}`);
+      handR.setAttribute("cx", handRelX.toFixed(1));
+      handR.setAttribute("cy", handRelY.toFixed(1));
+
+      // Orange thread
+      let threadProg = 0;
+      if (t >= 4.4 && t < 9.0) threadProg = lerp(0, 0.22, easeInOutCubic((t - 4.4) / 4.6));
+      else if (t >= 9.0 && t < 16.2) threadProg = lerp(0.22, 0.74, easeInOutCubic((t - 9.0) / 7.2));
+      else if (t >= 16.2 && t < 22.0) threadProg = lerp(0.74, 1.0, easeOutCubic((t - 16.2) / 5.8));
+      else if (t >= 22.0) threadProg = 1.0;
+
+      thread.style.strokeDashoffset = (threadLen - threadLen * threadProg).toFixed(1);
+      if (threadProg > 0.01 && threadProg < 0.99) {
+        const pt = threadPts[Math.min(200, Math.round(threadProg * 200))];
+        threadTip.setAttribute("cx", pt.x.toFixed(1));
+        threadTip.setAttribute("cy", pt.y.toFixed(1));
+        threadTip.setAttribute("opacity", "1");
+      } else {
+        threadTip.setAttribute("opacity", "0");
+      }
+
+      // Organize Desk Cards
+      const pA = easeOutBack(clamp((t - 5.0) / 0.6));
+      propAudience.setAttribute("transform", `translate(260, ${lerp(1270, 1250, pA).toFixed(1)}) rotate(${lerp(-14, 0, pA).toFixed(1)})`);
+      const pI = easeOutBack(clamp((t - 5.8) / 0.6));
+      propIdea.setAttribute("transform", `translate(540, ${lerp(1300, 1270, pI).toFixed(1)}) rotate(${lerp(16, 0, pI).toFixed(1)})`);
+      const pS = easeOutBack(clamp((t - 6.6) / 0.6));
+      propScript.setAttribute("transform", `translate(820, ${lerp(1270, 1250, pS).toFixed(1)}) rotate(${lerp(-12, 0, pS).toFixed(1)})`);
+
+      // Studio gears & outputs
+      const sT = clamp((t - 16.5) / 5.5);
+      gear1.setAttribute("transform", `translate(220, 50) rotate(${(sT * 360).toFixed(1)})`);
+      gear2.setAttribute("transform", `translate(560, 50) rotate(${(-sT * 420).toFixed(1)})`);
+      pipeOut1.setAttribute("transform", `translate(${lerp(300, 620, easeOutBack(clamp((t - 18.2) / 1.4))).toFixed(1)}, 34)`);
+      pipeOut1.setAttribute("opacity", clamp((t - 18.2) / 0.3));
+      pipeOut2.setAttribute("transform", `translate(${lerp(300, 700, easeOutBack(clamp((t - 18.9) / 1.4))).toFixed(1)}, 34)`);
+      pipeOut2.setAttribute("opacity", clamp((t - 18.9) / 0.3));
+      pipeOut3.setAttribute("transform", `translate(${lerp(300, 780, easeOutBack(clamp((t - 19.6) / 1.4))).toFixed(1)}, 34)`);
+      pipeOut3.setAttribute("opacity", clamp((t - 19.6) / 0.3));
+
+      // Captions
+      if (t < 4.0) {
+        capEyebrow.textContent = "01 · THE BRIEF STORM";
+        capLine.innerHTML = "Different brands.<br />Different problems.";
+        capBar.style.opacity = clamp(t / 0.5);
+      } else if (t < 9.0) {
+        capEyebrow.textContent = "02 · FINDING THE CONNECTION";
+        capLine.innerHTML = "Find the audience.<br />Shape the idea.";
+        capBar.style.opacity = 1;
+      } else if (t < 16.2) {
+        capEyebrow.textContent = "03 · CREATIVE WORLDS";
+        capLine.innerHTML = "Different stories.<br />Different worlds.";
+        capBar.style.opacity = 1;
+      } else if (t < 23.0) {
+        capEyebrow.textContent = "04 · PRODUCTION SYSTEMS";
+        capLine.innerHTML = "Build a better way<br />to create.";
+        capBar.style.opacity = 1;
+      } else {
+        capEyebrow.textContent = "05 · ONE CONNECTED WORLD";
+        capLine.innerHTML = "From signal to story<br />to system.";
+        capBar.style.opacity = clamp(1 - (t - 25.0) / 0.7);
+      }
+
+      endCard.style.opacity = clamp((t - 25.8) / 0.9);
+    }
+
+    renderAt(0);
+    const state = { t: 0 };
+    const tl = gsap.timeline({ paused: true });
+    tl.to(state, { t: 30, duration: 30, ease: "none", onUpdate: () => renderAt(state.t) }, 0);
+    window.__timelines = window.__timelines || {};
+    window.__timelines["root"] = tl;
+  </script>
+</body>
+</html>
