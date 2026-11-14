@@ -3,415 +3,350 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inside Haidar's Creative World — Website Intro Cut (10s)</title>
+  <title>The Anomaly — Inside Haidar Ghazy Arkan's World (20s Website Intro)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       width: 1920px;
       height: 1080px;
       overflow: hidden;
-      background: #0e0f14;
+      background: #07070a;
       font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #f6f2eb;
+      color: #f7f4ee;
+      -webkit-font-smoothing: antialiased;
     }
+
     #stage {
       position: relative;
       width: 1920px;
       height: 1080px;
       overflow: hidden;
-      background: radial-gradient(circle at 42% 38%, #211f26 0%, #121319 58%, #0b0c10 100%);
-      perspective: 1800px;
+      background: radial-gradient(circle at 50% 45%, #171520 0%, #0b0b10 58%, #050508 100%);
+      perspective: 1250px;
     }
 
-    /* Continuous Miniature World inside Camera Rig */
-    #camera {
+    /* Ambient Shader & Particle Canvas */
+    #fx-canvas {
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 8400px;
+      inset: 0;
+      width: 1920px;
       height: 1080px;
-      transform-origin: 0 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* 3D Camera World Rig */
+    #camera-viewport {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-style: preserve-3d;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    #world-3d {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
       will-change: transform;
     }
 
-    /* Continuous Studio Floor & Wall */
-    .world-wall {
+    .scene-cluster {
       position: absolute;
-      left: -400px;
-      top: -300px;
-      width: 9200px;
-      height: 1020px;
-      background: linear-gradient(180deg, #191a22 0%, #13141a 78%, #0f1015 100%);
-    }
-    .world-floor {
-      position: absolute;
-      left: -400px;
-      top: 635px;
-      width: 9200px;
-      height: 800px;
-      background: linear-gradient(180deg, #272424 0%, #1a191b 45%, #121216 100%);
-      border-top: 3px solid rgba(255, 224, 190, 0.18);
-    }
-
-    /* Zone 1: Studio Lamp & Shelves */
-    .wall-shelf {
-      position: absolute;
-      left: 160px;
-      top: 230px;
-      width: 560px;
-      height: 16px;
-      border-radius: 8px;
-      background: #272833;
-      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.45);
-    }
-    .wall-frame {
-      position: absolute;
-      width: 120px;
-      height: 150px;
-      border-radius: 10px;
-      background: #22232d;
-      border: 2px solid rgba(246, 242, 235, 0.14);
-    }
-    .lamp-cone {
-      position: absolute;
-      left: 170px;
-      top: 150px;
-      width: 960px;
-      height: 820px;
-      background: radial-gradient(ellipse at 25% 10%, rgba(255, 198, 138, 0.22) 0%, rgba(255, 90, 38, 0.08) 42%, transparent 72%);
-      pointer-events: none;
-    }
-
-    /* World A (x=2180): Miniature Cinema Screen */
-    .cinema-arch {
-      position: absolute;
-      left: 2150px;
-      top: 110px;
-      width: 780px;
-      height: 760px;
-      border-radius: 36px 36px 18px 18px;
-      background: linear-gradient(180deg, #241e22 0%, #17151a 100%);
-      border: 3px solid rgba(255, 160, 100, 0.28);
-      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.65), 0 0 80px rgba(255, 90, 38, 0.14);
-      padding: 44px 44px 110px;
-    }
-    .cinema-marquee {
-      position: absolute;
-      top: -22px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 26px;
-      border-radius: 999px;
-      background: #ff5a26;
-      color: #111115;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      box-shadow: 0 10px 28px rgba(255, 90, 38, 0.4);
-    }
-    .cinema-screen {
-      width: 100%;
-      height: 100%;
-      border-radius: 20px;
-      overflow: hidden;
-      background: #090a0d;
-      border: 4px solid #35333d;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .cinema-screen video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 22%;
-    }
-    .cinema-seats {
-      position: absolute;
-      left: 52px;
-      right: 52px;
-      bottom: 24px;
-      height: 54px;
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .seat {
-      flex: 1;
-      height: 54px;
-      border-radius: 16px 16px 6px 6px;
-      background: #2f2326;
-      border-top: 4px solid #4d3538;
-    }
-
-    /* World B (x=3580): Drama Stage Backdrop with Spotlights */
-    .drama-stage {
-      position: absolute;
-      left: 3560px;
-      top: 90px;
-      width: 780px;
-      height: 780px;
-      border-radius: 26px;
-      background: linear-gradient(180deg, #161822 0%, #101218 100%);
-      border: 3px solid rgba(110, 160, 255, 0.25);
-      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.7), 0 0 90px rgba(70, 125, 255, 0.12);
-      overflow: hidden;
-    }
-    .stage-truss {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      height: 58px;
-      background: #202330;
-      border-bottom: 3px solid #32374a;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 42px;
-    }
-    .stage-light {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #cfe0ff;
-      box-shadow: 0 0 32px 10px rgba(130, 175, 255, 0.45);
-    }
-    .stage-curtain-l, .stage-curtain-r {
-      position: absolute;
-      top: 58px;
-      bottom: 70px;
-      width: 72px;
-      background: linear-gradient(90deg, #271b24, #1b131b);
-      z-index: 3;
-    }
-    .stage-curtain-l { left: 0; border-right: 2px solid rgba(255,255,255,0.08); }
-    .stage-curtain-r { right: 0; border-left: 2px solid rgba(255,255,255,0.08); }
-    .stage-backdrop {
-      position: absolute;
-      left: 72px;
-      right: 72px;
-      top: 76px;
-      bottom: 86px;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #0a0b0f;
-      border: 2px solid rgba(255, 255, 255, 0.14);
-    }
-    .stage-backdrop video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 20%;
-    }
-    .stage-badge {
-      position: absolute;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 8px 20px;
-      border-radius: 999px;
-      background: rgba(16, 18, 26, 0.92);
-      border: 1px solid rgba(130, 175, 255, 0.45);
-      font-family: "JetBrains Mono", monospace;
-      font-size: 13px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #dbe8ff;
-      white-space: nowrap;
-    }
-
-    /* World C (x=4960): Illuminated Beauty Billboard */
-    .billboard-rig {
-      position: absolute;
-      left: 4960px;
-      top: 105px;
-      width: 760px;
-      height: 780px;
-    }
-    .billboard-pillar {
-      position: absolute;
-      bottom: 0;
-      width: 28px;
-      height: 220px;
-      background: linear-gradient(180deg, #3c353a, #242024);
-      border-radius: 8px;
-    }
-    .billboard-frame {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 760px;
-      height: 610px;
-      border-radius: 28px;
-      background: linear-gradient(145deg, #2b2226, #1b171b);
-      border: 4px solid rgba(244, 175, 171, 0.42);
-      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.68), 0 0 90px rgba(244, 140, 140, 0.18);
-      padding: 26px;
-    }
-    .billboard-screen {
-      width: 100%;
-      height: 100%;
-      border-radius: 18px;
-      overflow: hidden;
-      background: #0d0c0f;
-    }
-    .billboard-screen video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 22%;
-    }
-    .billboard-tag {
-      position: absolute;
-      top: -18px;
-      right: 36px;
-      padding: 8px 20px;
-      border-radius: 999px;
-      background: #f4a59d;
-      color: #161114;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    /* Zone 4 (x=6220): Miniature Production Studio */
-    .studio-console {
-      position: absolute;
-      left: 6260px;
-      top: 150px;
-      width: 1220px;
-      height: 670px;
-      border-radius: 32px;
-      background: linear-gradient(180deg, #1d1e27 0%, #13141b 100%);
-      border: 3px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
-      padding: 36px;
-    }
-    .console-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    .console-title {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 16px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #ff6c37;
-    }
-    .console-monitors {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-      height: 310px;
-    }
-    .monitor-bay {
-      border-radius: 20px;
-      background: #0e0f14;
-      border: 2px solid rgba(255, 255, 255, 0.14);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .monitor-label {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 13px;
-      color: #b7bac6;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    .monitor-screen {
-      flex: 1;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #14151c;
-    }
-    .monitor-screen img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-    }
-
-    /* Global SVG Layer spanning entire 8400px world */
-    #world-svg {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 8400px;
+      left: -960px;
+      top: -540px;
+      width: 1920px;
       height: 1080px;
-      overflow: visible;
-      pointer-events: none;
+      transform-style: preserve-3d;
+      will-change: transform, opacity;
     }
 
-    /* Narrative Caption Bar (fixed to screen bottom-left) */
-    #caption-bar {
+    /* Shared Glass & Frame Cards */
+    .glass-card {
       position: absolute;
-      left: 88px;
-      bottom: 58px;
-      z-index: 40;
-      pointer-events: none;
+      border-radius: 22px;
+      background: linear-gradient(155deg, rgba(26, 26, 36, 0.92) 0%, rgba(13, 13, 19, 0.96) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.78), 0 0 50px rgba(255, 90, 38, 0.08);
+      overflow: hidden;
+      transform-style: preserve-3d;
     }
-    .cap-eyebrow {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 15px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #ff6c37;
-      margin-bottom: 10px;
+    .glass-card.orange-rim {
+      border-color: rgba(255, 90, 38, 0.55);
+      box-shadow: 0 32px 90px rgba(0, 0, 0, 0.85), 0 0 70px rgba(255, 90, 38, 0.24);
     }
-    .cap-line {
-      font-size: 44px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.06;
-      color: #f6f2eb;
-      text-shadow: 0 8px 28px rgba(0, 0, 0, 0.78);
+    .glass-card.cyan-rim {
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 32px 90px rgba(0, 0, 0, 0.85), 0 0 70px rgba(56, 189, 248, 0.2);
+    }
+    .glass-card.emerald-rim {
+      border-color: rgba(16, 185, 129, 0.55);
+      box-shadow: 0 32px 90px rgba(0, 0, 0, 0.85), 0 0 70px rgba(16, 185, 129, 0.22);
     }
 
-    /* Scene 5 End-Card Overlay (clean hold 25.2 - 30.0s) */
-    #end-card {
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-tag {
+      position: absolute;
+      left: 16px;
+      top: 14px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(9, 9, 13, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #f7f4ee;
+      z-index: 4;
+      backdrop-filter: blur(8px);
+    }
+    .card-tag.accent {
+      background: #ff5a26;
+      color: #09090d;
+      border-color: #ff855e;
+    }
+    .card-tag.cyan {
+      background: rgba(14, 116, 144, 0.9);
+      color: #e0f2fe;
+      border-color: rgba(56, 189, 248, 0.6);
+    }
+
+    .craft-pill {
+      position: absolute;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: rgba(16, 16, 23, 0.92);
+      border: 1.5px solid rgba(255, 90, 38, 0.5);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #fff;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), 0 0 28px rgba(255, 90, 38, 0.2);
+      white-space: nowrap;
+    }
+
+    /* Chat DM Bubbles */
+    .dm-bubble {
+      position: absolute;
+      padding: 14px 20px;
+      border-radius: 20px 20px 20px 4px;
+      background: rgba(24, 25, 34, 0.95);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+      font-size: 15px;
+      font-weight: 600;
+      color: #f5f3ef;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+    }
+    .dm-bubble.reply {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border-radius: 20px 20px 4px 20px;
+      border-color: rgba(125, 211, 252, 0.6);
+      color: #fff;
+    }
+    .dm-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 12px #10b981;
+    }
+
+    /* Kinetic Typography Stage Overlay */
+    #kinetic-hud {
       position: absolute;
       inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: radial-gradient(920px 520px at 50% 45%, rgba(255, 90, 38, 0.20) 0%, rgba(14, 15, 20, 0.84) 68%);
-      opacity: 0;
-      z-index: 50;
+      z-index: 30;
       pointer-events: none;
     }
-    .end-name {
-      font-size: 76px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      color: #f6f2eb;
+
+    /* Camera Viewfinder & Telemetry Frame */
+    .hud-frame {
+      position: absolute;
+      inset: 34px 44px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      pointer-events: none;
     }
-    .end-line {
-      width: 140px;
-      height: 3px;
-      background: #ff5a26;
-      margin: 22px 0;
+    .hud-corner {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-color: #ff5a26;
+      border-style: solid;
     }
-    .end-pillars {
+    .hud-corner.tl { left: -1px; top: -1px; border-width: 3px 0 0 3px; border-top-left-radius: 12px; }
+    .hud-corner.tr { right: -1px; top: -1px; border-width: 3px 3px 0 0; border-top-right-radius: 12px; }
+    .hud-corner.bl { left: -1px; bottom: -1px; border-width: 0 0 3px 3px; border-bottom-left-radius: 12px; }
+    .hud-corner.br { right: -1px; bottom: -1px; border-width: 0 3px 3px 0; border-bottom-right-radius: 12px; }
+
+    .hud-topbar {
+      position: absolute;
+      left: 68px;
+      right: 68px;
+      top: 52px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-family: "JetBrains Mono", monospace;
-      font-size: 22px;
-      letter-spacing: 0.22em;
+      font-size: 13px;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: #ffb08e;
+      color: rgba(247, 244, 238, 0.76);
+    }
+    .rec-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 90, 38, 0.14);
+      border: 1px solid rgba(255, 90, 38, 0.45);
+      color: #ff7b52;
+      font-weight: 700;
+    }
+    .rec-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ff5a26;
+      box-shadow: 0 0 12px #ff5a26;
+    }
+
+    /* Lower Kinetic Title Block */
+    #kinetic-banner {
+      position: absolute;
+      left: 84px;
+      right: 84px;
+      bottom: 62px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      z-index: 35;
+    }
+    .k-left {
+      max-width: 1180px;
+    }
+    .k-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: rgba(14, 14, 20, 0.88);
+      border: 1px solid rgba(255, 90, 38, 0.5);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ff7648;
+      margin-bottom: 14px;
+      backdrop-filter: blur(10px);
+    }
+    .k-headline {
+      font-family: "Syne", sans-serif;
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      text-shadow: 0 18px 50px rgba(0, 0, 0, 0.95);
+    }
+    .k-headline .accent {
+      color: #ff5a26;
+    }
+    .k-headline .serif-italic {
+      font-family: "Instrument Serif", serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 66px;
+      color: #ffb088;
+    }
+    .k-sub {
+      margin-top: 10px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(247, 244, 238, 0.78);
+    }
+
+    /* Right Telemetry Counter Box */
+    .k-telemetry {
+      padding: 18px 26px;
+      border-radius: 20px;
+      background: rgba(12, 12, 18, 0.9);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      text-align: right;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+    }
+    .k-tel-num {
+      font-family: "Syne", sans-serif;
+      font-size: 44px;
+      font-weight: 800;
+      color: #ff5a26;
+      line-height: 1;
+    }
+    .k-tel-label {
+      margin-top: 6px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    /* Aperture Iris Portal Mask & Flash Overlay */
+    #iris-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #portal-flash {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 120, 60, 0.85), rgba(56, 189, 248, 0.35), transparent 70%);
+      opacity: 0;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 45;
+    }
+
+    /* Subtle Film Grain & Vignette */
+    .vignette-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, transparent 58%, rgba(3, 3, 6, 0.78) 100%);
+      pointer-events: none;
+      z-index: 28;
     }
   </style>
 </head>
@@ -420,306 +355,371 @@
     id="stage"
     data-composition-id="root"
     data-start="0"
-    data-duration="10"
+    data-duration="20"
     data-width="1920"
     data-height="1080"
   >
-    <div id="camera">
-      <div class="world-wall"></div>
-      <div class="world-floor"></div>
+    <!-- Master Synchronized Audio Track -->
+    <audio id="master-audio" data-start="0" data-duration="20" data-media-start="0" src="./assets/master-intro-20s.mp3" preload="auto"></audio>
 
-      <!-- Zone 1 Studio Props -->
-      <div class="wall-shelf"></div>
-      <div class="wall-frame" style="left:190px;top:70px;background:#25232b;"></div>
-      <div class="wall-frame" style="left:340px;top:60px;width:150px;height:160px;border-color:rgba(255,90,38,0.4);"></div>
-      <div class="wall-frame" style="left:520px;top:82px;height:138px;"></div>
-      <div class="lamp-cone"></div>
+    <canvas id="fx-canvas" width="1920" height="1080"></canvas>
 
-      <!-- Zone 3A: Miniature Cinema (World A) -->
-      <div class="cinema-arch">
-        <div class="cinema-marquee">World A · AI Animation</div>
-        <div class="cinema-screen">
-          <video id="v-cinema" data-start="2.5" data-duration="7.5" data-media-start="0" src="./clips/acekid-animasi-cut.mp4" muted playsinline></video>
-        </div>
-        <div class="cinema-seats">
-          <div class="seat"></div><div class="seat"></div><div class="seat"></div>
-          <div class="seat"></div><div class="seat"></div><div class="seat"></div>
-        </div>
-      </div>
+    <div id="camera-viewport">
+      <div id="world-3d">
 
-      <!-- Zone 3B: Drama Stage Backdrop (World B) -->
-      <div class="drama-stage">
-        <div class="stage-truss">
-          <div class="stage-light"></div><div class="stage-light"></div><div class="stage-light"></div>
-        </div>
-        <div class="stage-curtain-l"></div>
-        <div class="stage-curtain-r"></div>
-        <div class="stage-backdrop">
-          <video id="v-stage" data-start="2.5" data-duration="7.5" data-media-start="0" src="./clips/acekid-dracin-cut.mp4" muted playsinline></video>
-        </div>
-        <div class="stage-badge">World B · AI Drama Storytelling</div>
-      </div>
+        <!-- =======================================================================
+             SCENE 1 (Z = 0): THE FILMMAKER'S EYE (Cinema, 3D, VFX & Mapping)
+             ======================================================================= -->
+        <div id="scene-1" class="scene-cluster">
+          <!-- Center Lens Ring SVG -->
+          <svg style="position:absolute;left:410px;top:-10px;width:1100px;height:1100px;transform:translateZ(-120px);opacity:0.42;" viewBox="0 0 1000 1000">
+            <circle cx="500" cy="500" r="440" fill="none" stroke="#ff5a26" stroke-width="2" stroke-dasharray="14 10" />
+            <circle cx="500" cy="500" r="370" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
+            <circle cx="500" cy="500" r="295" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="6 14" />
+          </svg>
 
-      <!-- Zone 3C: Illuminated Beauty Billboard (World C) -->
-      <div class="billboard-rig">
-        <div class="billboard-pillar" style="left:140px;"></div>
-        <div class="billboard-pillar" style="right:140px;"></div>
-        <div class="billboard-frame">
-          <div class="billboard-tag">World C · Beauty Ad</div>
-          <div class="billboard-screen">
-            <video id="v-billboard" data-start="2.5" data-duration="7.5" data-media-start="0" src="./clips/rahasia-ad-cut.mp4" muted playsinline></video>
+          <!-- Left Plane: BI Digital QRIS Crossborder + Hayo Loh! VFX -->
+          <div id="s1-card-qris" class="glass-card" style="left:85px;top:115px;width:470px;height:310px;">
+            <span class="card-tag accent">DIRECTOR &amp; EDITOR · BI QRIS CROSSBORDER</span>
+            <img class="card-img" src="./assets/qris-01.webp" alt="BI QRIS Crossborder" />
           </div>
-        </div>
-      </div>
 
-      <!-- Zone 4: Miniature Production Studio Console -->
-      <div class="studio-console">
-        <div class="console-header">
-          <div class="console-title">Production Studio · Workflow Engine</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#9ea2b0;">BRIEF → SCRIPT → CREATE → OUTPUT</div>
-        </div>
-        <div class="console-monitors">
-          <div class="monitor-bay">
-            <div class="monitor-label">01 · Script &amp; Angle System (Caketing)</div>
-            <div class="monitor-screen">
-              <img src="./assets/caketing-studio-showcase.webp" alt="Caketing script workflow" />
+          <div id="s1-card-vfx" class="glass-card cyan-rim" style="left:110px;top:455px;width:450px;height:290px;">
+            <span class="card-tag cyan">3D &amp; VFX · SHORT FILM "HAYO LOH!"</span>
+            <img class="card-img" src="./assets/hayo-loh-vfx.webp" alt="Hayo Loh 3D VFX" />
+            <div style="position:absolute;left:14px;right:14px;bottom:14px;padding:8px 12px;border-radius:12px;background:rgba(8,8,12,0.9);border:1px solid rgba(255,190,90,0.5);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#fcd34d;">
+              ★ NOMINEE · UCIFEST 12 &amp; BOGOR FILM FESTIVAL
             </div>
           </div>
-          <div class="monitor-bay">
-            <div class="monitor-label">02 · Batch AI Visual Engine (CakVisual)</div>
-            <div class="monitor-screen">
-              <img src="./assets/cakvisual-featured-crop.webp" alt="CakVisual production engine" />
+
+          <!-- Center Hero Plane: Haidar Directing On-Set with Cinema Camera -->
+          <div id="s1-card-hero" class="glass-card orange-rim" style="left:605px;top:95px;width:710px;height:645px;">
+            <span class="card-tag accent">BEHIND THE LENS · ISI SURAKARTA FILM &amp; TV (GPA 3.86 CUM LAUDE)</span>
+            <img class="card-img" src="./assets/haidar-directing-cameraman.webp" alt="Haidar Directing On Set" style="object-position:center 28%;" />
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 52%,rgba(7,7,11,0.95) 100%);"></div>
+            <div style="position:absolute;left:28px;right:28px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;">
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#ff7b52;font-weight:700;">ROOTS IN VISUAL STORYTELLING (2021–2025)</div>
+                <div style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#fff;margin-top:4px;">50+ Film, TV, 3D &amp; VFX Projects</div>
+              </div>
+              <div style="padding:8px 16px;border-radius:12px;background:rgba(255,90,38,0.2);border:1px solid #ff5a26;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#fff;">
+                3RD PLACE NITRAFEST
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Plane: StudenVerse 3D Blackhole + Luminara Video Mapping + TV Switcher -->
+          <div id="s1-card-3d" class="glass-card" style="right:85px;top:110px;width:465px;height:295px;">
+            <span class="card-tag">3D ANIMATION · LEAP OF FAITH &amp; STUDENVERSE</span>
+            <img class="card-img" src="./assets/studenverse.webp" alt="StudenVerse 3D" />
+          </div>
+
+          <div id="s1-card-mapping" class="glass-card orange-rim" style="right:105px;top:435px;width:445px;height:305px;">
+            <span class="card-tag accent">CO-FOUNDER · LUMINARA VISUAL WORKS</span>
+            <img class="card-img" src="./assets/luminara-mapping.webp" alt="Luminara Projection Mapping" />
+            <div style="position:absolute;left:14px;right:14px;bottom:14px;padding:8px 12px;border-radius:12px;background:rgba(8,8,12,0.9);border:1px solid rgba(255,255,255,0.18);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#e2e8f0;">
+              ARCHITECTURAL VIDEO MAPPING · UNREAL &amp; RESOLUME
+            </div>
+          </div>
+
+          <!-- Orbiting Craft Badges -->
+          <div id="s1-pill-1" class="craft-pill" style="left:515px;top:52px;">BLENDER 3D · 4 YRS</div>
+          <div id="s1-pill-2" class="craft-pill" style="left:995px;top:48px;border-color:#38bdf8;">AFTER EFFECTS &amp; PREMIERE · 6 YRS</div>
+          <div id="s1-pill-3" class="craft-pill" style="left:490px;top:755px;border-color:#a855f7;">UNREAL ENGINE · LIVE PRE-VIS</div>
+          <div id="s1-pill-4" class="craft-pill" style="left:980px;top:755px;border-color:#10b981;">DAVINCI RESOLVE &amp; RESOLUME VJ</div>
+        </div>
+
+        <!-- =======================================================================
+             SCENE 2 (Z = -2400): THE ALGORITHM HIJACK (AI Growth & Viral Proof)
+             ======================================================================= -->
+        <div id="scene-2" class="scene-cluster">
+          <!-- Left Wing: OPPO @diologtech 7.9M Views Proof -->
+          <div id="s2-oppo-card" class="glass-card orange-rim" style="left:65px;top:85px;width:540px;height:665px;padding:22px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <span style="padding:6px 14px;border-radius:999px;background:#ff5a26;color:#09090d;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;letter-spacing:0.12em;">OPPO · @DIOLOGTECH</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#38bdf8;font-weight:700;">100% AI ORGANIC CREATOR</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:14px;height:415px;">
+              <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.14);background:#000;">
+                <img class="card-img" src="./assets/diologtech-feed.webp" alt="Oppo Diologtech Feed" style="object-position:center top;" />
+              </div>
+              <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,90,38,0.45);background:#000;">
+                <img class="card-img" src="./assets/oppo-7-9m.webp" alt="Oppo 7.9M Analytics" style="object-position:center top;" />
+              </div>
+            </div>
+            <div style="margin-top:16px;padding:16px 20px;border-radius:16px;background:rgba(255,90,38,0.12);border:1px solid rgba(255,90,38,0.4);display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div id="oppo-views-counter" style="font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:#ff5a26;line-height:1;">7.9M</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#f7f4ee;letter-spacing:0.12em;margin-top:4px;">ORGANIC POST VIEWS</div>
+              </div>
+              <div style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;color:#e2e8f0;line-height:1.5;">
+                <div><strong style="color:#fff;">5.5M</strong> TOTAL VIEWERS</div>
+                <div><strong style="color:#fff;">167K</strong> LIKES · <strong style="color:#fff;">3,624+</strong> FOLLOWERS</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Stage: 3 Live Playing Brand Video Worlds (AceKid Animation, AceKid Drama, Rahasia Beauty) -->
+          <div id="s2-video-deck" class="glass-card" style="left:635px;top:85px;width:650px;height:665px;padding:20px;background:rgba(15,15,22,0.95);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.14em;color:#ff855e;">MULTI-PERSONA AI CAMPAIGNS · 5 BRAND ECOSYSTEMS</span>
+              <span style="padding:5px 12px;border-radius:999px;background:rgba(56,189,248,0.16);border:1px solid rgba(56,189,248,0.5);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#7dd3fc;">20–90 AI PERSONAS / BRAND</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;height:465px;">
+              <div style="position:relative;border-radius:16px;overflow:hidden;border:1.5px solid rgba(255,90,38,0.5);background:#000;">
+                <video id="v-intro-animasi" data-start="3.5" data-duration="7.0" data-media-start="0" src="./clips/acekid-animasi-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                <div style="position:absolute;left:8px;right:8px;bottom:8px;padding:6px 8px;border-radius:8px;background:rgba(8,8,12,0.88);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#ffb088;text-align:center;">ACEKID · 3D ANIMATION</div>
+              </div>
+              <div style="position:relative;border-radius:16px;overflow:hidden;border:1.5px solid rgba(56,189,248,0.5);background:#000;">
+                <video id="v-intro-dracin" data-start="3.5" data-duration="7.0" data-media-start="0" src="./clips/acekid-dracin-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                <div style="position:absolute;left:8px;right:8px;bottom:8px;padding:6px 8px;border-radius:8px;background:rgba(8,8,12,0.88);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#7dd3fc;text-align:center;">ACEKID · DRACIN UGC</div>
+              </div>
+              <div style="position:relative;border-radius:16px;overflow:hidden;border:1.5px solid rgba(244,114,182,0.5);background:#000;">
+                <video id="v-intro-rahasia" data-start="3.5" data-duration="7.0" data-media-start="0" src="./clips/rahasia-ad-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                <div style="position:absolute;left:8px;right:8px;bottom:8px;padding:6px 8px;border-radius:8px;background:rgba(8,8,12,0.88);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#f9a8d4;text-align:center;">RAHASIA BEAUTY · AI AD</div>
+              </div>
+            </div>
+            <div style="margin-top:14px;padding:14px 18px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:#d1d5db;">
+              <span>BRANDS: <strong style="color:#fff;">OPPO · ACEKID · SYAILENDRA · GOLDEN RAMA · CAK IC</strong></span>
+              <span style="color:#10b981;font-weight:700;">120 ASSETS / DAY</span>
+            </div>
+          </div>
+
+          <!-- Right Wing: Cak Investment Club 2.3M+ Views & ~60% DM-to-Member Conversion Proof -->
+          <div id="s2-cic-card" class="glass-card emerald-rim" style="right:65px;top:85px;width:540px;height:665px;padding:22px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <span style="padding:6px 14px;border-radius:999px;background:#10b981;color:#051b14;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;letter-spacing:0.12em;">CAK INVESTMENT CLUB</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399;font-weight:700;">96.2% FOR YOU TRAFFIC</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;height:285px;">
+              <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.14);background:#000;position:relative;">
+                <img class="card-img" src="./assets/leo-1-1m.webp" alt="Leo Ryansyah 1.1M Views" style="object-position:center top;" />
+                <div style="position:absolute;bottom:8px;left:8px;right:8px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.85);font-family:'JetBrains Mono',monospace;font-size:10px;color:#fff;">@leo_ryansyah · 1.1M Views</div>
+              </div>
+              <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.14);background:#000;position:relative;">
+                <img class="card-img" src="./assets/jo-1-2m.webp" alt="Jonathan Darsono 1.2M Views" style="object-position:center top;" />
+                <div style="position:absolute;bottom:8px;left:8px;right:8px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.85);font-family:'JetBrains Mono',monospace;font-size:10px;color:#fff;">@jo.darsono · 1.2M Views</div>
+              </div>
+            </div>
+
+            <!-- Real Inbound DM Conversion Cascade -->
+            <div style="position:relative;height:185px;margin-top:14px;border-radius:14px;background:rgba(8,12,16,0.92);border:1px solid rgba(16,185,129,0.35);padding:12px;overflow:hidden;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#6ee7b7;letter-spacing:0.14em;margin-bottom:8px;">REAL TIKTOK INBOX CONVERSION FUNNEL</div>
+              <div id="dm-1" class="dm-bubble" style="left:14px;top:36px;padding:8px 14px;font-size:13px;">
+                <span class="dm-dot"></span><span>"Info join grup om" · "mau JOIN CAK IC gimana yaa?"</span>
+              </div>
+              <div id="dm-2" class="dm-bubble reply" style="right:14px;top:86px;padding:8px 14px;font-size:13px;">
+                <span>➔ https://link.cakinvestmentclub.com</span>
+              </div>
+              <div id="dm-3" class="dm-bubble" style="left:14px;top:134px;padding:7px 14px;font-size:12px;border-color:#10b981;">
+                <span class="dm-dot"></span><span>"Saya udah connect via WA &amp; IG ya pak Leo 🙏"</span>
+              </div>
+            </div>
+
+            <div style="margin-top:14px;padding:14px 18px;border-radius:16px;background:rgba(16,185,129,0.14);border:1px solid rgba(16,185,129,0.5);display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div id="cic-conv-counter" style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#34d399;line-height:1;">~60%</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#d1fae5;letter-spacing:0.12em;margin-top:4px;">INBOUND DM ➔ MEMBER CONVERSION</div>
+              </div>
+              <div style="text-align:right;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;">
+                2.3M+ <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#9ca3af;font-weight:600;">COMBINED VIEWS</span>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- =======================================================================
+             SCENE 3 (Z = -4800): THE SYSTEM ARCHITECT (CAKETING & CakVisual Engine)
+             ======================================================================= -->
+        <div id="scene-3" class="scene-cluster">
+          <!-- Left Console: CAKETING Bulk Scriptwriting Platform -->
+          <div id="s3-caketing" class="glass-card orange-rim" style="left:70px;top:85px;width:660px;height:665px;padding:24px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <span class="card-tag accent" style="position:static;">IN-HOUSE SYSTEM 01 · CAKETING</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffb088;font-weight:700;">BULK AI SCRIPTWRITING ENGINE</span>
+            </div>
+            <div style="position:relative;height:390px;border-radius:16px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.16);background:#090a0f;">
+              <img class="card-img" src="./assets/caketing-studio-showcase.webp" alt="CAKETING UI" style="object-position:left top;" />
+              <div style="position:absolute;right:12px;bottom:12px;width:250px;height:142px;border-radius:12px;overflow:hidden;border:2px solid #ff5a26;box-shadow:0 14px 34px rgba(0,0,0,0.85);background:#000;">
+                <video id="v-intro-caketing" data-start="9.5" data-duration="7.0" data-media-start="0" src="./clips/caketing-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+              </div>
+            </div>
+            <div style="margin-top:16px;display:flex;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;">
+              <span style="padding:8px 12px;border-radius:8px;background:rgba(255,90,38,0.16);border:1px solid rgba(255,90,38,0.45);color:#ffb088;">1. RESEARCH</span>
+              <span style="padding:8px 12px;border-radius:8px;background:rgba(255,90,38,0.16);border:1px solid rgba(255,90,38,0.45);color:#ffb088;">2. STRATEGY</span>
+              <span style="padding:8px 12px;border-radius:8px;background:rgba(255,90,38,0.16);border:1px solid rgba(255,90,38,0.45);color:#ffb088;">3. MULTI-PERSONA</span>
+              <span style="padding:8px 12px;border-radius:8px;background:#ff5a26;color:#09090d;">4. 200 SCRIPTS / 3 HRS</span>
+            </div>
+            <div style="margin-top:16px;padding:16px 20px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#fff;line-height:1;">200 SCRIPTS <span style="color:#ff5a26;">IN 3 HRS</span></div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9ca3af;margin-top:5px;">FROM RESEARCH TO MULTI-PERSONA DRAFTS</div>
+              </div>
+              <div style="padding:10px 16px;border-radius:12px;background:rgba(16,185,129,0.16);border:1px solid #10b981;font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#34d399;">
+                -70% TIME
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Time-Compression Reactor (5 DAYS -> 5 HOURS) -->
+          <div id="s3-reactor" class="glass-card" style="left:755px;top:155px;width:410px;height:525px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;background:radial-gradient(circle at 50% 35%,rgba(255,90,38,0.22),rgba(12,12,18,0.96) 70%);border-color:rgba(255,90,38,0.6);">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.18em;color:#ff855e;">PRODUCTION BOTTLENECK CRUSHED</div>
+            <div style="width:100%;padding:18px;border-radius:16px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#fca5a5;">BEFORE (MANUAL WORKFLOW)</div>
+              <div style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#f87171;text-decoration:line-through;margin-top:4px;">~5 DAYS</div>
+            </div>
+            <div style="font-family:'Syne',sans-serif;font-size:34px;font-weight:800;color:#ff5a26;">⬇</div>
+            <div id="s3-5hours-box" style="width:100%;padding:22px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(255,90,38,0.28),rgba(16,185,129,0.22));border:2px solid #ff5a26;box-shadow:0 0 45px rgba(255,90,38,0.35);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#fde68a;font-weight:700;">AFTER (CAKETING + CAKVISUAL)</div>
+              <div style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:#ffffff;line-height:1.05;margin-top:6px;">~5 HOURS</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6ee7b7;margin-top:6px;">WEEKLY KPI PRODUCTION</div>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#cbd5e1;">+ BUILT <strong style="color:#fff;">CAKAI PRO</strong> SOLO IN 2 WEEKS (0 DOWNTIME)</div>
+          </div>
+
+          <!-- Right Console: CakVisual Multi-Workspace Bulk AI Video Engine -->
+          <div id="s3-cakvisual" class="glass-card cyan-rim" style="right:70px;top:85px;width:660px;height:665px;padding:24px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <span class="card-tag cyan" style="position:static;">IN-HOUSE SYSTEM 02 · CAKVISUAL</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7dd3fc;font-weight:700;">BULK AI VIDEO PLATFORM</span>
+            </div>
+            <div style="position:relative;height:390px;border-radius:16px;overflow:hidden;border:1.5px solid rgba(56,189,248,0.35);background:#090a0f;">
+              <img class="card-img" src="./assets/cakvisual-featured-crop.webp" alt="CakVisual Dashboard" style="object-position:left top;" />
+              <div style="position:absolute;right:12px;bottom:12px;width:250px;height:142px;border-radius:12px;overflow:hidden;border:2px solid #38bdf8;box-shadow:0 14px 34px rgba(0,0,0,0.85);background:#000;">
+                <video id="v-intro-cakvisual" data-start="9.5" data-duration="7.0" data-media-start="0" src="./clips/cakvisual-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+              </div>
+            </div>
+            <div style="margin-top:16px;display:flex;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;">
+              <span style="padding:8px 12px;border-radius:8px;background:rgba(56,189,248,0.14);border:1px solid rgba(56,189,248,0.45);color:#bae6fd;">BRAND WORKSPACES</span>
+              <span style="padding:8px 12px;border-radius:8px;background:rgba(56,189,248,0.14);border:1px solid rgba(56,189,248,0.45);color:#bae6fd;">20+ PERSONAS / RUN</span>
+              <span style="padding:8px 12px;border-radius:8px;background:#0284c7;color:#fff;">DUAL-PASS AI QC</span>
+            </div>
+            <div style="margin-top:16px;padding:16px 20px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#fff;line-height:1;">2,000 <span style="color:#38bdf8;">VIDEOS / MO</span></div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9ca3af;margin-top:5px;">MULTI-BRAND AI VIDEO SUPPLY CHAIN</div>
+              </div>
+              <div style="padding:10px 16px;border-radius:12px;background:rgba(56,189,248,0.16);border:1px solid #38bdf8;font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#7dd3fc;">
+                20+ / RUN
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =======================================================================
+             SCENE 4 (Z = -7200): THE SIGNATURE CONVERGENCE (Haidar Ghazy Arkan)
+             ======================================================================= -->
+        <div id="scene-4" class="scene-cluster">
+          <!-- Orbiting Constellation Background Rings -->
+          <svg style="position:absolute;left:360px;top:-60px;width:1200px;height:1200px;transform:translateZ(-80px);opacity:0.55;" viewBox="0 0 1200 1200">
+            <circle cx="600" cy="600" r="490" fill="none" stroke="rgba(255,90,38,0.35)" stroke-width="2" stroke-dasharray="18 12" />
+            <circle cx="600" cy="600" r="390" fill="none" stroke="rgba(56,189,248,0.28)" stroke-width="1.5" />
+            <path d="M 120 600 Q 600 180 1080 600 Q 600 1020 120 600 Z" fill="none" stroke="rgba(255,90,38,0.22)" stroke-width="2" />
+          </svg>
+
+          <!-- Main Hero Lockup Container -->
+          <div id="s4-hero-panel" class="glass-card orange-rim" style="left:170px;top:110px;width:1580px;height:660px;padding:48px 56px;display:grid;grid-template-columns:440px 1fr;gap:54px;align-items:center;background:linear-gradient(145deg,rgba(20,19,28,0.96) 0%,rgba(10,10,15,0.98) 100%);">
+            <!-- Portrait Column -->
+            <div style="position:relative;width:440px;height:540px;border-radius:26px;overflow:hidden;border:2px solid #ff5a26;box-shadow:0 28px 75px rgba(255,90,38,0.28);">
+              <img class="card-img" src="./assets/haidar-portrait-ai-studio.webp" alt="Haidar Ghazy Arkan" />
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(6,6,10,0.94) 100%);"></div>
+              <div style="position:absolute;left:20px;right:20px;bottom:18px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#ffb088;">TANGERANG · JAKARTA</span>
+                <span style="padding:5px 12px;border-radius:999px;background:#ff5a26;color:#09090d;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;">AVAILABLE</span>
+              </div>
+            </div>
+
+            <!-- Editorial Identity & Proof Matrix -->
+            <div>
+              <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 18px;border-radius:999px;background:rgba(255,90,38,0.15);border:1px solid rgba(255,90,38,0.5);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:0.16em;color:#ff7b52;margin-bottom:18px;">
+                <span>HEAD OF CREATOR &amp; AI MARKETING STRATEGIST · FILMMAKER</span>
+              </div>
+              <div style="font-family:'Syne',sans-serif;font-size:74px;font-weight:800;letter-spacing:-0.03em;line-height:0.98;color:#ffffff;">
+                HAIDAR GHAZY ARKAN
+              </div>
+              <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:52px;color:#ffb088;margin-top:8px;">
+                Strategy. Stories. Systems.
+              </div>
+              <p style="margin-top:16px;font-size:19px;line-height:1.5;color:#cbd5e1;max-width:920px;">
+                Combining a Film &amp; TV Director’s eye (ISI Surakarta Cum Laude) with AI-native growth strategy and custom production software for <strong style="color:#fff;">Oppo, AceKid, Syailendra, Golden Rama, and Cak Investment Club</strong>.
+              </p>
+
+              <!-- 4 Verified Impact Pillars -->
+              <div style="margin-top:28px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+                <div style="padding:16px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,90,38,0.4);">
+                  <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#ff5a26;">7.9M</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#e2e8f0;margin-top:4px;">OPPO @DIOLOGTECH VIEWS</div>
+                </div>
+                <div style="padding:16px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(16,185,129,0.4);">
+                  <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#34d399;">~60%</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#e2e8f0;margin-top:4px;">DM-TO-MEMBER CONVERSION</div>
+                </div>
+                <div style="padding:16px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(56,189,248,0.4);">
+                  <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#38bdf8;">200 / 3H</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#e2e8f0;margin-top:4px;">CAKETING BULK SCRIPTS</div>
+                </div>
+                <div style="padding:16px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(250,204,21,0.4);">
+                  <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#facc15;">5D ➔ 5H</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#e2e8f0;margin-top:4px;">CAKVISUAL 2K VIDEOS/MO</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="vignette-overlay"></div>
+    <div id="portal-flash"></div>
+
+    <!-- Camera Viewfinder & Kinetic Typography Overlay -->
+    <div id="kinetic-hud">
+      <div class="hud-frame">
+        <div class="hud-corner tl"></div>
+        <div class="hud-corner tr"></div>
+        <div class="hud-corner bl"></div>
+        <div class="hud-corner br"></div>
       </div>
 
-      <!-- Continuous SVG Layer: Character, Briefs, Props, Production Machine, Orange Thread -->
-      <svg id="world-svg" viewBox="0 0 8400 1080">
+      <div class="hud-topbar">
+        <div class="rec-pill">
+          <span class="rec-dot"></span>
+          <span id="hud-chapter">ACT I · THE FILMMAKER'S EYE</span>
+        </div>
+        <div id="hud-specs">35MM ANAMORPHIC · 3D &amp; VFX · AI-CORE ENGINE</div>
+        <div id="hud-tc" style="color:#ff855e;font-weight:700;">TC 00:00:00:00</div>
+      </div>
+
+      <div id="kinetic-banner">
+        <div class="k-left">
+          <div id="k-eyebrow" class="k-eyebrow">01 · ORIGINS IN CINEMA, 3D &amp; VFX (2021–2025)</div>
+          <div id="k-headline" class="k-headline">
+            I DIDN’T START WITH PROMPTS. <span class="accent">I STARTED BEHIND THE LENS.</span>
+          </div>
+          <div id="k-sub" class="k-sub">
+            ISI SURAKARTA FILM &amp; TV (CUM LAUDE 3.86) · LUMINARA VISUAL WORKS · 50+ PROJECTS
+          </div>
+        </div>
+        <div id="k-telemetry" class="k-telemetry">
+          <div id="k-tel-num" class="k-tel-num">50+</div>
+          <div id="k-tel-label" class="k-tel-label">FILM, 3D &amp; VFX WORKS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opening Lens Iris Portal SVG -->
+    <div id="iris-overlay">
+      <svg id="iris-svg" width="1920" height="1080" viewBox="0 0 1920 1080">
         <defs>
-          <filter id="soft-shadow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#000000" flood-opacity="0.55" />
-          </filter>
-          <filter id="thread-glow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <linearGradient id="hoodie-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#f5efe6" />
-            <stop offset="100%" stop-color="#d7cfc4" />
-          </linearGradient>
-          <linearGradient id="skin-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#e8b896" />
-            <stop offset="100%" stop-color="#d29c78" />
-          </linearGradient>
+          <mask id="iris-mask">
+            <rect width="1920" height="1080" fill="white" />
+            <circle id="iris-hole" cx="960" cy="540" r="0" fill="black" />
+          </mask>
         </defs>
-
-        <!-- Desk Lamp -->
-        <g transform="translate(260, 360)">
-          <ellipse cx="45" cy="300" rx="68" ry="16" fill="rgba(0,0,0,0.45)" />
-          <rect x="0" y="284" width="90" height="16" rx="8" fill="#3a3a45" />
-          <path d="M 45 284 L 22 150 L 96 40" fill="none" stroke="#4c4c58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
-          <circle cx="22" cy="150" r="9" fill="#ff5a26" />
-          <g transform="translate(96, 40) rotate(28)">
-            <path d="M -28 0 L 28 0 L 46 44 L -46 44 Z" fill="#2c2d36" stroke="#5a5b68" stroke-width="2" />
-            <ellipse cx="0" cy="44" rx="42" ry="10" fill="#ffd8a8" />
-          </g>
-        </g>
-
-        <!-- Zone 1 Character Contact Shadow & Haidar Character -->
-        <ellipse id="char-shadow" cx="550" cy="672" rx="145" ry="26" fill="rgba(0,0,0,0.52)" />
-        <g id="haidar-char" transform="translate(550, 460)">
-          <g id="char-torso">
-            <path d="M -86 195 C -88 85, -56 42, 0 42 C 56 42, 88 85, 86 195 Z" fill="url(#hoodie-grad)" filter="url(#soft-shadow)" />
-            <path d="M -42 46 Q 0 74 42 46" fill="none" stroke="#b9b0a4" stroke-width="8" stroke-linecap="round" />
-            <line x1="-14" y1="62" x2="-16" y2="118" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
-            <line x1="14" y1="62" x2="16" y2="118" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
-            <circle cx="38" cy="108" r="8" fill="#ff5a26" />
-          </g>
-          <g transform="translate(-74, 78)">
-            <path d="M 0 0 Q -36 58, -12 108" fill="none" stroke="#dfd7cc" stroke-width="34" stroke-linecap="round" />
-            <circle cx="-12" cy="112" r="17" fill="#e2af8c" />
-          </g>
-          <g id="char-head" transform="translate(0, -18)">
-            <rect x="-18" y="24" width="36" height="36" rx="14" fill="#d29c78" />
-            <rect x="-56" y="-86" width="112" height="122" rx="52" fill="url(#skin-grad)" filter="url(#soft-shadow)" />
-            <circle cx="-56" cy="-22" r="13" fill="#d29c78" />
-            <circle cx="56" cy="-22" r="13" fill="#d29c78" />
-            <path d="M -60 -34 C -64 -92, -16 -112, 16 -108 C 52 -104, 66 -74, 58 -32 C 42 -58, 12 -64, -18 -56 C -40 -50, -52 -42, -60 -34 Z" fill="#171820" />
-            <g stroke="#1b1c24" stroke-width="4" fill="rgba(255,255,255,0.08)">
-              <rect x="-42" y="-36" width="34" height="24" rx="7" />
-              <rect x="8" y="-36" width="34" height="24" rx="7" />
-              <line x1="-8" y1="-24" x2="8" y2="-24" />
-            </g>
-            <g id="char-eyes">
-              <circle cx="-25" cy="-24" r="4.5" fill="#171820" />
-              <circle cx="25" cy="-24" r="4.5" fill="#171820" />
-            </g>
-            <path d="M -38 -45 Q -25 -50 -12 -45" fill="none" stroke="#171820" stroke-width="4" stroke-linecap="round" />
-            <path d="M 12 -45 Q 25 -50 38 -45" fill="none" stroke="#171820" stroke-width="4" stroke-linecap="round" />
-            <path d="M -10 8 Q 2 14 14 7" fill="none" stroke="#8a523c" stroke-width="4" stroke-linecap="round" />
-          </g>
-          <g transform="translate(72, 76)">
-            <path id="arm-r-path" d="M 0 0 Q 52 38, 108 62" fill="none" stroke="#e9e2d8" stroke-width="34" stroke-linecap="round" />
-            <circle id="hand-r" cx="114" cy="64" r="18" fill="#e5b390" />
-          </g>
-        </g>
-
-        <!-- Zone 2 Organized Desk Props -->
-        <g id="prop-audience" transform="translate(1060, 745)">
-          <ellipse cx="0" cy="54" rx="72" ry="12" fill="rgba(0,0,0,0.45)" />
-          <rect x="-64" y="-44" width="128" height="90" rx="14" fill="#232530" stroke="#4c4e5e" stroke-width="2" />
-          <circle cx="-26" cy="-12" r="14" fill="#ff5a26" />
-          <rect x="-2" y="-20" width="46" height="8" rx="4" fill="#f6f2eb" />
-          <rect x="-2" y="-4" width="32" height="6" rx="3" fill="#9a9ca8" />
-          <text x="-44" y="28" fill="#f6f2eb" font-family="JetBrains Mono" font-size="13" font-weight="600">AUDIENCE</text>
-        </g>
-        <g id="prop-idea" transform="translate(1320, 765)">
-          <ellipse cx="0" cy="54" rx="72" ry="12" fill="rgba(0,0,0,0.45)" />
-          <rect x="-64" y="-44" width="128" height="90" rx="14" fill="#232530" stroke="#4c4e5e" stroke-width="2" />
-          <polygon points="-24,-28 -12,-2 -36,-2" fill="#f5b841" />
-          <rect x="-2" y="-20" width="46" height="8" rx="4" fill="#f6f2eb" />
-          <rect x="-2" y="-4" width="34" height="6" rx="3" fill="#9a9ca8" />
-          <text x="-44" y="28" fill="#f6f2eb" font-family="JetBrains Mono" font-size="13" font-weight="600">CONCEPT</text>
-        </g>
-        <g id="prop-script" transform="translate(1580, 740)">
-          <ellipse cx="0" cy="54" rx="72" ry="12" fill="rgba(0,0,0,0.45)" />
-          <rect x="-64" y="-44" width="128" height="90" rx="14" fill="#f6f2eb" stroke="#d5cfc6" stroke-width="2" />
-          <rect x="-46" y="-24" width="92" height="8" rx="4" fill="#1b1c24" />
-          <rect x="-46" y="-8" width="76" height="6" rx="3" fill="#70727e" />
-          <rect x="-46" y="6" width="60" height="6" rx="3" fill="#70727e" />
-          <text x="-46" y="30" fill="#ff5a26" font-family="JetBrains Mono" font-size="13" font-weight="600">SCRIPT</text>
-        </g>
-
-        <!-- Scene 1 Flying Briefs -->
-        <g id="brief-1" filter="url(#soft-shadow)">
-          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#f6f2eb" />
-          <circle cx="-26" cy="-10" r="10" fill="#ff5a26" />
-          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#232530" />
-          <rect x="-8" y="-2" width="32" height="5" rx="2.5" fill="#787a86" />
-        </g>
-        <g id="brief-2" filter="url(#soft-shadow)">
-          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#3a86ff" />
-          <rect x="-36" y="-16" width="20" height="20" rx="5" fill="#ffffff" />
-          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#ffffff" />
-          <rect x="-8" y="-2" width="30" height="5" rx="2.5" fill="rgba(255,255,255,0.7)" />
-        </g>
-        <g id="brief-3" filter="url(#soft-shadow)">
-          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#f4a261" />
-          <polygon points="-26,-18 -16,2 -36,2" fill="#171820" />
-          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#171820" />
-          <rect x="-8" y="-2" width="34" height="5" rx="2.5" fill="rgba(23,24,32,0.65)" />
-        </g>
-        <g id="brief-4" filter="url(#soft-shadow)">
-          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#e76f51" />
-          <circle cx="-26" cy="-10" r="10" fill="#fff5ee" />
-          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#fff5ee" />
-          <rect x="-8" y="-2" width="28" height="5" rx="2.5" fill="rgba(255,245,238,0.75)" />
-        </g>
-        <g id="brief-5" filter="url(#soft-shadow)">
-          <rect x="-54" y="-36" width="108" height="72" rx="10" fill="#2a9d8f" />
-          <rect x="-36" y="-16" width="20" height="20" rx="10" fill="#ffffff" />
-          <rect x="-8" y="-15" width="44" height="7" rx="3.5" fill="#ffffff" />
-          <rect x="-8" y="-2" width="34" height="5" rx="2.5" fill="rgba(255,255,255,0.75)" />
-        </g>
-
-        <!-- Zone 4 Production Studio Animated Pipeline (x=6320..7440, y=560..760) -->
-        <g id="studio-pipeline" transform="translate(6320, 560)">
-          <!-- Conveyor track -->
-          <rect x="0" y="130" width="1100" height="24" rx="12" fill="#272936" stroke="#45485c" stroke-width="2" />
-          <!-- Rotating Gears -->
-          <g id="gear-1" transform="translate(320, 110)">
-            <circle cx="0" cy="0" r="32" fill="#2f3242" stroke="#ff5a26" stroke-width="5" stroke-dasharray="14 10" />
-            <circle cx="0" cy="0" r="10" fill="#ff5a26" />
-          </g>
-          <g id="gear-2" transform="translate(760, 110)">
-            <circle cx="0" cy="0" r="32" fill="#2f3242" stroke="#f4a261" stroke-width="5" stroke-dasharray="14 10" />
-            <circle cx="0" cy="0" r="10" fill="#f4a261" />
-          </g>
-          <!-- Animated Brief Token entering & transforming into Output Reels -->
-          <g id="pipe-token-1">
-            <rect x="-34" y="-24" width="68" height="48" rx="10" fill="#ff5a26" />
-            <rect x="-20" y="-10" width="40" height="6" rx="3" fill="#fff5ee" />
-            <rect x="-20" y="2" width="28" height="6" rx="3" fill="rgba(255,245,238,0.75)" />
-          </g>
-          <g id="pipe-out-1">
-            <rect x="-32" y="-44" width="64" height="88" rx="12" fill="#2a9d8f" stroke="#ffffff" stroke-width="2" />
-            <polygon points="-8,-10 12,0 -8,10" fill="#ffffff" />
-          </g>
-          <g id="pipe-out-2">
-            <rect x="-32" y="-44" width="64" height="88" rx="12" fill="#3a86ff" stroke="#ffffff" stroke-width="2" />
-            <polygon points="-8,-10 12,0 -8,10" fill="#ffffff" />
-          </g>
-          <g id="pipe-out-3">
-            <rect x="-32" y="-44" width="64" height="88" rx="12" fill="#ff5a26" stroke="#ffffff" stroke-width="2" />
-            <polygon points="-8,-10 12,0 -8,10" fill="#ffffff" />
-          </g>
-        </g>
-
-        <!-- Zone 4 Haidar at Studio Console (Consistent character!) -->
-        <g id="haidar-studio" transform="translate(7560, 500)">
-          <ellipse cx="0" cy="212" rx="120" ry="22" fill="rgba(0,0,0,0.48)" />
-          <path d="M -78 190 C -80 85, -50 42, 0 42 C 50 42, 80 85, 78 190 Z" fill="url(#hoodie-grad)" filter="url(#soft-shadow)" />
-          <line x1="-12" y1="62" x2="-14" y2="112" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
-          <line x1="12" y1="62" x2="14" y2="112" stroke="#ff5a26" stroke-width="5" stroke-linecap="round" />
-          <g id="studio-head" transform="translate(0, -18)">
-            <rect x="-16" y="22" width="32" height="34" rx="12" fill="#d29c78" />
-            <rect x="-52" y="-82" width="104" height="114" rx="48" fill="url(#skin-grad)" filter="url(#soft-shadow)" />
-            <path d="M -56 -32 C -60 -88, -14 -106, 14 -102 C 48 -98, 60 -70, 54 -30 C 38 -54, 10 -60, -16 -52 C -36 -46, -48 -38, -56 -32 Z" fill="#171820" />
-            <g stroke="#1b1c24" stroke-width="4" fill="rgba(255,255,255,0.08)">
-              <rect x="-38" y="-34" width="32" height="22" rx="6" />
-              <rect x="6" y="-34" width="32" height="22" rx="6" />
-              <line x1="-6" y1="-23" x2="6" y2="-23" />
-            </g>
-            <circle cx="-22" cy="-23" r="4" fill="#171820" />
-            <circle cx="22" cy="-23" r="4" fill="#171820" />
-            <path d="M -10 8 Q 0 15 12 8" fill="none" stroke="#8a523c" stroke-width="4" stroke-linecap="round" />
-          </g>
-          <g transform="translate(-68, 78)">
-            <path id="studio-arm-l" d="M 0 0 Q -50 20, -100 30" fill="none" stroke="#e9e2d8" stroke-width="30" stroke-linecap="round" />
-            <circle id="studio-hand-l" cx="-106" cy="32" r="16" fill="#e5b390" />
-          </g>
-        </g>
-
-        <!-- CONTINUOUS WARM ORANGE THREAD THROUGH ALL 5 ZONES -->
-        <path
-          id="orange-thread"
-          d="M 735 645
-             C 820 615, 920 680, 1060 700
-             C 1180 715, 1220 655, 1320 715
-             C 1420 770, 1480 665, 1580 690
-             C 1780 735, 1980 560, 2190 520
-             C 2480 465, 2720 820, 3040 740
-             C 3320 670, 3420 530, 3610 510
-             C 3940 480, 4240 820, 4560 720
-             C 4780 650, 4840 500, 5020 490
-             C 5350 470, 5650 780, 5980 710
-             C 6140 675, 6220 695, 6360 695
-             L 7480 695"
-          fill="none"
-          stroke="#ff5a26"
-          stroke-width="9"
-          stroke-linecap="round"
-          filter="url(#thread-glow)"
-        />
-        <circle id="thread-tip" cx="735" cy="645" r="12" fill="#ffb17a" filter="url(#thread-glow)" opacity="0" />
+        <rect width="1920" height="1080" fill="#050508" mask="url(#iris-mask)" />
+        <circle id="iris-ring" cx="960" cy="540" r="10" fill="none" stroke="#ff5a26" stroke-width="6" />
       </svg>
-    </div>
-
-    <!-- Story Caption -->
-    <div id="caption-bar">
-      <div id="cap-eyebrow" class="cap-eyebrow">01 · THE BRIEF STORM</div>
-      <div id="cap-line" class="cap-line">Different brands. Different problems.</div>
-    </div>
-
-    <!-- Scene 5 Signature End-Card -->
-    <div id="end-card">
-      <div class="end-name">HAIDAR GHAZY ARKAN</div>
-      <div class="end-line"></div>
-      <div class="end-pillars">Strategy. Stories. Systems.</div>
     </div>
   </div>
 
@@ -732,6 +732,12 @@
       t = clamp(t);
       return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     };
+    const easeInOutExpo = (t) => {
+      t = clamp(t);
+      if (t === 0) return 0;
+      if (t === 1) return 1;
+      return t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2;
+    };
     const easeOutBack = (t) => {
       t = clamp(t);
       const c1 = 1.70158;
@@ -739,240 +745,242 @@
       return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
     };
 
-    const camera = document.getElementById("camera");
-    const haidar = document.getElementById("haidar-char");
-    const charHead = document.getElementById("char-head");
-    const charEyes = document.getElementById("char-eyes");
-    const armPath = document.getElementById("arm-r-path");
-    const handR = document.getElementById("hand-r");
-    const propAudience = document.getElementById("prop-audience");
-    const propIdea = document.getElementById("prop-idea");
-    const propScript = document.getElementById("prop-script");
-    const thread = document.getElementById("orange-thread");
-    const threadTip = document.getElementById("thread-tip");
-    const gear1 = document.getElementById("gear-1");
-    const gear2 = document.getElementById("gear-2");
-    const pipeToken1 = document.getElementById("pipe-token-1");
-    const pipeOut1 = document.getElementById("pipe-out-1");
-    const pipeOut2 = document.getElementById("pipe-out-2");
-    const pipeOut3 = document.getElementById("pipe-out-3");
-    const studioArmL = document.getElementById("studio-arm-l");
-    const studioHandL = document.getElementById("studio-hand-l");
-    const studioHead = document.getElementById("studio-head");
-    const capEyebrow = document.getElementById("cap-eyebrow");
-    const capLine = document.getElementById("cap-line");
-    const capBar = document.getElementById("caption-bar");
-    const endCard = document.getElementById("end-card");
+    const world3d = document.getElementById("world-3d");
+    const scene1 = document.getElementById("scene-1");
+    const scene2 = document.getElementById("scene-2");
+    const scene3 = document.getElementById("scene-3");
+    const scene4 = document.getElementById("scene-4");
 
-    // Pre-compute thread lookup table at build time (zero DOM measurements during seek!)
-    const threadLen = thread.getTotalLength();
-    const threadPts = Array.from({ length: 201 }, (_, i) => {
-      const p = thread.getPointAtLength((i / 200) * threadLen);
-      return { x: p.x, y: p.y };
-    });
-    thread.style.strokeDasharray = threadLen;
-    thread.style.strokeDashoffset = threadLen;
+    const irisHole = document.getElementById("iris-hole");
+    const irisRing = document.getElementById("iris-ring");
+    const irisOverlay = document.getElementById("iris-overlay");
+    const portalFlash = document.getElementById("portal-flash");
 
-    const briefs = [
-      ["brief-1", 0.25, 1.35, 1300, -80, 950, 260, 735, 650, -34, -8],
-      ["brief-2", 0.65, 1.75, 160, 120, 480, 220, 760, 642, 28, 7],
-      ["brief-3", 1.05, 2.15, 1520, 40, 1080, 320, 718, 632, -22, -14],
-      ["brief-4", 1.45, 2.55, 1060, -120, 860, 280, 746, 622, 36, 11],
-      ["brief-5", 1.85, 2.95, 1460, 280, 1040, 380, 732, 610, -28, -3]
-    ];
+    const hudChapter = document.getElementById("hud-chapter");
+    const hudTc = document.getElementById("hud-tc");
+    const kEyebrow = document.getElementById("k-eyebrow");
+    const kHeadline = document.getElementById("k-headline");
+    const kSub = document.getElementById("k-sub");
+    const kTelNum = document.getElementById("k-tel-num");
+    const kTelLabel = document.getElementById("k-tel-label");
+    const kBanner = document.getElementById("kinetic-banner");
 
-    function bezier(p0, p1, p2, t) {
-      const u = 1 - t;
-      return u * u * p0 + 2 * u * t * p1 + t * t * p2;
+    const oppoCounter = document.getElementById("oppo-views-counter");
+    const cicCounter = document.getElementById("cic-conv-counter");
+
+    // Canvas Particle & Glowing Neural Thread Renderer
+    const canvas = document.getElementById("fx-canvas");
+    const ctx = canvas.getContext("2d");
+    const particles = Array.from({ length: 68 }, (_, i) => ({
+      x: ((i * 137.5) % 1920),
+      y: ((i * 293.7) % 1080),
+      z: (i % 5) * 0.2 + 0.2,
+      r: (i % 3) + 1.4,
+      hue: i % 3 === 0 ? "#ff5a26" : i % 3 === 1 ? "#38bdf8" : "#f7f4ee"
+    }));
+
+    function drawCanvas(t) {
+      ctx.clearRect(0, 0, 1920, 1080);
+
+      // Dynamic perspective grid lines
+      ctx.save();
+      ctx.strokeStyle = "rgba(255, 90, 38, 0.06)";
+      ctx.lineWidth = 1;
+      const shift = (t * 60) % 120;
+      for (let x = -200; x <= 2120; x += 160) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(960 + (x - 960) * 1.35, 1080);
+        ctx.stroke();
+      }
+      for (let y = shift; y < 1080; y += 120) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(1920, y);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Floating depth particles
+      for (const p of particles) {
+        const px = (p.x + Math.sin(t * 0.8 + p.y * 0.01) * 45 * p.z + 1920) % 1920;
+        const py = (p.y - t * 38 * p.z + 10800) % 1080;
+        ctx.beginPath();
+        ctx.fillStyle = p.hue;
+        ctx.globalAlpha = 0.25 + 0.35 * p.z;
+        ctx.arc(px, py, p.r * (0.7 + p.z), 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Signature Glowing Orange Thread weaving across the frame
+      ctx.save();
+      ctx.globalAlpha = 0.72;
+      ctx.strokeStyle = "#ff5a26";
+      ctx.lineWidth = 4;
+      ctx.shadowColor = "#ff5a26";
+      ctx.shadowBlur = 24;
+      ctx.beginPath();
+      for (let x = 0; x <= 1920; x += 24) {
+        const wave = Math.sin(x * 0.0045 - t * 2.8) * 90 + Math.cos(x * 0.009 + t * 1.7) * 35;
+        const y = 540 + wave;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function formatTimecode(t) {
+      const s = Math.floor(t);
+      const f = Math.floor((t - s) * 30);
+      return `TC 00:00:${String(s).padStart(2, "0")}:${String(f).padStart(2, "0")}`;
     }
 
     function renderAt(t) {
-      // 1. CAMERA CHOREOGRAPHY ACROSS THE 8400px WORLD
-      let camX = 0, camY = 0, camScale = 0.9;
+      drawCanvas(t);
+      hudTc.textContent = formatTimecode(t);
+
+      // 1. OPENING LENS IRIS (0.0s -> 0.85s)
+      if (t < 0.9) {
+        const p = easeInOutCubic(t / 0.85);
+        const radius = lerp(8, 1250, p);
+        irisHole.setAttribute("r", radius.toFixed(1));
+        irisRing.setAttribute("r", radius.toFixed(1));
+        irisOverlay.style.opacity = clamp(1 - (t - 0.65) / 0.25);
+      } else {
+        irisOverlay.style.opacity = "0";
+      }
+
+      // 2. Z-AXIS CAMERA FLY-THROUGH CHOREOGRAPHY (Z: 0 -> -2400 -> -4800 -> -7200)
+      let camZ = 0;
+      let camX = Math.sin(t * 1.7) * 14;
+      let camY = Math.cos(t * 1.3) * 10;
+      let camRotZ = Math.sin(t * 0.9) * 0.6;
+      let flashAlpha = 0;
+
+      if (t < 3.6) {
+        // Slowly dolly in on Scene 1 (Cinema & 3D Craft)
+        camZ = lerp(-140, 110, easeOutCubic(t / 3.6));
+      } else if (t < 4.4) {
+        // Whip-zoom portal transition into Scene 2 (Z = 2400)
+        const p = easeInOutExpo((t - 3.6) / 0.8);
+        camZ = lerp(110, 2400, p);
+        camRotZ += Math.sin(p * Math.PI) * 5.5;
+        flashAlpha = Math.sin(p * Math.PI) * 0.78;
+      } else if (t < 9.6) {
+        // Explore Scene 2 (AI Growth & Viral Proof)
+        camZ = lerp(2400, 2530, easeInOutCubic((t - 4.4) / 5.2));
+      } else if (t < 10.4) {
+        // Whip-zoom portal transition into Scene 3 (Z = 4800)
+        const p = easeInOutExpo((t - 9.6) / 0.8);
+        camZ = lerp(2530, 4800, p);
+        camRotZ -= Math.sin(p * Math.PI) * 5.0;
+        flashAlpha = Math.sin(p * Math.PI) * 0.78;
+      } else if (t < 15.6) {
+        // Explore Scene 3 (CAKETING & CakVisual Factory)
+        camZ = lerp(4800, 4920, easeInOutCubic((t - 10.4) / 5.2));
+      } else if (t < 16.4) {
+        // Whip-zoom portal transition into Scene 4 (Z = 7200)
+        const p = easeInOutExpo((t - 15.6) / 0.8);
+        camZ = lerp(4920, 7200, p);
+        camRotZ += Math.sin(p * Math.PI) * 4.0;
+        flashAlpha = Math.sin(p * Math.PI) * 0.75;
+      } else {
+        // Settle on Scene 4 Hero Lockup
+        camZ = lerp(7200, 7245, easeOutCubic((t - 16.4) / 3.6));
+      }
+
+      portalFlash.style.opacity = flashAlpha.toFixed(3);
+      world3d.style.transform = `translate3d(${camX.toFixed(1)}px, ${camY.toFixed(1)}px, ${camZ.toFixed(1)}px) rotateZ(${camRotZ.toFixed(2)}deg)`;
+
+      // Position & fade scenes along Z-axis
+      scene1.style.transform = `translate3d(0px, 0px, 0px)`;
+      scene1.style.opacity = clamp(1 - (t - 3.8) / 0.45);
+
+      scene2.style.transform = `translate3d(0px, 0px, -2400px)`;
+      scene2.style.opacity = clamp((t - 3.6) / 0.45) * clamp(1 - (t - 9.8) / 0.45);
+
+      scene3.style.transform = `translate3d(0px, 0px, -4800px)`;
+      scene3.style.opacity = clamp((t - 9.6) / 0.45) * clamp(1 - (t - 15.8) / 0.45);
+
+      scene4.style.transform = `translate3d(0px, 0px, -7200px)`;
+      scene4.style.opacity = clamp((t - 15.6) / 0.5);
+
+      // 3. SCENE 1 PARALLAX & CARD CHOREOGRAPHY (0.0s -> 4.0s)
+      const s1p = easeOutBack(clamp((t - 0.15) / 0.75));
+      document.getElementById("s1-card-hero").style.transform = `translate3d(0px, ${lerp(60, 0, s1p).toFixed(1)}px, 70px)`;
+      document.getElementById("s1-card-qris").style.transform = `translate3d(${lerp(-90, 0, s1p).toFixed(1)}px, 0px, -20px) rotateY(14deg)`;
+      document.getElementById("s1-card-vfx").style.transform = `translate3d(${lerp(-90, 0, s1p).toFixed(1)}px, 0px, 20px) rotateY(12deg)`;
+      document.getElementById("s1-card-3d").style.transform = `translate3d(${lerp(90, 0, s1p).toFixed(1)}px, 0px, -20px) rotateY(-14deg)`;
+      document.getElementById("s1-card-mapping").style.transform = `translate3d(${lerp(90, 0, s1p).toFixed(1)}px, 0px, 20px) rotateY(-12deg)`;
+
+      // 4. SCENE 2 ANALYTICS COUNTERS & DM POP CHOREOGRAPHY (4.0s -> 10.0s)
+      const s2t = clamp((t - 4.1) / 1.5);
+      const oppoVal = lerp(0.0, 7.9, easeOutCubic(s2t));
+      oppoCounter.textContent = `${oppoVal.toFixed(1)}M`;
+
+      const cicVal = Math.round(lerp(0, 60, easeOutCubic(clamp((t - 5.2) / 1.4))));
+      cicCounter.textContent = `~${cicVal}%`;
+
+      const dm1p = easeOutBack(clamp((t - 5.4) / 0.45));
+      const dm2p = easeOutBack(clamp((t - 6.1) / 0.45));
+      const dm3p = easeOutBack(clamp((t - 6.8) / 0.45));
+      document.getElementById("dm-1").style.transform = `scale(${dm1p.toFixed(3)})`;
+      document.getElementById("dm-1").style.opacity = clamp((t - 5.4) / 0.2);
+      document.getElementById("dm-2").style.transform = `scale(${dm2p.toFixed(3)})`;
+      document.getElementById("dm-2").style.opacity = clamp((t - 6.1) / 0.2);
+      document.getElementById("dm-3").style.transform = `scale(${dm3p.toFixed(3)})`;
+      document.getElementById("dm-3").style.opacity = clamp((t - 6.8) / 0.2);
+
+      document.getElementById("s2-oppo-card").style.transform = `translate3d(0px, 0px, 25px) rotateY(10deg)`;
+      document.getElementById("s2-video-deck").style.transform = `translate3d(0px, 0px, 65px)`;
+      document.getElementById("s2-cic-card").style.transform = `translate3d(0px, 0px, 25px) rotateY(-10deg)`;
+
+      // 5. SCENE 3 CAKETING & CAKVISUAL COMPRESSION (10.0s -> 16.0s)
+      const s3p = easeOutBack(clamp((t - 10.1) / 0.75));
+      document.getElementById("s3-caketing").style.transform = `translate3d(${lerp(-80, 0, s3p).toFixed(1)}px, 0px, 20px) rotateY(9deg)`;
+      document.getElementById("s3-cakvisual").style.transform = `translate3d(${lerp(80, 0, s3p).toFixed(1)}px, 0px, 20px) rotateY(-9deg)`;
+      const slamP = easeOutBack(clamp((t - 12.2) / 0.6));
+      document.getElementById("s3-5hours-box").style.transform = `scale(${lerp(0.75, 1.04, slamP).toFixed(3)})`;
+
+      // 6. KINETIC TYPOGRAPHY HUD UPDATES
       if (t < 4.0) {
-        // Scene 1: Wide -> Worktable push-in
-        const p = easeInOutCubic(t / 4.0);
-        camX = lerp(40, -60, p);
-        camY = lerp(20, -20, p);
-        camScale = lerp(0.88, 1.08, p);
-      } else if (t < 9.0) {
-        // Scene 2: Follow orange thread across desk toward World A
-        const p = easeInOutCubic((t - 4.0) / 5.0);
-        camX = lerp(-60, -1580, p);
-        camY = lerp(-20, 10, p);
-        camScale = lerp(1.08, 1.0, p);
-      } else if (t < 11.3) {
-        // World A: Cinema (centered at x=2540 -> camX=-1580)
-        const p = easeInOutCubic((t - 9.0) / 1.2);
-        camX = lerp(-1580, -1620, p);
-        camY = lerp(10, 14, p);
-        camScale = lerp(1.0, 1.06, p);
-      } else if (t < 13.7) {
-        // World B: Drama Stage (centered at x=3950 -> camX=-2990)
-        const p = easeInOutCubic((t - 11.3) / 1.0);
-        camX = lerp(-1620, -2990, p);
-        camY = lerp(14, 10, p);
-        camScale = lerp(1.06, 1.04, p);
-      } else if (t < 16.2) {
-        // World C: Beauty Billboard (centered at x=5340 -> camX=-4380)
-        const p = easeInOutCubic((t - 13.7) / 1.0);
-        camX = lerp(-2990, -4380, p);
-        camY = lerp(10, 10, p);
-        camScale = lerp(1.04, 1.05, p);
-      } else if (t < 23.0) {
-        // Scene 4: Production Studio (centered around x=6940 -> camX=-5960)
-        const p = easeInOutCubic((t - 16.2) / 1.8);
-        camX = lerp(-4380, -5960, p);
-        camY = lerp(10, 0, p);
-        camScale = lerp(1.05, 0.98, p);
+        hudChapter.textContent = "ACT I · THE FILMMAKER'S EYE";
+        kEyebrow.textContent = "01 · ORIGINS IN CINEMA, 3D & VFX (2021–2025)";
+        if (t < 1.75) {
+          kHeadline.innerHTML = `I DIDN’T START WITH <span class="accent">AI PROMPTS.</span>`;
+        } else {
+          kHeadline.innerHTML = `I STARTED <span class="serif-italic">Behind the Cinema Lens.</span>`;
+        }
+        kSub.textContent = "ISI SURAKARTA FILM & TV (CUM LAUDE 3.86) · LUMINARA VISUAL WORKS · 50+ PROJECTS";
+        kTelNum.textContent = "50+";
+        kTelLabel.textContent = "FILM, 3D & VFX WORKS";
+        kBanner.style.opacity = "1";
+      } else if (t < 10.0) {
+        hudChapter.textContent = "ACT II · THE ALGORITHM HIJACKER";
+        kEyebrow.textContent = "02 · STORYTELLING WEAPONIZED WITH AI GROWTH";
+        kHeadline.innerHTML = `<span class="accent">7.9M VIEWS</span> ON OPPO · <span class="serif-italic">~60% DM Conversion</span> ON CAK IC.`;
+        kSub.textContent = "20–90 AI PERSONAS/BRAND · OPPO · ACEKID · SYAILENDRA · GOLDEN RAMA · RAHASIA BEAUTY";
+        kTelNum.textContent = "10.2M+";
+        kTelLabel.textContent = "VERIFIED CAMPAIGN VIEWS";
+        kBanner.style.opacity = "1";
+      } else if (t < 16.0) {
+        hudChapter.textContent = "ACT III · THE SYSTEM ARCHITECT";
+        kEyebrow.textContent = "03 · IN-HOUSE AI PRODUCTION ENGINES (CAKETING & CAKVISUAL)";
+        kHeadline.innerHTML = `BUILT THE FACTORY: <span class="accent">5 DAYS CUT TO 5 HOURS.</span>`;
+        kSub.textContent = "CAKETING: 200 SCRIPTS IN 3 HRS (-70% TIME) · CAKVISUAL: 2,000 AI VIDEOS / MONTH";
+        kTelNum.textContent = "5D ➔ 5H";
+        kTelLabel.textContent = "WEEKLY KPI COMPRESSION";
+        kBanner.style.opacity = "1";
       } else {
-        // Scene 5: Pull back fast (23.0 - 24.6s) to reveal the entire connected world!
-        const p = easeInOutCubic((t - 23.0) / 1.6);
-        camX = lerp(-5960, 40, p);
-        camY = lerp(0, 415, p);
-        camScale = lerp(0.98, 0.225, p);
+        hudChapter.textContent = "HAIDAR GHAZY ARKAN · PORTFOLIO";
+        kEyebrow.textContent = "04 · THE CONVERGENCE OF CRAFT, GROWTH & SYSTEMS";
+        kHeadline.innerHTML = `WELCOME TO <span class="accent">HAIDAR’S CREATIVE WORLD.</span>`;
+        kSub.textContent = "DIRECTOR’S EYE · STRATEGIST’S BRAIN · SYSTEMS BUILDER’S EXECUTION";
+        kTelNum.textContent = "3-IN-1";
+        kTelLabel.textContent = "STRATEGY · STORIES · SYSTEMS";
+        kBanner.style.opacity = "1";
       }
-      camera.style.transform = `translate3d(${camX.toFixed(1)}px, ${camY.toFixed(1)}px, 0) scale(${camScale.toFixed(4)})`;
-
-      // 2. BRIEF STORM (0 - 4s)
-      for (const [id, sT, eT, sx, sy, cx, cy, ex, ey, sR, eR] of briefs) {
-        const el = document.getElementById(id);
-        const raw = clamp((t - sT) / (eT - sT));
-        const p = easeOutCubic(raw);
-        const x = bezier(sx, cx, ex, p);
-        const y = bezier(sy, cy, ey, p);
-        const bounce = raw >= 1 ? Math.sin((t - eT) * 10) * Math.exp(-(t - eT) * 4) * 5 : 0;
-        const rot = lerp(sR, eR, p);
-        el.setAttribute("transform", `translate(${x.toFixed(1)}, ${(y + bounce).toFixed(1)}) rotate(${rot.toFixed(1)})`);
-        el.setAttribute("opacity", raw > 0.02 ? 1 : 0);
-      }
-
-      // 3. ZONE 1 CHARACTER ACTING
-      const breathY = Math.sin(t * 2.2) * 3;
-      let leanX = 0, headRot = 0, eyeX = 0, eyeY = 0;
-      if (t < 3.8) {
-        const react = easeInOutCubic(t / 3.2);
-        leanX = lerp(0, -14, react);
-        headRot = lerp(-5, 8, Math.sin(t * 2.1) * 0.5 + 0.5);
-        eyeX = lerp(0, 6, react);
-        eyeY = lerp(-2, 2, react);
-      } else if (t < 5.0) {
-        const p = easeInOutCubic((t - 3.8) / 1.2);
-        leanX = lerp(-14, 24, p);
-        headRot = lerp(8, 12, p);
-        eyeX = 6;
-        eyeY = 4;
-      } else {
-        leanX = 12;
-        headRot = 4;
-        eyeX = 7;
-        eyeY = 0;
-      }
-      haidar.setAttribute("transform", `translate(${(550 + leanX).toFixed(1)}, ${(460 + breathY).toFixed(1)})`);
-      charHead.setAttribute("transform", `translate(0, -18) rotate(${headRot.toFixed(1)})`);
-      charEyes.setAttribute("transform", `translate(${eyeX.toFixed(1)}, ${eyeY.toFixed(1)})`);
-
-      let handRelX = 114, handRelY = 64;
-      if (t >= 3.6 && t < 4.5) {
-        const p = easeOutBack((t - 3.6) / 0.9);
-        handRelX = lerp(114, 178, p);
-        handRelY = lerp(64, 104, p);
-      } else if (t >= 4.5 && t < 5.5) {
-        const p = easeInOutCubic((t - 4.5) / 1.0);
-        handRelX = lerp(178, 130, p);
-        handRelY = lerp(104, 72, p);
-      } else if (t >= 5.5) {
-        handRelX = 130;
-        handRelY = 72;
-      }
-      armPath.setAttribute("d", `M 0 0 Q ${(handRelX * 0.48).toFixed(1)} ${(handRelY * 0.65).toFixed(1)}, ${handRelX.toFixed(1)} ${handRelY.toFixed(1)}`);
-      handR.setAttribute("cx", handRelX.toFixed(1));
-      handR.setAttribute("cy", handRelY.toFixed(1));
-
-      // 4. CONTINUOUS ORANGE THREAD TRAVEL (4.4s -> 22.0s)
-      let threadProg = 0;
-      if (t >= 4.4 && t < 9.0) {
-        threadProg = lerp(0, 0.16, easeInOutCubic((t - 4.4) / 4.6));
-      } else if (t >= 9.0 && t < 16.2) {
-        threadProg = lerp(0.16, 0.72, easeInOutCubic((t - 9.0) / 7.2));
-      } else if (t >= 16.2 && t < 22.0) {
-        threadProg = lerp(0.72, 1.0, easeOutCubic((t - 16.2) / 5.8));
-      } else if (t >= 22.0) {
-        threadProg = 1.0;
-      }
-      const drawLen = threadLen * threadProg;
-      thread.style.strokeDashoffset = (threadLen - drawLen).toFixed(1);
-
-      if (threadProg > 0.01 && threadProg < 0.99) {
-        const idx = Math.min(200, Math.round(threadProg * 200));
-        const pt = threadPts[idx];
-        threadTip.setAttribute("cx", pt.x.toFixed(1));
-        threadTip.setAttribute("cy", pt.y.toFixed(1));
-        threadTip.setAttribute("opacity", "1");
-      } else {
-        threadTip.setAttribute("opacity", "0");
-      }
-
-      // Organize Desk Objects when thread reaches them
-      const pAud = easeOutBack(clamp((t - 5.1) / 0.6));
-      propAudience.setAttribute("transform", `translate(1060, ${lerp(758, 740, pAud).toFixed(1)}) rotate(${lerp(-14, 0, pAud).toFixed(1)})`);
-      const pIdea = easeOutBack(clamp((t - 5.9) / 0.6));
-      propIdea.setAttribute("transform", `translate(1320, ${lerp(780, 748, pIdea).toFixed(1)}) rotate(${lerp(18, 0, pIdea).toFixed(1)})`);
-      const pScript = easeOutBack(clamp((t - 6.7) / 0.6));
-      propScript.setAttribute("transform", `translate(1580, ${lerp(762, 735, pScript).toFixed(1)}) rotate(${lerp(-11, 0, pScript).toFixed(1)})`);
-
-      // 5. ZONE 4 PRODUCTION STUDIO ACTION (16.2s - 23.0s)
-      const studioT = clamp((t - 16.5) / 5.5);
-      const gearDeg = studioT * 360;
-      gear1.setAttribute("transform", `translate(320, 110) rotate(${gearDeg.toFixed(1)})`);
-      gear2.setAttribute("transform", `translate(760, 110) rotate(${(-gearDeg * 1.2).toFixed(1)})`);
-
-      // Brief token enters left -> disappears into engine -> 3 output reels emerge
-      const inP = clamp((t - 17.0) / 1.8);
-      pipeToken1.setAttribute("transform", `translate(${lerp(60, 520, easeInOutCubic(inP)).toFixed(1)}, 112) scale(${inP > 0.92 ? 0 : 1})`);
-      pipeToken1.setAttribute("opacity", inP > 0.02 && inP < 0.95 ? "1" : "0");
-
-      const out1 = easeOutBack(clamp((t - 18.8) / 1.4));
-      const out2 = easeOutBack(clamp((t - 19.4) / 1.4));
-      const out3 = easeOutBack(clamp((t - 20.0) / 1.4));
-      pipeOut1.setAttribute("transform", `translate(${lerp(560, 840, out1).toFixed(1)}, 90)`);
-      pipeOut1.setAttribute("opacity", clamp((t - 18.8) / 0.3));
-      pipeOut2.setAttribute("transform", `translate(${lerp(560, 940, out2).toFixed(1)}, 90)`);
-      pipeOut2.setAttribute("opacity", clamp((t - 19.4) / 0.3));
-      pipeOut3.setAttribute("transform", `translate(${lerp(560, 1040, out3).toFixed(1)}, 90)`);
-      pipeOut3.setAttribute("opacity", clamp((t - 20.0) / 0.3));
-
-      // Studio Haidar hand adjustment
-      const adj = Math.sin(clamp((t - 17.5) / 3.0) * Math.PI * 2) * 14;
-      studioArmL.setAttribute("d", `M 0 0 Q -50 ${(20 + adj).toFixed(1)}, -100 ${(30 + adj).toFixed(1)}`);
-      studioHandL.setAttribute("cy", (32 + adj).toFixed(1));
-      studioHead.setAttribute("transform", `translate(0, -18) rotate(${lerp(-6, 4, easeInOutCubic(studioT)).toFixed(1)})`);
-
-      // 6. STORY CAPTIONS & END CARD
-      if (t < 4.0) {
-        capEyebrow.textContent = "01 · THE BRIEF STORM";
-        capLine.textContent = "Different brands. Different problems.";
-        capBar.style.opacity = clamp(t / 0.5);
-      } else if (t < 9.0) {
-        capEyebrow.textContent = "02 · FINDING THE CONNECTION";
-        capLine.textContent = "Find the audience. Shape the idea.";
-        capBar.style.opacity = 1;
-      } else if (t < 16.2) {
-        capEyebrow.textContent = "03 · CREATIVE WORLDS";
-        capLine.textContent = "Different stories. Different worlds.";
-        capBar.style.opacity = 1;
-      } else if (t < 23.0) {
-        capEyebrow.textContent = "04 · PRODUCTION SYSTEMS";
-        capLine.textContent = "Build a better way to create.";
-        capBar.style.opacity = 1;
-      } else {
-        capEyebrow.textContent = "05 · ONE CONNECTED WORLD";
-        capLine.textContent = "From signal to story to system.";
-        capBar.style.opacity = clamp(1 - (t - 25.0) / 0.7);
-      }
-
-      // End card reveal (25.8s -> 30.0s)
-      endCard.style.opacity = clamp((t - 25.8) / 0.9);
     }
 
     renderAt(0);
@@ -980,10 +988,10 @@
     const state = { t: 0 };
     const tl = gsap.timeline({ paused: true });
     tl.to(state, {
-      t: 10,
-      duration: 10,
+      t: 20,
+      duration: 20,
       ease: "none",
-      onUpdate: () => renderAt(state.t * 3.0)
+      onUpdate: () => renderAt(state.t)
     }, 0);
 
     window.__timelines = window.__timelines || {};

@@ -159,11 +159,20 @@ export function HeroSection() {
 
               <button
                 type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent('hga:replay-intro'))}
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-line bg-surface/60 px-4 py-2 text-xs font-semibold text-ink transition-colors hover:border-accent/60 hover:text-accent sm:text-sm"
+              >
+                <Play size={14} weight="fill" className="text-accent" />
+                <span>Watch Intro (20s)</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => window.dispatchEvent(new CustomEvent('hga:replay-showreel'))}
                 className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold text-muted transition-colors hover:text-accent sm:text-sm"
               >
                 <Play size={14} weight="fill" className="text-accent" />
-                <span>Watch Full Film (30s)</span>
+                <span>Director&apos;s Cut (60s)</span>
               </button>
             </div>
 
