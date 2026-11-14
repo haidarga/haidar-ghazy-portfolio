@@ -165,15 +165,6 @@ export function HeroSection() {
                 <Play size={14} weight="fill" className="text-accent" />
                 <span>Watch Intro (20s)</span>
               </button>
-
-              <button
-                type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent('hga:replay-showreel'))}
-                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold text-muted transition-colors hover:text-accent sm:text-sm"
-              >
-                <Play size={14} weight="fill" className="text-accent" />
-                <span>Director&apos;s Cut (60s)</span>
-              </button>
             </div>
 
             {/* 3 Open Typographic Hero Proof Numbers (No card monotony) */}

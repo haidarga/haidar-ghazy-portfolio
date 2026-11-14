@@ -2,16 +2,14 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, ArrowUpRight, FilmStrip, Play, SpeakerHigh, SpeakerSlash } from '@phosphor-icons/react';
+import { ArrowRight, ArrowUpRight, Play, SpeakerHigh, SpeakerSlash } from '@phosphor-icons/react';
 import { useAppContext } from '@/components/AppProviders';
 
-const INTRO_STORAGE_KEY = 'hga_intro_choice_v5';
+const INTRO_STORAGE_KEY = 'hga_intro_choice_v6';
 
 export function CinematicIntro() {
   const { setScrollLocked } = useAppContext();
   const [mode, setMode] = useState<'hidden' | 'choice' | 'showreel'>('hidden');
-  const [reelKind, setReelKind] = useState<'intro' | 'full'>('intro');
-  const [isMobilePortrait, setIsMobilePortrait] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -23,16 +21,10 @@ export function CinematicIntro() {
   }, [mode, setScrollLocked]);
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px) and (orientation: portrait)');
-    const syncOrientation = () => setIsMobilePortrait(mq.matches);
-    syncOrientation();
-    mq.addEventListener('change', syncOrientation);
-
     try {
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const seen = sessionStorage.getItem(INTRO_STORAGE_KEY) === '1';
       if (!reduced && !seen) {
-        setReelKind('intro');
         setMode('choice');
         sessionStorage.setItem(INTRO_STORAGE_KEY, '1');
       }
@@ -40,25 +32,14 @@ export function CinematicIntro() {
       // Ignore storage failures
     }
 
-    const onReplay = () => {
-      setProgress(0);
-      setVideoReady(false);
-      setIsMuted(false);
-      setReelKind('full');
-      setMode('showreel');
-    };
     const onReplayIntro = () => {
       setProgress(0);
       setVideoReady(false);
       setIsMuted(false);
-      setReelKind('intro');
       setMode('showreel');
     };
-    window.addEventListener('hga:replay-showreel', onReplay);
     window.addEventListener('hga:replay-intro', onReplayIntro);
     return () => {
-      mq.removeEventListener('change', syncOrientation);
-      window.removeEventListener('hga:replay-showreel', onReplay);
       window.removeEventListener('hga:replay-intro', onReplayIntro);
     };
   }, []);
@@ -75,11 +56,10 @@ export function CinematicIntro() {
     return () => window.removeEventListener('keydown', onKey);
   }, [mode]);
 
-  const handleEnterShowreel = (kind: 'intro' | 'full' = 'intro') => {
+  const handleEnterShowreel = () => {
     setProgress(0);
     setVideoReady(false);
     setIsMuted(false);
-    setReelKind(kind);
     setMode('showreel');
   };
 
@@ -146,21 +126,12 @@ export function CinematicIntro() {
               <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3.5">
                 <button
                   type="button"
-                  onClick={() => handleEnterShowreel('intro')}
+                  onClick={handleEnterShowreel}
                   className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-[#ff5a26] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-[#ff5a26]/25 transition-colors hover:bg-[#ff7447] sm:text-base"
                 >
                   <Play size={16} weight="fill" />
                   <span>Enter My World (20s Intro · Sound On)</span>
                   <ArrowUpRight size={16} weight="bold" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleEnterShowreel('full')}
-                  className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-[#ff5a26]/50 bg-[#ff5a26]/10 px-6 py-3 text-sm font-semibold text-[#ffb088] transition-colors hover:border-[#ff5a26] hover:bg-[#ff5a26]/20 hover:text-white sm:text-base"
-                >
-                  <FilmStrip size={17} weight="duotone" />
-                  <span>Full Director&apos;s Cut (60s)</span>
                 </button>
 
                 <button
@@ -175,113 +146,90 @@ export function CinematicIntro() {
             </motion.div>
           )}
 
-          {mode === 'showreel' && (() => {
-            const usePortraitFull = reelKind === 'full' && isMobilePortrait;
-            const videoSrc =
-              reelKind === 'intro'
-                ? '/assets/video/haidar-intro.mp4'
-                : usePortraitFull
-                  ? '/assets/video/haidar-showreel-social.mp4'
-                  : '/assets/video/haidar-showreel.mp4';
-            const durationLabel = reelKind === 'intro' ? '20s Website Intro' : '60s Director’s Cut';
+          {mode === 'showreel' && (
+            <motion.div
+              key="showreel-stage"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="relative z-10 flex w-full max-w-5xl flex-col items-center"
+            >
+              {/* Top synced progress bar */}
+              <div className="fixed inset-x-0 top-0 h-[3px] bg-white/10">
+                <div
+                  className="h-full bg-[#ff5a26] transition-[width] duration-100 ease-linear"
+                  style={{ width: `${Math.min(100, Math.max(0, progress * 100))}%` }}
+                />
+              </div>
 
-            return (
-              <motion.div
-                key="showreel-stage"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className={`relative z-10 flex w-full flex-col items-center ${usePortraitFull ? 'max-w-[380px]' : 'max-w-5xl'}`}
-              >
-                {/* Top synced progress bar */}
-                <div className="fixed inset-x-0 top-0 h-[3px] bg-white/10">
-                  <div
-                    className="h-full bg-[#ff5a26] transition-[width] duration-100 ease-linear"
-                    style={{ width: `${Math.min(100, Math.max(0, progress * 100))}%` }}
-                  />
+              <div className="w-full overflow-hidden rounded-2xl border border-white/15 bg-black shadow-2xl sm:rounded-[24px]">
+                <video
+                  ref={videoRef}
+                  src="/assets/video/haidar-intro.mp4"
+                  autoPlay
+                  muted={isMuted}
+                  playsInline
+                  preload="auto"
+                  onLoadedData={(e) => {
+                    setVideoReady(true);
+                    const v = e.currentTarget;
+                    v.muted = isMuted;
+                    v.volume = 1.0;
+                    v.play().catch(() => {
+                      // Fallback if browser blocks unmuted autoplay without gesture
+                      setIsMuted(true);
+                      v.muted = true;
+                      v.play().catch(() => {});
+                    });
+                  }}
+                  onTimeUpdate={(e) => {
+                    const v = e.currentTarget;
+                    if (v.duration > 0) setProgress(v.currentTime / v.duration);
+                  }}
+                  onEnded={handleClose}
+                  onError={handleClose}
+                  className={`aspect-video max-h-[76dvh] w-full object-cover transition-opacity duration-300 ${
+                    videoReady ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
+              </div>
+
+              <div className="mt-4 flex w-full flex-wrap items-center justify-between gap-2 text-xs text-white/75">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-white">
+                    Warp Drive — Inside Haidar’s World · 20s Website Intro
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleToggleMute}
+                    className="inline-flex min-h-[38px] items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:border-[#ff5a26]"
+                  >
+                    {isMuted ? (
+                      <>
+                        <SpeakerSlash size={14} weight="fill" className="text-[#ff5a26]" />
+                        <span>Unmute Audio</span>
+                      </>
+                    ) : (
+                      <>
+                        <SpeakerHigh size={14} weight="fill" className="text-[#34d399]" />
+                        <span>Sound On</span>
+                      </>
+                    )}
+                  </button>
                 </div>
 
-                <div className="w-full overflow-hidden rounded-2xl border border-white/15 bg-black shadow-2xl sm:rounded-[24px]">
-                  <video
-                    key={videoSrc}
-                    ref={videoRef}
-                    src={videoSrc}
-                    autoPlay
-                    muted={isMuted}
-                    playsInline
-                    preload="auto"
-                    onLoadedData={(e) => {
-                      setVideoReady(true);
-                      const v = e.currentTarget;
-                      v.muted = isMuted;
-                      v.volume = 1.0;
-                      v.play().catch(() => {
-                        // Fallback if browser blocks unmuted autoplay without gesture
-                        setIsMuted(true);
-                        v.muted = true;
-                        v.play().catch(() => {});
-                      });
-                    }}
-                    onTimeUpdate={(e) => {
-                      const v = e.currentTarget;
-                      if (v.duration > 0) setProgress(v.currentTime / v.duration);
-                    }}
-                    onEnded={handleClose}
-                    onError={handleClose}
-                    className={`transition-opacity duration-300 ${videoReady ? 'opacity-100' : 'opacity-0'} ${
-                      usePortraitFull ? 'aspect-[9/16] max-h-[76dvh] w-full object-cover' : 'aspect-video max-h-[76dvh] w-full object-cover'
-                    }`}
-                  />
-                </div>
-
-                <div className="mt-4 flex w-full flex-wrap items-center justify-between gap-2 text-xs text-white/75">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-white">
-                      {reelKind === 'intro' ? 'Warp Drive — Inside Haidar’s World' : 'Inside Haidar’s World'} · {durationLabel}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleToggleMute}
-                      className="inline-flex min-h-[38px] items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:border-[#ff5a26]"
-                    >
-                      {isMuted ? (
-                        <>
-                          <SpeakerSlash size={14} weight="fill" className="text-[#ff5a26]" />
-                          <span>Unmute Audio</span>
-                        </>
-                      ) : (
-                        <>
-                          <SpeakerHigh size={14} weight="fill" className="text-[#34d399]" />
-                          <span>Sound On</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => handleEnterShowreel(reelKind === 'intro' ? 'full' : 'intro')}
-                      className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs font-semibold text-white/90 transition-colors hover:border-[#ff5a26] hover:text-white"
-                    >
-                      <FilmStrip size={14} weight="bold" />
-                      <span>{reelKind === 'intro' ? 'Switch to 60s Full Cut' : 'Switch to 20s Intro'}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleClose}
-                      className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white transition-colors hover:border-[#ff5a26] hover:text-white"
-                    >
-                      <span>Skip to Portfolio</span>
-                      <ArrowRight size={13} weight="bold" />
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })()}
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white transition-colors hover:border-[#ff5a26] hover:text-white"
+                >
+                  <span>Skip to Portfolio</span>
+                  <ArrowRight size={13} weight="bold" />
+                </button>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
