@@ -2,20 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Anomaly — Inside Haidar Ghazy Arkan's World (60s Vertical Director's Cut)</title>
+  <meta name="viewport" content="width=1080, height=1920, initial-scale=1.0" />
+  <title>Haidar Ghazy Arkan — The Story, The Growth, The Machine (9:16 Visual CV)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     html, body {
       width: 1080px;
       height: 1920px;
       overflow: hidden;
-      background: #060609;
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #f7f4ee;
+      background: #0b0b10;
+      color: #f5f3ef;
+      font-family: "Inter", sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -24,8 +29,24 @@
       width: 1080px;
       height: 1920px;
       overflow: hidden;
-      background: radial-gradient(circle at 50% 42%, #191624 0%, #0b0b11 60%, #050508 100%);
-      perspective: 1200px;
+      background:
+        radial-gradient(circle at 50% 28%, rgba(255, 90, 38, 0.13) 0%, rgba(56, 189, 248, 0.06) 42%, rgba(11, 11, 16, 0.98) 78%),
+        linear-gradient(180deg, #0d0e15 0%, #090a0f 100%);
+    }
+
+    /* Architectural Blueprint Studio Grid */
+    #blueprint-grid {
+      position: absolute;
+      inset: -120px;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(rgba(255, 90, 38, 0.025) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(255, 90, 38, 0.025) 2px, transparent 2px);
+      background-size: 60px 60px, 60px 60px, 300px 300px, 300px 300px;
+      pointer-events: none;
+      z-index: 1;
+      will-change: transform;
     }
 
     #fx-canvas {
@@ -33,128 +54,40 @@
       inset: 0;
       width: 1080px;
       height: 1920px;
-      z-index: 1;
       pointer-events: none;
+      z-index: 2;
     }
 
-    #camera-viewport {
+    /* Top Safe-Zone Editorial Header (Y: 56px - 128px) */
+    #editorial-header {
       position: absolute;
-      inset: 0;
-      width: 1080px;
-      height: 1920px;
-      transform-style: preserve-3d;
-      z-index: 5;
-      pointer-events: none;
-    }
-
-    #world-3d {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 0;
-      height: 0;
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
-
-    .chapter-cluster {
-      position: absolute;
-      left: -540px;
-      top: -960px;
-      width: 1080px;
-      height: 1920px;
-      transform-style: preserve-3d;
-      will-change: transform, opacity;
-    }
-
-    .sub-stage {
-      position: absolute;
-      inset: 0;
-      transform-style: preserve-3d;
-      will-change: transform, opacity;
-    }
-
-    /* Glass Cards */
-    .v-card {
-      position: absolute;
-      border-radius: 26px;
-      background: linear-gradient(160deg, rgba(25, 25, 36, 0.94) 0%, rgba(12, 12, 18, 0.97) 100%);
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.85), 0 0 60px rgba(255, 90, 38, 0.08);
-      overflow: hidden;
-      transform-style: preserve-3d;
-    }
-    .v-card.orange {
-      border-color: rgba(255, 90, 38, 0.65);
-      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.88), 0 0 75px rgba(255, 90, 38, 0.25);
-    }
-    .v-card.cyan {
-      border-color: rgba(56, 189, 248, 0.6);
-      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.88), 0 0 75px rgba(56, 189, 248, 0.22);
-    }
-    .v-card.emerald {
-      border-color: rgba(16, 185, 129, 0.65);
-      box-shadow: 0 36px 90px rgba(0, 0, 0, 0.88), 0 0 75px rgba(16, 185, 129, 0.24);
-    }
-
-    .v-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .v-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 18px;
+      top: 56px;
+      left: 64px;
+      right: 64px;
+      height: 68px;
+      padding: 0 28px;
       border-radius: 999px;
-      background: #ff5a26;
-      color: #08080c;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-    .v-badge.cyan { background: #38bdf8; color: #061826; }
-    .v-badge.emerald { background: #10b981; color: #041f16; }
-
-    /* Safe-Zone Top HUD & Lower Kinetic Captions (Reels/TikTok Safe Zone: y=110 to y=1640) */
-    #portrait-hud {
-      position: absolute;
-      inset: 0;
-      z-index: 40;
-      pointer-events: none;
-    }
-
-    .p-hud-top {
-      position: absolute;
-      left: 56px;
-      right: 56px;
-      top: 96px;
+      background: rgba(15, 16, 24, 0.86);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 14px 24px;
-      border-radius: 999px;
-      background: rgba(11, 11, 16, 0.86);
-      border: 1.5px solid rgba(255, 255, 255, 0.14);
-      backdrop-filter: blur(12px);
+      justify-content: space-between;
       font-family: "JetBrains Mono", monospace;
       font-size: 15px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-    .p-rec {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: #ff7748;
       font-weight: 700;
+      letter-spacing: 0.14em;
+      z-index: 40;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
     }
-    .p-dot {
+
+    .hdr-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #ff7b52;
+    }
+
+    .hdr-dot {
       width: 11px;
       height: 11px;
       border-radius: 50%;
@@ -162,82 +95,196 @@
       box-shadow: 0 0 14px #ff5a26;
     }
 
-    /* Kinetic Subtitle Box in Lower Safe Zone */
-    #p-caption-box {
+    /* Primary Safe-Zone Stage Container (Y: 150px - 1560px) */
+    #world-stage {
       position: absolute;
-      left: 56px;
-      right: 56px;
-      bottom: 245px;
-      padding: 28px 34px;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .chapter-layer {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    /* Clean Editorial Surface Cards */
+    .ed-card {
+      background: linear-gradient(165deg, rgba(22, 24, 36, 0.95) 0%, rgba(12, 13, 20, 0.98) 100%);
+      border: 2px solid rgba(255, 255, 255, 0.14);
       border-radius: 28px;
-      background: linear-gradient(180deg, rgba(14, 14, 22, 0.92) 0%, rgba(8, 8, 13, 0.96) 100%);
-      border: 2px solid rgba(255, 90, 38, 0.5);
-      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 90, 38, 0.16);
-      backdrop-filter: blur(14px);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.78);
+      overflow: hidden;
     }
-    .p-cap-eyebrow {
+    .ed-card.orange { border-color: rgba(255, 90, 38, 0.65); }
+    .ed-card.cyan { border-color: rgba(56, 189, 248, 0.65); }
+    .ed-card.emerald { border-color: rgba(52, 211, 153, 0.65); }
+    .ed-card.amber { border-color: rgba(251, 191, 36, 0.65); }
+
+    .ed-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      border-radius: 999px;
       font-family: "JetBrains Mono", monospace;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #ff7b52;
-      margin-bottom: 10px;
-    }
-    .p-cap-title {
-      font-family: "Syne", sans-serif;
-      font-size: 44px;
+      font-size: 13px;
       font-weight: 800;
-      line-height: 1.05;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      background: rgba(255, 90, 38, 0.16);
+      border: 1.5px solid rgba(255, 90, 38, 0.55);
+      color: #ff9c7a;
+    }
+    .ed-pill.cyan {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.55);
+      color: #7dd3fc;
+    }
+    .ed-pill.emerald {
+      background: rgba(52, 211, 153, 0.15);
+      border-color: rgba(52, 211, 153, 0.55);
+      color: #6ee7b7;
+    }
+
+    /* Story Caption Strip (Inside Safe Zone Y: 1390px - 1555px) */
+    #story-caption-bar {
+      position: absolute;
+      left: 64px;
+      right: 64px;
+      top: 1390px;
+      height: 165px;
+      padding: 22px 32px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(16, 17, 26, 0.95) 0%, rgba(10, 10, 16, 0.98) 100%);
+      border: 2px solid rgba(255, 90, 38, 0.5);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 38;
+    }
+
+    #cap-kicker {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: #ff7b52;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    #cap-headline {
+      font-family: "Syne", sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1.1;
       letter-spacing: -0.025em;
       color: #ffffff;
     }
-    .p-cap-title .accent { color: #ff5a26; }
-    .p-cap-title .cyan { color: #38bdf8; }
-    .p-cap-title .emerald { color: #34d399; }
-    .p-cap-title .serif {
+    #cap-headline .accent { color: #ff5a26; }
+    #cap-headline .cyan { color: #38bdf8; }
+    #cap-headline .emerald { color: #34d399; }
+    #cap-headline .serif {
       font-family: "Instrument Serif", serif;
       font-style: italic;
       font-weight: 400;
-      font-size: 52px;
+      font-size: 44px;
       color: #ffb38a;
     }
-    .p-cap-sub {
-      margin-top: 12px;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: #cbd5e1;
-    }
 
-    #portal-flash {
+    /* Timeline Scrubber Bar at Y: 1585px (Above IG/TikTok bottom UI) */
+    #scrubber-track {
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 45%, rgba(255, 110, 50, 0.85), rgba(56, 189, 248, 0.35), transparent 72%);
-      opacity: 0;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: 48;
+      left: 64px;
+      right: 64px;
+      top: 1582px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      z-index: 38;
+    }
+    #scrubber-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ff5a26, #38bdf8, #34d399);
     }
 
-    .dm-pill {
-      padding: 16px 22px;
-      border-radius: 22px 22px 22px 6px;
-      background: rgba(22, 24, 34, 0.96);
-      border: 1.5px solid rgba(255, 255, 255, 0.18);
-      font-size: 18px;
-      font-weight: 600;
-      color: #fff;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
-      display: flex;
-      align-items: center;
-      gap: 14px;
+    /* 35mm Filmstrip Sprocket Holes */
+    .film-rail {
+      position: absolute;
+      top: 150px;
+      bottom: 340px;
+      width: 44px;
+      background: rgba(10, 10, 15, 0.92);
+      border-left: 2px solid rgba(255, 90, 38, 0.35);
+      border-right: 2px solid rgba(255, 90, 38, 0.35);
+      background-image: repeating-linear-gradient(
+        180deg,
+        transparent 0px,
+        transparent 18px,
+        rgba(255, 245, 235, 0.22) 18px,
+        rgba(255, 245, 235, 0.22) 42px,
+        transparent 42px,
+        transparent 60px
+      );
+      background-size: 24px 60px;
+      background-position: center top;
     }
-    .dm-pill.out {
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      border-radius: 22px 22px 6px 22px;
-      border-color: rgba(125, 211, 252, 0.65);
+
+    /* Portal Overlays (Camera Lens Iris & Gear Slice) */
+    #lens-portal {
+      position: absolute;
+      left: 540px;
+      top: 780px;
+      width: 900px;
+      height: 900px;
+      margin-left: -450px;
+      margin-top: -450px;
+      z-index: 45;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #gear-portal {
+      position: absolute;
+      left: 540px;
+      top: 780px;
+      width: 760px;
+      height: 760px;
+      margin-left: -380px;
+      margin-top: -380px;
+      z-index: 45;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Interactive Vector Cursor */
+    #interactive-cursor {
+      position: absolute;
+      left: 540px;
+      top: 960px;
+      width: 64px;
+      height: 64px;
+      z-index: 50;
+      pointer-events: none;
+      will-change: transform;
+    }
+    #cursor-ripple {
+      position: absolute;
+      left: -18px;
+      top: -18px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 3px solid #ff5a26;
+      opacity: 0;
+      transform: scale(0.3);
     }
   </style>
 </head>
@@ -250,393 +297,657 @@
     data-width="1080"
     data-height="1920"
   >
-    <!-- Master 60s Synchronized Audio Track (Voiceover + 124 BPM Score + Foley SFX) -->
+    <!-- Master 3-Stem Audio -->
     <audio id="master-audio" data-start="0" data-duration="60" data-media-start="0" src="./assets/master-social-60s.mp3" preload="auto"></audio>
 
+    <div id="blueprint-grid"></div>
     <canvas id="fx-canvas" width="1080" height="1920"></canvas>
 
-    <div id="camera-viewport">
-      <div id="world-3d">
+    <!-- Top Safe-Zone Editorial Header -->
+    <div id="editorial-header">
+      <div class="hdr-left">
+        <span class="hdr-dot"></span>
+        <span id="hdr-chapter">CHAPTER 01 // THE 3-IN-1 STORY</span>
+      </div>
+      <div id="hdr-timecode" style="color:#f5f3ef;">00:00 / 01:00</div>
+    </div>
 
-        <!-- =======================================================================
-             CHAPTER 01 (0.0s – 6.0s | Z = 0): THE PATTERN-INTERRUPT HOOK
-             ======================================================================= -->
-        <div id="ch-1" class="chapter-cluster">
-          <!-- Slop Warning Card that shatters at 1.4s -->
-          <div id="c1-slop-card" class="v-card" style="left:70px;top:220px;width:940px;height:420px;padding:34px;border-color:rgba(239,68,68,0.65);background:linear-gradient(160deg,rgba(45,14,18,0.94),rgba(16,8,12,0.98));display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
-            <div style="padding:10px 24px;border-radius:999px;background:rgba(239,68,68,0.22);border:2px solid #ef4444;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;color:#fca5a5;letter-spacing:0.18em;">[X] GENERIC AI SLOP</div>
-            <div style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:#fff;margin-top:20px;line-height:1.05;">ANYONE CAN TYPE A PROMPT.</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:17px;color:#fda4af;margin-top:12px;">ZERO STORY STRUCTURE · ZERO RETENTION · ZERO CONVERSION</div>
+    <!-- =========================================================================
+         PRIMARY STAGE: 5 EDITORIAL MIXED-MEDIA CHAPTERS
+         ========================================================================= -->
+    <div id="world-stage">
+
+      <!-- =======================================================================
+           CHAPTER 01 (0.0s – 8.0s): THE INTRODUCTION — THREE BRAINS IN ONE PERSON
+           ======================================================================= -->
+      <div id="ch-1" class="chapter-layer">
+        <!-- Folder Tab (Clicked at 0.5s) -->
+        <div id="ch1-folder" style="position:absolute;left:220px;top:175px;width:640px;padding:16px 26px;border-radius:20px;background:rgba(255,90,38,0.14);border:2px dashed rgba(255,90,38,0.65);display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ff5a26" stroke-width="2.2">
+              <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+            </svg>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:#fff;">Haidar_Ghazy_Arkan_CV.world</span>
           </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399;font-weight:800;">OPENING...</span>
+        </div>
 
-          <!-- Haidar Hero Counter-Punch + 3 Identity Locks -->
-          <div id="c1-hero-card" class="v-card orange" style="left:70px;top:210px;width:940px;height:660px;">
-            <img class="v-img" src="./assets/haidar-directing-crew.webp" alt="Haidar Ghazy Arkan" style="object-position:center 22%;" />
-            <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(6,6,10,0.96) 100%);"></div>
-            <div style="position:absolute;left:34px;right:34px;bottom:30px;">
-              <span class="v-badge">THE 3-IN-1 CREATIVE ANOMALY</span>
-              <div style="font-family:'Syne',sans-serif;font-size:54px;font-weight:800;color:#fff;margin-top:14px;line-height:1;">HAIDAR GHAZY ARKAN</div>
+        <!-- Central Hero Studio Cutout Frame -->
+        <div id="ch1-portrait" class="ed-card orange" style="position:absolute;left:310px;top:270px;width:460px;height:480px;padding:16px;">
+          <div style="width:100%;height:375px;border-radius:20px;overflow:hidden;position:relative;">
+            <img src="./assets/haidar-portrait-ai-studio.webp" alt="Haidar Ghazy Arkan" style="width:100%;height:100%;object-fit:cover;" />
+            <div style="position:absolute;left:14px;bottom:14px;padding:7px 14px;border-radius:999px;background:rgba(10,12,18,0.9);border:1.5px solid #34d399;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#6ee7b7;">
+              ● AVAILABLE · JAKARTA / TANGERANG
             </div>
           </div>
+          <div style="text-align:center;margin-top:14px;">
+            <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.02em;">HAIDAR GHAZY ARKAN</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ff9c7a;margin-top:3px;">THE 3-IN-1 CREATIVE &amp; GROWTH ARCHITECT</div>
+          </div>
+        </div>
 
-          <!-- 3 Mech HUD Identity Locks -->
-          <div id="c1-lock-1" class="v-card orange" style="left:70px;top:900px;width:940px;height:145px;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;">
+        <!-- Self-Drawing SVG Connector Cables -->
+        <svg style="position:absolute;left:0;top:0;width:1080px;height:1920px;pointer-events:none;" viewBox="0 0 1080 1920" fill="none">
+          <path id="ch1-wire-1" d="M 310 520 C 180 520, 180 780, 260 830" stroke="#ff5a26" stroke-width="4" stroke-dasharray="500" stroke-dashoffset="500" stroke-linecap="round" />
+          <path id="ch1-wire-2" d="M 770 520 C 900 520, 900 780, 820 830" stroke="#38bdf8" stroke-width="4" stroke-dasharray="500" stroke-dashoffset="500" stroke-linecap="round" />
+          <path id="ch1-wire-3" d="M 540 750 L 540 1055" stroke="#34d399" stroke-width="4" stroke-dasharray="400" stroke-dashoffset="400" stroke-linecap="round" />
+        </svg>
+
+        <!-- Role 01: Filmmaker & 3D Artist (Left Illustrated Card) -->
+        <div id="ch1-role-1" class="ed-card orange" style="position:absolute;left:64px;top:790px;width:460px;height:230px;padding:24px;display:flex;align-items:center;gap:22px;">
+          <div style="width:110px;height:110px;border-radius:22px;background:rgba(255,90,38,0.14);border:2px solid #ff5a26;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <!-- Custom SVG 35mm Cinema Camera Illustration -->
+            <svg width="68" height="68" viewBox="0 0 64 64" fill="none" stroke="#ff5a26" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="22" cy="18" r="9" />
+              <circle cx="42" cy="18" r="9" />
+              <rect x="12" y="28" width="36" height="24" rx="5" />
+              <polygon points="48,34 60,27 60,53 48,46" />
+              <circle cx="30" cy="40" r="5" />
+            </svg>
+          </div>
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#ff7b52;">PILLAR 01 · THE EYE</div>
+            <div style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#fff;line-height:1.05;margin-top:6px;">Filmmaker &amp; 3D Artist</div>
+            <div style="font-family:'Inter',sans-serif;font-size:15px;color:#cbd5e1;margin-top:6px;">ISI Surakarta Cum Laude · 50+ Works</div>
+          </div>
+        </div>
+
+        <!-- Role 02: AI Growth Marketer (Right Illustrated Card) -->
+        <div id="ch1-role-2" class="ed-card cyan" style="position:absolute;right:64px;top:790px;width:460px;height:230px;padding:24px;display:flex;align-items:center;gap:22px;">
+          <div style="width:110px;height:110px;border-radius:22px;background:rgba(56,189,248,0.14);border:2px solid #38bdf8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <!-- Custom SVG Viral Trend Rocket & Graph -->
+            <svg width="68" height="68" viewBox="0 0 64 64" fill="none" stroke="#38bdf8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="8,48 24,34 36,40 54,16" />
+              <polyline points="42,16 54,16 54,28" />
+              <rect x="12" y="52" width="40" height="4" rx="2" />
+              <circle cx="24" cy="34" r="3.5" fill="#38bdf8" />
+              <circle cx="54" cy="16" r="4" fill="#38bdf8" />
+            </svg>
+          </div>
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#38bdf8;">PILLAR 02 · THE BRAIN</div>
+            <div style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#fff;line-height:1.05;margin-top:6px;">AI Growth Strategist</div>
+            <div style="font-family:'Inter',sans-serif;font-size:15px;color:#cbd5e1;margin-top:6px;">7.9M Oppo Views · ~60% DM Conversion</div>
+          </div>
+        </div>
+
+        <!-- Role 03: AI Systems Builder (Bottom Centered Illustrated Card) -->
+        <div id="ch1-role-3" class="ed-card emerald" style="position:absolute;left:150px;top:1050px;width:780px;height:215px;padding:24px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
+          <div style="display:flex;align-items:center;gap:24px;">
+            <div style="width:110px;height:110px;border-radius:22px;background:rgba(52,211,153,0.14);border:2px solid #34d399;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <!-- Custom SVG Gear & Automation Node Illustration -->
+              <svg width="68" height="68" viewBox="0 0 64 64" fill="none" stroke="#34d399" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="32" cy="32" r="11" />
+                <path d="M32 10v6M32 48v6M10 32h6M48 32h6M16.4 16.4l4.2 4.2M43.4 43.4l4.2 4.2M47.6 16.4l-4.2 4.2M20.6 43.4l-4.2 4.2" />
+              </svg>
+            </div>
             <div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#ff7b52;font-weight:800;letter-spacing:0.16em;">IDENTITY [01] · CRAFT</div>
-              <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;margin-top:4px;">FILM DIRECTOR, 3D &amp; VFX ARTIST</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#34d399;">PILLAR 03 · THE ENGINE</div>
+              <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;line-height:1.05;margin-top:6px;">Production Systems Builder</div>
+              <div style="font-family:'Inter',sans-serif;font-size:16px;color:#cbd5e1;margin-top:6px;">Built CAKETING &amp; CakVisual · 5 Days Cut to 5 Hours</div>
             </div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;color:#ffb088;">5+ YRS · 50+ WORKS</div>
+          </div>
+          <div style="padding:14px 20px;border-radius:16px;background:rgba(52,211,153,0.18);border:1.5px solid #34d399;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#6ee7b7;flex-shrink:0;">
+            3-IN-1
+          </div>
+        </div>
+
+        <!-- Convergence Banner (5.2s - 7.4s) -->
+        <div id="ch1-converge" style="position:absolute;left:150px;top:1285px;width:780px;padding:18px 28px;border-radius:999px;background:linear-gradient(90deg,#ff5a26,#e11d48,#0284c7);text-align:center;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;letter-spacing:0.15em;color:#fff;box-shadow:0 16px 40px rgba(255,90,38,0.45);">
+          STORY + GROWTH + SYSTEMS = UNFAIR ADVANTAGE
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           CHAPTER 02 (8.0s – 21.0s): THE VISUAL ROOTS — FILM, 3D & LUMINARA
+           ======================================================================= -->
+      <div id="ch-2" class="chapter-layer">
+        <!-- 35mm Perforated Filmstrip Rails -->
+        <div class="film-rail" style="left:64px;"></div>
+        <div class="film-rail" style="right:64px;"></div>
+
+        <!-- BEAT 2A (8.0s - 12.2s): On-Set Directing & ISI Surakarta Cum Laude -->
+        <div id="ch2-beat-a" style="position:absolute;left:128px;right:128px;top:165px;height:1190px;">
+          <div class="ed-card orange" style="width:100%;height:780px;padding:24px;display:flex;flex-direction:column;gap:18px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="ed-pill">01 · ON-SET FILM &amp; TV DIRECTOR</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#cbd5e1;font-weight:700;">2021 – 2025 · 50+ PROJECTS</span>
+            </div>
+            <!-- Main Directing Hero Photo -->
+            <div style="width:100%;height:420px;border-radius:20px;overflow:hidden;position:relative;border:1.5px solid rgba(255,255,255,0.16);">
+              <img src="./assets/haidar-directing-cameraman.webp" alt="Haidar Directing On Set" style="width:100%;height:100%;object-fit:cover;object-position:center 28%;" />
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(8,8,12,0.92) 100%);"></div>
+              <div style="position:absolute;left:22px;bottom:18px;font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#fff;">
+                Started Behind Real Cinema Cameras
+              </div>
+            </div>
+            <!-- 2 Secondary Film/TV Frames -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;flex:1;min-height:0;">
+              <div style="border-radius:18px;overflow:hidden;position:relative;border:1.5px solid rgba(255,90,38,0.45);">
+                <img src="./assets/qris-01.webp" alt="BI Digital QRIS Crossborder" style="width:100%;height:100%;object-fit:cover;" />
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.94) 100%);"></div>
+                <div style="position:absolute;left:16px;bottom:14px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ff9c7a;font-weight:800;">DIRECTOR &amp; EDITOR</div>
+                  <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;">BI Digital: QRIS Crossborder</div>
+                </div>
+              </div>
+              <div style="border-radius:18px;overflow:hidden;position:relative;border:1.5px solid rgba(56,189,248,0.45);">
+                <img src="./assets/tv-switcher.webp" alt="TV Broadcast Switcher" style="width:100%;height:100%;object-fit:cover;" />
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.94) 100%);"></div>
+                <div style="position:absolute;left:16px;bottom:14px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7dd3fc;font-weight:800;">LIVE TV SWITCHER &amp; CAM</div>
+                  <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;">Mozaik &amp; Warna Warni TV</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div id="c1-lock-2" class="v-card cyan" style="left:70px;top:1065px;width:940px;height:145px;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;">
+          <!-- CV Education Stamp with Self-Drawing Highlighter -->
+          <div class="ed-card amber" style="margin-top:22px;width:100%;height:365px;padding:28px 32px;display:flex;flex-direction:column;justify-content:space-between;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="ed-pill" style="background:rgba(251,191,36,0.16);border-color:#fbbf24;color:#fde68a;">🎓 ACADEMIC CREDENTIAL · CV VERIFIED</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#fde68a;font-weight:800;">GRADUATED IN 3.5 YEARS</span>
+            </div>
             <div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#38bdf8;font-weight:800;letter-spacing:0.16em;">IDENTITY [02] · SCALE</div>
-              <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;margin-top:4px;">AI-NATIVE GROWTH STRATEGIST</div>
+              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#fff;line-height:1.08;">
+                ISI SURAKARTA — FILM &amp; TV
+              </div>
+              <div style="position:relative;display:inline-block;margin-top:10px;">
+                <span style="font-family:'Syne',sans-serif;font-size:46px;font-weight:800;color:#fbbf24;position:relative;z-index:2;">
+                  GPA 3.86 / 4.00 · CUM LAUDE
+                </span>
+                <svg style="position:absolute;left:0;bottom:-6px;width:100%;height:18px;z-index:1;" viewBox="0 0 600 18" fill="none">
+                  <path id="ch2-highlight" d="M 4 12 Q 300 4 596 12" stroke="#ff5a26" stroke-width="10" stroke-linecap="round" stroke-dasharray="620" stroke-dashoffset="620" />
+                </svg>
+              </div>
             </div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;color:#7dd3fc;">7.9M OPPO · 60% DM</div>
+            <div style="font-family:'Inter',sans-serif;font-size:17px;color:#cbd5e1;">
+              Trained in Cinema Directing, Narrative Pacing, 3D Animation, and Visual Effects before entering AI.
+            </div>
+          </div>
+        </div>
+
+        <!-- BEAT 2B (12.2s - 16.5s): 3D/VFX Viewport & Festival Laurel Wreaths -->
+        <div id="ch2-beat-b" style="position:absolute;left:128px;right:128px;top:165px;height:1190px;opacity:0;">
+          <div class="ed-card cyan" style="width:100%;height:780px;padding:24px;display:flex;flex-direction:column;gap:18px;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="ed-pill cyan">02 · 3D ANIMATION &amp; VFX VIEWPORT</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#7dd3fc;font-weight:800;">BLENDER · UNREAL · AFTER EFFECTS</span>
+            </div>
+            <!-- 3D Viewport Hero (Hayo Loh! VFX) -->
+            <div style="width:100%;height:420px;border-radius:20px;overflow:hidden;position:relative;border:2px solid #38bdf8;">
+              <img src="./assets/hayo-loh-vfx.webp" alt="Hayo Loh Short Film VFX" style="width:100%;height:100%;object-fit:cover;" />
+              <!-- Illustrated 3D XYZ Gizmo Overlay -->
+              <svg style="position:absolute;right:20px;top:20px;width:84px;height:84px;background:rgba(10,12,20,0.85);border-radius:16px;padding:8px;border:1px solid rgba(255,255,255,0.2);" viewBox="0 0 64 64" fill="none" stroke-width="3" stroke-linecap="round">
+                <line x1="32" y1="32" x2="32" y2="8" stroke="#38bdf8" />
+                <line x1="32" y1="32" x2="54" y2="44" stroke="#ef4444" />
+                <line x1="32" y1="32" x2="10" y2="44" stroke="#34d399" />
+                <circle cx="32" cy="32" r="4" fill="#fff" />
+              </svg>
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(8,8,12,0.94) 100%);"></div>
+              <div style="position:absolute;left:22px;bottom:18px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7dd3fc;font-weight:800;">CAMERAMAN · EDITOR · 3D &amp; VFX ARTIST</div>
+                <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">Short Film "Hayo Loh!" (2022)</div>
+              </div>
+            </div>
+            <!-- 2 Secondary 3D Worlds -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;flex:1;min-height:0;">
+              <div style="border-radius:18px;overflow:hidden;position:relative;border:1.5px solid rgba(255,255,255,0.18);">
+                <img src="./assets/leap-of-faith.webp" alt="Leap of Faith 3D" style="width:100%;height:100%;object-fit:cover;" />
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.94) 100%);"></div>
+                <div style="position:absolute;left:16px;bottom:14px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ff9c7a;font-weight:800;">3D ANIMATED SHORT</div>
+                  <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;">Leap of Faith &amp; Kampung Seni</div>
+                </div>
+              </div>
+              <div style="border-radius:18px;overflow:hidden;position:relative;border:1.5px solid rgba(255,255,255,0.18);">
+                <img src="./assets/studenverse.webp" alt="StudenVerse Blackhole 3D" style="width:100%;height:100%;object-fit:cover;" />
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.94) 100%);"></div>
+                <div style="position:absolute;left:16px;bottom:14px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7dd3fc;font-weight:800;">3D SPACE &amp; VFX COMPOSITING</div>
+                  <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;">StudenVerse &amp; Speed(mon)Ster</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div id="c1-lock-3" class="v-card emerald" style="left:70px;top:1230px;width:940px;height:145px;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;">
+          <!-- Festival Recognition Card with Custom SVG Laurel Wreaths -->
+          <div class="ed-card amber" style="margin-top:22px;width:100%;height:365px;padding:28px 32px;display:flex;align-items:center;gap:28px;">
+            <div style="width:125px;height:125px;border-radius:26px;background:rgba(251,191,36,0.14);border:2px solid #fbbf24;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="84" height="84" viewBox="0 0 64 64" fill="none" stroke="#fbbf24" stroke-width="2.6" stroke-linecap="round">
+                <path d="M22 50 C 12 42, 10 26, 18 14" />
+                <path d="M42 50 C 52 42, 54 26, 46 14" />
+                <polygon points="32,14 35,23 44,23 37,28 39,37 32,32 25,37 27,28 20,23 29,23" fill="rgba(251,191,36,0.35)" />
+                <path d="M20 52 L44 52" />
+              </svg>
+            </div>
             <div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#34d399;font-weight:800;letter-spacing:0.16em;">IDENTITY [03] · SPEED</div>
-              <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;margin-top:4px;">AI PRODUCTION SYSTEMS BUILDER</div>
-            </div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;color:#6ee7b7;">5 DAYS ➔ 5 HOURS</div>
-          </div>
-        </div>
-
-        <!-- =======================================================================
-             CHAPTER 02 (6.0s – 18.0s | Z = -2400): ACT I — FILMMAKER, 3D & MAPPING
-             ======================================================================= -->
-        <div id="ch-2" class="chapter-cluster">
-          <!-- Sub-stage 2A (6-10s): On-Set Cinema & TV Broadcast -->
-          <div id="c2-sub-a" class="sub-stage">
-            <div class="v-card orange" style="left:70px;top:210px;width:940px;height:520px;">
-              <img class="v-img" src="./assets/haidar-directing-cameraman.webp" alt="Haidar Directing On Set" style="object-position:center 28%;" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,rgba(6,6,10,0.95) 100%);"></div>
-              <div style="position:absolute;left:30px;right:30px;bottom:26px;">
-                <span class="v-badge">ISI SURAKARTA FILM &amp; TV · GPA 3.86 CUM LAUDE</span>
-                <div style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#fff;margin-top:10px;">Started on Real Film &amp; TV Sets</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fde68a;letter-spacing:0.14em;">🏆 NATIONAL FESTIVAL RECOGNITION</div>
+              <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;line-height:1.12;margin-top:8px;">
+                Nominee — UCIFEST 12 &amp; Bogor Film Festival (2022)
               </div>
-            </div>
-
-            <div class="v-card" style="left:70px;top:760px;width:455px;height:600px;">
-              <img class="v-img" src="./assets/qris-01.webp" alt="BI Digital QRIS Crossborder" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(6,6,10,0.95) 100%);"></div>
-              <div style="position:absolute;left:22px;right:22px;bottom:22px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ff7b52;font-weight:700;">DIRECTOR &amp; EDITOR (2023)</div>
-                <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin-top:4px;">BI Digital: QRIS Crossborder</div>
-              </div>
-            </div>
-
-            <div class="v-card cyan" style="right:70px;top:760px;width:455px;height:600px;">
-              <img class="v-img" src="./assets/tv-switcher.webp" alt="TV Broadcast Switcher" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(6,6,10,0.95) 100%);"></div>
-              <div style="position:absolute;left:22px;right:22px;bottom:22px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#38bdf8;font-weight:700;">SWITCHER, CAMERAMAN &amp; MOTION</div>
-                <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin-top:4px;">Mozaik &amp; Warna Warni Nusantara</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sub-stage 2B (10-14s): 3D Animation, VFX & Festival Selections -->
-          <div id="c2-sub-b" class="sub-stage">
-            <div class="v-card cyan" style="left:70px;top:210px;width:940px;height:520px;">
-              <img class="v-img" src="./assets/hayo-loh-vfx.webp" alt="Hayo Loh 3D VFX" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,rgba(6,6,10,0.96) 100%);"></div>
-              <div style="position:absolute;left:30px;right:30px;bottom:26px;">
-                <span class="v-badge cyan">★ NOMINEE · UCIFEST 12 &amp; BOGOR FILM FESTIVAL</span>
-                <div style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#fff;margin-top:10px;">Short Film "Hayo Loh!" · 3D &amp; VFX</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#fcd34d;margin-top:6px;">+ 3RD PLACE DIGITAL ARTS COMPETITION, NITRAFEST 2021</div>
-              </div>
-            </div>
-
-            <div class="v-card" style="left:70px;top:760px;width:455px;height:600px;">
-              <img class="v-img" src="./assets/leap-of-faith.webp" alt="Leap of Faith 3D" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(6,6,10,0.95) 100%);"></div>
-              <div style="position:absolute;left:22px;right:22px;bottom:22px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ff7b52;font-weight:700;">BLENDER 3D &amp; UNREAL ENGINE</div>
-                <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin-top:4px;">Leap of Faith &amp; Kampung Seni</div>
-              </div>
-            </div>
-
-            <div class="v-card orange" style="right:70px;top:760px;width:455px;height:600px;">
-              <img class="v-img" src="./assets/studenverse.webp" alt="StudenVerse Blackhole" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(6,6,10,0.95) 100%);"></div>
-              <div style="position:absolute;left:22px;right:22px;bottom:22px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#38bdf8;font-weight:700;">AFTER EFFECTS &amp; DAVINCI</div>
-                <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin-top:4px;">StudenVerse &amp; Speed(mon)Ster VFX</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sub-stage 2C (14-18s): Luminara Visual Works & Video Mapping -->
-          <div id="c2-sub-c" class="sub-stage">
-            <div class="v-card orange" style="left:70px;top:210px;width:940px;height:620px;">
-              <img class="v-img" src="./assets/luminara-mapping.webp" alt="Luminara Projection Mapping" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,rgba(6,6,10,0.96) 100%);"></div>
-              <div style="position:absolute;left:32px;right:32px;bottom:28px;">
-                <span class="v-badge">CO-FOUNDER · LUMINARA VISUAL WORKS (2024–PRESENT)</span>
-                <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#fff;margin-top:12px;">Architectural Projection Mapping &amp; Live VJ</div>
-              </div>
-            </div>
-
-            <div class="v-card cyan" style="left:70px;top:860px;width:940px;height:500px;">
-              <img class="v-img" src="./assets/luminara-unreal.webp" alt="Unreal 3D Environment" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(6,6,10,0.95) 100%);"></div>
-              <div style="position:absolute;left:32px;right:32px;bottom:26px;display:flex;justify-content:space-between;align-items:flex-end;">
-                <div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#38bdf8;font-weight:700;">UNREAL ENGINE · RESOLUME ARENA · BLENDER 3D</div>
-                  <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;margin-top:6px;">10+ Commercial &amp; Narrative Shows Directed End-to-End</div>
-                </div>
+              <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:#fbbf24;margin-top:10px;">
+                + 3rd Place Digital Arts Competition, Nitrafest (2021)
               </div>
             </div>
           </div>
         </div>
 
-        <!-- =======================================================================
-             CHAPTER 03 (18.0s – 36.0s | Z = -4800): ACT II — AI GROWTH & VIRAL PROOF
-             ======================================================================= -->
-        <div id="ch-3" class="chapter-cluster">
-          <!-- Sub-stage 3A (18-24s): OPPO @diologtech 7.9M Views -->
-          <div id="c3-sub-a" class="sub-stage">
-            <div class="v-card orange" style="left:70px;top:205px;width:940px;height:1155px;padding:30px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-                <span class="v-badge">CASE 01 · OPPO @DIOLOGTECH</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#38bdf8;font-weight:700;">100% AI VIRTUAL CREATOR</span>
+        <!-- BEAT 2C (16.5s - 20.5s): Luminara Architectural Projection Mapping + SVG Projector -->
+        <div id="ch2-beat-c" style="position:absolute;left:128px;right:128px;top:165px;height:1190px;opacity:0;">
+          <div class="ed-card orange" style="width:100%;height:840px;padding:24px;display:flex;flex-direction:column;gap:18px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="ed-pill">03 · CO-FOUNDER — LUMINARA VISUAL WORKS</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ff9c7a;font-weight:800;">2024 – PRESENT · 10+ SHOWS</span>
+            </div>
+            <div style="width:100%;height:460px;border-radius:20px;overflow:hidden;position:relative;border:2px solid #ff5a26;">
+              <img src="./assets/luminara-mapping.webp" alt="Luminara Projection Mapping" style="width:100%;height:100%;object-fit:cover;" />
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(8,8,12,0.92) 100%);"></div>
+              <div style="position:absolute;left:22px;bottom:18px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ff9c7a;font-weight:800;">ARCHITECTURAL VIDEO MAPPING &amp; LIVE VJ</div>
+                <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">Turning Giant Buildings Into Moving Art</div>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;height:740px;overflow:hidden;">
-                <div style="border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,0.16);background:#000;height:100%;">
-                  <img class="v-img" src="./assets/diologtech-feed.webp" alt="Diologtech TikTok Feed" style="object-position:center top;" />
-                </div>
-                <div style="display:flex;flex-direction:column;gap:20px;height:100%;min-height:0;overflow:hidden;">
-                  <div style="flex:1;min-height:0;border-radius:20px;overflow:hidden;border:2px solid #ff5a26;background:#000;">
-                    <img class="v-img" src="./assets/oppo-7-9m.webp" alt="Oppo 7.9M Analytics" style="object-position:center top;" />
-                  </div>
-                  <div style="flex:1;min-height:0;border-radius:20px;overflow:hidden;border:2px solid #38bdf8;background:#000;">
-                    <img class="v-img" src="./assets/oppo-5-5m.webp" alt="Oppo 5.5M Viewers" style="object-position:center top;" />
-                  </div>
+            </div>
+            <div style="width:100%;flex:1;min-height:0;border-radius:20px;overflow:hidden;position:relative;border:1.5px solid rgba(56,189,248,0.5);">
+              <img src="./assets/luminara-unreal.webp" alt="Luminara Unreal 3D Stage" style="width:100%;height:100%;object-fit:cover;" />
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.92) 100%);"></div>
+              <div style="position:absolute;left:22px;bottom:16px;font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#7dd3fc;">
+                Unreal Engine 3D Pre-Vis · Blender · Resolume Arena
+              </div>
+            </div>
+          </div>
+
+          <!-- Illustrated SVG Projector Unit Shooting Volumetric Beam Upward -->
+          <div style="position:relative;margin-top:20px;height:330px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;">
+            <svg style="position:absolute;left:0;top:-110px;width:824px;height:340px;pointer-events:none;" viewBox="0 0 824 340" fill="none">
+              <defs>
+                <linearGradient id="projBeam" x1="412" y1="320" x2="412" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ff5a26" stop-opacity="0.65" />
+                  <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.28" />
+                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.0" />
+                </linearGradient>
+              </defs>
+              <polygon id="ch2-beam-poly" points="370,300 454,300 790,10 34,10" fill="url(#projBeam)" />
+            </svg>
+            <div class="ed-card" style="width:100%;padding:22px 30px;display:flex;align-items:center;justify-content:space-between;border:2px solid #ff5a26;position:relative;z-index:2;">
+              <div style="display:flex;align-items:center;gap:20px;">
+                <svg width="58" height="58" viewBox="0 0 64 64" fill="none" stroke="#ff5a26" stroke-width="2.8">
+                  <rect x="10" y="24" width="44" height="24" rx="6" />
+                  <circle cx="32" cy="20" r="10" fill="#181824" stroke="#38bdf8" stroke-width="3" />
+                  <line x1="20" y1="48" x2="14" y2="58" />
+                  <line x1="44" y1="48" x2="50" y2="58" />
+                </svg>
+                <div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#34d399;font-weight:800;">● LUMINARA PROJECTOR RIG ONLINE</div>
+                  <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;">Real-World Spatial Visual Storytelling</div>
                 </div>
               </div>
-              <div style="margin-top:22px;padding:24px 28px;border-radius:22px;background:#1a1110;border:2px solid #ff5a26;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center;position:relative;z-index:3;">
-                <div>
-                  <div id="p-oppo-views" style="font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:#ff5a26;">7.9M</div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#fff;margin-top:4px;">POST VIEWS</div>
+              <span class="ed-pill emerald">ACTIVE BEAM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           CHAPTER 03 (21.0s – 38.0s): THE GROWTH IMPACT — CAK AI, 7.9M OPPO & 60% DM
+           ======================================================================= -->
+      <div id="ch-3" class="chapter-layer">
+
+        <!-- BEAT 3A (21.0s - 26.2s): 3-Phone Live Video Stage + CAK AI Role -->
+        <div id="ch3-beat-a" style="position:absolute;left:64px;right:64px;top:165px;height:1190px;">
+          <div class="ed-card orange" style="width:100%;height:830px;padding:26px;display:flex;flex-direction:column;gap:18px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="ed-pill">HEAD OF CREATOR &amp; AI STRATEGIST · CAK AI</span>
+              <span class="ed-pill cyan">20–90 AI PERSONAS / BRAND</span>
+            </div>
+            <!-- 3 Smartphone Rigs Playing Live Clips -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1;min-height:0;">
+              <!-- Phone 1: AceKid 3D Animation -->
+              <div style="border-radius:26px;overflow:hidden;border:3px solid #ff5a26;background:#000;position:relative;box-shadow:0 18px 40px rgba(0,0,0,0.8);">
+                <video id="v-ed-animasi" data-start="20.8" data-duration="6.0" data-media-start="0" src="./clips/acekid-animasi-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                <div style="position:absolute;left:10px;right:10px;bottom:12px;padding:10px;border-radius:12px;background:rgba(10,10,16,0.9);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#ff9c7a;text-align:center;">
+                  ACEKID · 3D ANIMATION
                 </div>
-                <div>
-                  <div style="font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:#fff;">5.5M</div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;margin-top:4px;">VIEWERS</div>
+              </div>
+              <!-- Phone 2: AceKid Dracin Drama UGC -->
+              <div style="border-radius:26px;overflow:hidden;border:3px solid #38bdf8;background:#000;position:relative;box-shadow:0 18px 40px rgba(0,0,0,0.8);">
+                <video id="v-ed-dracin" data-start="20.8" data-duration="6.0" data-media-start="0" src="./clips/acekid-dracin-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                <div style="position:absolute;left:10px;right:10px;bottom:12px;padding:10px;border-radius:12px;background:rgba(10,10,16,0.9);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#7dd3fc;text-align:center;">
+                  ACEKID · DRAMA STORY UGC
                 </div>
-                <div>
-                  <div style="font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:#38bdf8;">167K</div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;margin-top:4px;">LIKES</div>
-                </div>
-                <div>
-                  <div style="font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:#34d399;">3.6K+</div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;margin-top:4px;">FOLLOWERS</div>
+              </div>
+              <!-- Phone 3: Rahasia Beauty Commercial -->
+              <div style="border-radius:26px;overflow:hidden;border:3px solid #f472b6;background:#000;position:relative;box-shadow:0 18px 40px rgba(0,0,0,0.8);">
+                <video id="v-ed-rahasia" data-start="20.8" data-duration="6.0" data-media-start="0" src="./clips/rahasia-ad-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                <div style="position:absolute;left:10px;right:10px;bottom:12px;padding:10px;border-radius:12px;background:rgba(10,10,16,0.9);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#f9a8d4;text-align:center;">
+                  RAHASIA BEAUTY · AI AD
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Sub-stage 3B (24-31s): Cak Investment Club 2.3M+ Views & ~60% DM Conversion -->
-          <div id="c3-sub-b" class="sub-stage">
-            <div class="v-card emerald" style="left:70px;top:205px;width:940px;height:1155px;padding:30px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
-                <span class="v-badge emerald">CASE 02 · CAK INVESTMENT CLUB</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#34d399;font-weight:800;">92.5% – 96.2% FYP TRAFFIC</span>
-              </div>
+          <!-- 5 Brand Ecosystems Summary Card -->
+          <div class="ed-card cyan" style="margin-top:22px;width:100%;height:335px;padding:28px 34px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:800;color:#38bdf8;letter-spacing:0.15em;">
+              5 BRAND ECOSYSTEMS DIRECTED SIMULTANEOUSLY (2025 – PRESENT)
+            </div>
+            <div style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#fff;line-height:1.1;">
+              Oppo · AceKid · Syailendra · Golden Rama · Cak Investment Club
+            </div>
+            <div style="font-family:'Inter',sans-serif;font-size:18px;color:#cbd5e1;">
+              Applying cinema directing &amp; audience retention psychology so AI characters feel 100% human.
+            </div>
+          </div>
+        </div>
 
-              <!-- Analytics Dual Row -->
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;height:390px;">
-                <div style="border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.18);background:#000;position:relative;">
-                  <img class="v-img" src="./assets/leo-1-1m.webp" alt="Leo Ryansyah 1.1M Views" style="object-position:center top;" />
-                  <div style="position:absolute;left:12px;right:12px;bottom:12px;padding:8px 14px;border-radius:10px;background:rgba(0,0,0,0.88);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff;">@leo_ryansyah · 1.1M Views</div>
-                </div>
-                <div style="border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.18);background:#000;position:relative;">
-                  <img class="v-img" src="./assets/jo-1-2m.webp" alt="Jonathan Darsono 1.2M Views" style="object-position:center top;" />
-                  <div style="position:absolute;left:12px;right:12px;bottom:12px;padding:8px 14px;border-radius:10px;background:rgba(0,0,0,0.88);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff;">@jo.darsono · 1.2M Views</div>
-                </div>
-              </div>
+        <!-- BEAT 3B (26.2s - 32.0s): Hero Proof #1 — 7.9M Views on Oppo @diologtech -->
+        <div id="ch3-beat-b" style="position:absolute;left:64px;right:64px;top:165px;height:1190px;opacity:0;">
+          <div class="ed-card orange" style="width:100%;height:1190px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="ed-pill">VERIFIED CASE 01 · OPPO @DIOLOGTECH</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#38bdf8;font-weight:800;">100% AI VIRTUAL CREATOR</span>
+            </div>
 
-              <!-- Real DM Screenshots + Animated Conversion Funnel -->
-              <div style="margin-top:18px;display:grid;grid-template-columns:0.9fr 1.1fr;gap:18px;height:420px;">
-                <div style="border-radius:18px;overflow:hidden;border:2px solid #10b981;background:#000;">
-                  <img class="v-img" src="./assets/leo-dm.webp" alt="Real TikTok DM Proof" style="object-position:center top;" />
-                </div>
-                <div style="border-radius:18px;background:rgba(7,12,15,0.95);border:1.5px solid rgba(16,185,129,0.45);padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#6ee7b7;font-weight:700;letter-spacing:0.14em;">VERIFIED INBOX DM CONVERSION</div>
-                  <div id="p-dm-1" class="dm-pill"><span>💬 "Info join grup om"</span></div>
-                  <div id="p-dm-2" class="dm-pill"><span>💬 "mau JOIN CAK IC gimana yaa?"</span></div>
-                  <div id="p-dm-3" class="dm-pill out"><span>🔗 link.cakinvestmentclub.com</span></div>
-                  <div id="p-dm-4" class="dm-pill" style="border-color:#10b981;"><span>✅ "Saya udah connect via WA &amp; IG ya pak Leo"</span></div>
-                </div>
+            <!-- Clean Non-Overlapping 2-Column Proof Grid -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;height:730px;min-height:0;overflow:hidden;position:relative;">
+              <div style="border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,0.18);background:#000;height:100%;">
+                <img src="./assets/diologtech-feed.webp" alt="Oppo Diologtech Profile" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
               </div>
-
-              <div style="margin-top:18px;padding:20px 28px;border-radius:20px;background:rgba(16,185,129,0.16);border:2px solid #10b981;display:flex;justify-content:space-between;align-items:center;">
-                <div>
-                  <div style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:#34d399;line-height:1;">~60% CONVERTED</div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#d1fae5;margin-top:4px;">INBOUND TIKTOK DMs ➔ REGISTERED CLUB MEMBERS</div>
+              <div style="display:flex;flex-direction:column;gap:20px;height:100%;min-height:0;overflow:hidden;">
+                <div style="flex:1;min-height:0;border-radius:20px;overflow:hidden;border:2px solid #ff5a26;background:#000;">
+                  <img src="./assets/oppo-7-9m.webp" alt="Oppo 7.9M Views Analytics" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
                 </div>
-                <div style="text-align:right;font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#fff;">
-                  2.3M+ <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9ca3af;">POST VIEWS</span>
+                <div style="flex:1;min-height:0;border-radius:20px;overflow:hidden;border:2px solid #38bdf8;background:#000;">
+                  <img src="./assets/oppo-5-5m.webp" alt="Oppo 5.5M Viewers Analytics" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Sub-stage 3C (31-36s): 20–90 AI Personas Across 5 Brand Ecosystems -->
-          <div id="c3-sub-c" class="sub-stage">
-            <div class="v-card orange" style="left:70px;top:205px;width:940px;height:1155px;padding:30px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-                <span class="v-badge">MULTI-PERSONA UGC SYSTEM</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#ffb088;font-weight:800;">20 TO 90 PERSONAS / BRAND</span>
+            <!-- Massive Single-Focal-Point Odometer Metric Deck -->
+            <div style="padding:26px 30px;border-radius:24px;background:#191210;border:2.5px solid #ff5a26;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:16px;align-items:center;text-align:center;">
+              <div style="text-align:left;border-right:1.5px solid rgba(255,255,255,0.14);padding-right:16px;">
+                <div id="oppo-counter" style="font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:#ff5a26;line-height:0.95;">7.9M</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fff;margin-top:6px;">ORGANIC POST VIEWS</div>
               </div>
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;height:780px;">
-                <div style="position:relative;border-radius:20px;overflow:hidden;border:2px solid #ff5a26;background:#000;">
-                  <video id="v-port-animasi" data-start="30.5" data-duration="6.5" data-media-start="0" src="./clips/acekid-animasi-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-                  <div style="position:absolute;left:10px;right:10px;bottom:12px;padding:10px;border-radius:12px;background:rgba(8,8,12,0.9);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#ffb088;text-align:center;">ACEKID · 3D ANIMATION</div>
-                </div>
-                <div style="position:relative;border-radius:20px;overflow:hidden;border:2px solid #38bdf8;background:#000;">
-                  <video id="v-port-dracin" data-start="30.5" data-duration="6.5" data-media-start="0" src="./clips/acekid-dracin-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-                  <div style="position:absolute;left:10px;right:10px;bottom:12px;padding:10px;border-radius:12px;background:rgba(8,8,12,0.9);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#7dd3fc;text-align:center;">ACEKID · DRAMA STORY</div>
-                </div>
-                <div style="position:relative;border-radius:20px;overflow:hidden;border:2px solid #f472b6;background:#000;">
-                  <video id="v-port-rahasia" data-start="30.5" data-duration="6.5" data-media-start="0" src="./clips/rahasia-ad-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-                  <div style="position:absolute;left:10px;right:10px;bottom:12px;padding:10px;border-radius:12px;background:rgba(8,8,12,0.9);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#f9a8d4;text-align:center;">RAHASIA BEAUTY · AI UGC</div>
-                </div>
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:#fff;">5.5M</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;margin-top:4px;">TOTAL VIEWERS</div>
               </div>
-              <div style="margin-top:22px;padding:24px;border-radius:20px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.16);display:flex;justify-content:space-between;align-items:center;">
-                <div>
-                  <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:#fff;">OPPO · ACEKID · SYAILENDRA · GOLDEN RAMA</div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#9ca3af;margin-top:6px;">SCALED DAILY MARKETING OUTPUT FROM <strong style="color:#ff5a26;">20 ➔ 120 ASSETS/DAY</strong></div>
-                </div>
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:#38bdf8;">167K</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;margin-top:4px;">LIKES (11K CMTS)</div>
+              </div>
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:#34d399;">3.6K+</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;margin-top:4px;">NEW FOLLOWERS</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- =======================================================================
-             CHAPTER 04 (36.0s – 50.0s | Z = -7200): ACT III — CAKETING & CAKVISUAL
-             ======================================================================= -->
-        <div id="ch-4" class="chapter-cluster">
-          <!-- Top Console: CAKETING (200 Persona Scripts in 3 Hours) -->
-          <div id="c4-caketing" class="v-card orange" style="left:70px;top:205px;width:940px;height:495px;padding:26px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-              <span class="v-badge">PLATFORM 01 · CAKETING</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#34d399;font-weight:800;">SAVED ~70% SCRIPTING TIME</span>
-            </div>
-            <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:18px;height:285px;">
-              <div style="border-radius:16px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.16);background:#000;">
-                <img class="v-img" src="./assets/caketing-studio-showcase.webp" alt="CAKETING UI" style="object-position:left top;" />
-              </div>
-              <div style="border-radius:16px;overflow:hidden;border:2px solid #ff5a26;background:#000;">
-                <video id="v-port-caketing" data-start="35.5" data-duration="15.0" data-media-start="0" src="./clips/caketing-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-              </div>
-            </div>
-            <div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-radius:14px;background:rgba(255,90,38,0.14);border:1px solid rgba(255,90,38,0.45);">
-              <span style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">200 PERSONA SCRIPTS <span style="color:#ff5a26;">IN 3 HOURS</span></span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ffb088;font-weight:700;">RESEARCH ➔ STRATEGY ➔ DRAFTS</span>
-            </div>
-          </div>
-
-          <!-- Middle Console: CakVisual (2,000 Videos/Month) -->
-          <div id="c4-cakvisual" class="v-card cyan" style="left:70px;top:725px;width:940px;height:495px;padding:26px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-              <span class="v-badge cyan">PLATFORM 02 · CAKVISUAL &amp; CAKAI PRO</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#7dd3fc;font-weight:800;">20+ PERSONAS PER RUN</span>
-            </div>
-            <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:18px;height:285px;">
-              <div style="border-radius:16px;overflow:hidden;border:1.5px solid rgba(56,189,248,0.35);background:#000;">
-                <img class="v-img" src="./assets/cakvisual-featured-crop.webp" alt="CakVisual UI" style="object-position:left top;" />
-              </div>
-              <div style="border-radius:16px;overflow:hidden;border:2px solid #38bdf8;background:#000;">
-                <video id="v-port-cakvisual" data-start="35.5" data-duration="15.0" data-media-start="0" src="./clips/cakvisual-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-              </div>
-            </div>
-            <div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-radius:14px;background:rgba(56,189,248,0.14);border:1px solid rgba(56,189,248,0.45);">
-              <span style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">2,000 AI VIDEOS <span style="color:#38bdf8;">/ MONTH</span></span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#bae6fd;font-weight:700;">DUAL-PASS AI BRAND SAFETY QC</span>
-            </div>
-          </div>
-
-          <!-- Bottom Compression Bar: 5 DAYS -> 5 HOURS -->
-          <div id="c4-slam-bar" class="v-card emerald" style="left:70px;top:1240px;width:940px;height:130px;padding:20px 32px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(90deg,rgba(255,90,38,0.25),rgba(16,185,129,0.25));">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:#fde68a;letter-spacing:0.14em;">WEEKLY KPI PRODUCTION TIME:</div>
-            <div style="font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:#fff;">
-              <span style="color:#f87171;text-decoration:line-through;font-size:34px;margin-right:14px;">~5 DAYS</span>➔ <span style="color:#34d399;">~5 HOURS</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- =======================================================================
-             CHAPTER 05 (50.0s – 60.0s | Z = -9600): THE CONVERGENCE & CTA
-             ======================================================================= -->
-        <div id="ch-5" class="chapter-cluster">
-          <div class="v-card orange" style="left:70px;top:205px;width:940px;height:1160px;padding:42px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;background:linear-gradient(165deg,rgba(22,20,32,0.96) 0%,rgba(9,9,14,0.99) 100%);">
-            <div style="width:320px;height:320px;border-radius:36px;overflow:hidden;border:3px solid #ff5a26;box-shadow:0 28px 80px rgba(255,90,38,0.35);">
-              <img class="v-img" src="./assets/haidar-portrait-ai-studio.webp" alt="Haidar Ghazy Arkan" />
+        <!-- BEAT 3C (32.0s - 38.0s): Hero Proof #2 — Cak Investment Club 2.3M+ Views & ~60% DM Conversion -->
+        <div id="ch3-beat-c" style="position:absolute;left:64px;right:64px;top:165px;height:1190px;opacity:0;">
+          <div class="ed-card emerald" style="width:100%;height:1190px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="ed-pill emerald">VERIFIED CASE 02 · CAK INVESTMENT CLUB</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#34d399;font-weight:800;">96.2% FOR YOU PAGE TRAFFIC</span>
             </div>
 
-            <div>
-              <span class="v-badge">HEAD OF CREATOR &amp; AI MARKETING STRATEGIST</span>
-              <div style="font-family:'Syne',sans-serif;font-size:66px;font-weight:800;color:#fff;margin-top:18px;line-height:0.98;letter-spacing:-0.03em;">
-                HAIDAR GHAZY ARKAN
+            <!-- Top Row: Verified Analytics (@leo_ryansyah 1.1M & @jo.darsono 1.2M) -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;height:360px;overflow:hidden;">
+              <div style="border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.16);background:#000;position:relative;">
+                <img src="./assets/leo-1-1m.webp" alt="Leo Ryansyah 1.1M Views" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
+                <div style="position:absolute;left:12px;right:12px;bottom:10px;padding:8px 14px;border-radius:10px;background:rgba(8,8,12,0.9);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fff;">
+                  @leo_ryansyah · 1.1M Views (61K Likes)
+                </div>
               </div>
-              <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:52px;color:#ffb088;margin-top:8px;">
-                Strategy. Stories. Systems.
+              <div style="border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.16);background:#000;position:relative;">
+                <img src="./assets/jo-1-2m.webp" alt="Jonathan Darsono 1.2M Views" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
+                <div style="position:absolute;left:12px;right:12px;bottom:10px;padding:8px 14px;border-radius:10px;background:rgba(8,8,12,0.9);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fff;">
+                  @jo.darsono · 1.2M Views (43K Likes)
+                </div>
               </div>
             </div>
 
-            <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-              <div style="padding:20px;border-radius:20px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,90,38,0.45);">
-                <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#ff5a26;">7.9M</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#e2e8f0;margin-top:4px;">OPPO @DIOLOGTECH VIEWS</div>
+            <!-- Middle Row: Real TikTok DM Screenshot + Interactive Animated Chat Bubbles -->
+            <div style="display:grid;grid-template-columns:0.92fr 1.08fr;gap:18px;height:455px;overflow:hidden;">
+              <div style="border-radius:18px;overflow:hidden;border:2px solid #34d399;background:#000;">
+                <img src="./assets/leo-dm.webp" alt="Real TikTok DM Proof" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
               </div>
-              <div style="padding:20px;border-radius:20px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(16,185,129,0.45);">
-                <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#34d399;">~60%</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#e2e8f0;margin-top:4px;">INBOUND DM CONVERSION</div>
-              </div>
-              <div style="padding:20px;border-radius:20px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(56,189,248,0.45);">
-                <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#38bdf8;">200 / 3H</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#e2e8f0;margin-top:4px;">CAKETING SCRIPT ENGINE</div>
-              </div>
-              <div style="padding:20px;border-radius:20px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(250,204,21,0.45);">
-                <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#facc15;">5D ➔ 5H</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#e2e8f0;margin-top:4px;">CAKVISUAL 2,000 VIDS/MO</div>
+              <div style="border-radius:18px;background:rgba(12,15,24,0.96);border:1.5px solid rgba(255,255,255,0.14);padding:22px;display:flex;flex-direction:column;justify-content:center;gap:16px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399;font-weight:800;letter-spacing:0.14em;">
+                  LIVE TIKTOK INBOX CONVERSION FUNNEL
+                </div>
+                <div id="dm-bub-1" style="padding:16px 20px;border-radius:20px 20px 20px 6px;background:#1e2230;border:1.5px solid rgba(255,255,255,0.18);font-size:17px;font-weight:600;color:#fff;">
+                  💬 "Halo mas Leo, mau JOIN CAK IC gimana yaa?"
+                </div>
+                <div id="dm-bub-2" style="padding:16px 20px;border-radius:20px 20px 6px 20px;background:linear-gradient(135deg,#0284c7,#2563eb);font-size:17px;font-weight:700;color:#fff;align-self:flex-end;">
+                  🔗 link.cakinvestmentclub.com
+                </div>
+                <div id="dm-bub-3" style="padding:16px 20px;border-radius:20px 20px 20px 6px;background:rgba(16,185,129,0.2);border:2px solid #34d399;font-size:17px;font-weight:700;color:#d1fae5;">
+                  ✅ "Saya udah connect via WA &amp; IG ya pak Leo 🙏"
+                </div>
               </div>
             </div>
 
-            <div style="width:100%;padding:22px;border-radius:999px;background:#ff5a26;color:#08080c;font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:800;letter-spacing:0.12em;">
-              HAIDARGHAZY.COM · @haidarghazyarkan_
+            <!-- Bottom Conversion Impact Banner -->
+            <div style="padding:24px 30px;border-radius:22px;background:#0e211b;border:2.5px solid #34d399;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-size:58px;font-weight:800;color:#34d399;line-height:0.95;">~60% CONVERTED</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#d1fae5;margin-top:6px;">
+                  INBOUND TIKTOK DMs TURNED INTO REGISTERED COMMUNITY MEMBERS
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#fff;">2.3M+</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6ee7b7;">COMBINED VIEWS</div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
+      <!-- =======================================================================
+           CHAPTER 04 (38.0s – 51.5s): THE SYSTEM BUILDER — CAKETING & CAKVISUAL
+           ======================================================================= -->
+      <div id="ch-4" class="chapter-layer">
+        <!-- Top Illustrated SVG Factory Node Pipeline Header (Y: 160px - 265px) -->
+        <div style="position:absolute;left:64px;right:64px;top:160px;height:98px;padding:0 28px;border-radius:22px;background:rgba(16,18,28,0.95);border:2px solid rgba(255,90,38,0.55);display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="padding:8px 14px;border-radius:10px;background:rgba(255,90,38,0.2);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#ff9c7a;">1. BRIEF 📄</span>
+            <span style="color:#ff5a26;font-weight:800;">➔</span>
+            <span style="padding:8px 14px;border-radius:10px;background:rgba(56,189,248,0.2);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#7dd3fc;">2. CAKETING (SCRIPTS)</span>
+            <span style="color:#38bdf8;font-weight:800;">➔</span>
+            <span style="padding:8px 14px;border-radius:10px;background:rgba(52,211,153,0.2);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#6ee7b7;">3. CAKVISUAL (VIDEOS)</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#fbbf24;font-weight:800;">AI FACTORY</span>
+        </div>
+
+        <!-- Engine 01: CAKETING Bulk Scriptwriting Platform (Y: 278px - 738px) -->
+        <div id="ch4-caketing" class="ed-card orange" style="position:absolute;left:64px;right:64px;top:278px;height:460px;padding:22px 26px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="ed-pill">IN-HOUSE ENGINE 01 · CAKETING</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#34d399;font-weight:800;">SAVED ~70% SCRIPTING TIME</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:18px;height:270px;overflow:hidden;">
+            <div style="border-radius:16px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.18);background:#000;">
+              <img src="./assets/caketing-studio-showcase.webp" alt="CAKETING UI" style="width:100%;height:100%;object-fit:cover;object-position:left top;" />
+            </div>
+            <div style="border-radius:16px;overflow:hidden;border:2px solid #ff5a26;background:#000;">
+              <video id="v-ed-caketing" data-start="37.8" data-duration="14.0" data-media-start="0" src="./clips/caketing-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+            </div>
+          </div>
+          <div style="padding:14px 22px;border-radius:16px;background:rgba(255,90,38,0.15);border:1.5px solid #ff5a26;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">
+              200 PERSONA SCRIPTS <span style="color:#ff5a26;">IN 3 HOURS</span>
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ffb088;font-weight:800;">RESEARCH ➔ DRAFTS</span>
+          </div>
+        </div>
+
+        <!-- Engine 02: CakVisual & CakAI Pro Video Platform (Y: 758px - 1218px) -->
+        <div id="ch4-cakvisual" class="ed-card cyan" style="position:absolute;left:64px;right:64px;top:758px;height:460px;padding:22px 26px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="ed-pill cyan">IN-HOUSE ENGINE 02 · CAKVISUAL &amp; CAKAI PRO</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#7dd3fc;font-weight:800;">BUILT CAKAI PRO SOLO IN 2 WEEKS</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:18px;height:270px;overflow:hidden;">
+            <div style="border-radius:16px;overflow:hidden;border:1.5px solid rgba(56,189,248,0.35);background:#000;">
+              <img src="./assets/cakvisual-featured-crop.webp" alt="CakVisual UI" style="width:100%;height:100%;object-fit:cover;object-position:left top;" />
+            </div>
+            <div style="border-radius:16px;overflow:hidden;border:2px solid #38bdf8;background:#000;">
+              <video id="v-ed-cakvisual" data-start="37.8" data-duration="14.0" data-media-start="0" src="./clips/cakvisual-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+            </div>
+          </div>
+          <div style="padding:14px 22px;border-radius:16px;background:rgba(56,189,248,0.15);border:1.5px solid #38bdf8;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">
+              2,000 AI VIDEOS <span style="color:#38bdf8;">/ MONTH</span>
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#bae6fd;font-weight:800;">20+ PERSONAS / RUN · QC</span>
+          </div>
+        </div>
+
+        <!-- Bottom Compression Slam Bar: 5 DAYS -> 5 HOURS (Y: 1238px - 1368px) -->
+        <div id="ch4-slam" class="ed-card emerald" style="position:absolute;left:64px;right:64px;top:1238px;height:128px;padding:0 32px;background:linear-gradient(90deg,#1b1214 0%,#0e221b 100%);border:2.5px solid #34d399;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fde68a;letter-spacing:0.14em;">WEEKLY KPI PRODUCTION TIME</div>
+            <div style="font-family:'Inter',sans-serif;font-size:15px;color:#cbd5e1;margin-top:4px;">Daily Output Scaled 6× (20 ➔ 120 Assets/Day)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:18px;font-family:'Syne',sans-serif;font-weight:800;">
+            <span style="position:relative;font-size:34px;color:#f87171;">
+              ~5 DAYS
+              <svg style="position:absolute;left:-6px;top:45%;width:110%;height:12px;" viewBox="0 0 160 12">
+                <line x1="0" y1="10" x2="160" y2="2" stroke="#ef4444" stroke-width="5" stroke-linecap="round" />
+              </svg>
+            </span>
+            <span style="font-size:36px;color:#fff;">➔</span>
+            <span style="font-size:48px;color:#34d399;">~5 HOURS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           CHAPTER 05 (51.5s – 60.0s): THE HUMAN SIGN-OFF & INTERACTIVE VISUAL CV CARD
+           ======================================================================= -->
+      <div id="ch-5" class="chapter-layer">
+        <div class="ed-card orange" style="position:absolute;left:64px;right:64px;top:170px;height:1195px;padding:42px 38px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;">
+          <!-- Orbital Studio Portrait with SVG Constellation Ring -->
+          <div style="position:relative;width:320px;height:320px;display:flex;align-items:center;justify-content:center;">
+            <svg id="ch5-orbit-svg" style="position:absolute;inset:-34px;width:388px;height:388px;" viewBox="0 0 388 388" fill="none">
+              <circle cx="194" cy="194" r="184" stroke="rgba(255,90,38,0.45)" stroke-width="2" stroke-dasharray="10 8" />
+              <circle cx="194" cy="10" r="9" fill="#ff5a26" />
+              <circle cx="353" cy="286" r="9" fill="#38bdf8" />
+              <circle cx="35" cy="286" r="9" fill="#34d399" />
+            </svg>
+            <div style="width:280px;height:280px;border-radius:36px;overflow:hidden;border:3px solid #ff5a26;box-shadow:0 24px 70px rgba(255,90,38,0.35);position:relative;z-index:2;">
+              <img src="./assets/haidar-portrait-signoff.webp" alt="Haidar Ghazy Arkan" style="width:100%;height:100%;object-fit:cover;" />
+            </div>
+          </div>
+
+          <!-- Name & Tagline -->
+          <div>
+            <span class="ed-pill">HEAD OF CREATOR &amp; AI MARKETING STRATEGIST · FILMMAKER</span>
+            <div style="font-family:'Syne',sans-serif;font-size:62px;font-weight:800;color:#fff;line-height:0.98;letter-spacing:-0.03em;margin-top:16px;">
+              HAIDAR GHAZY ARKAN
+            </div>
+            <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:52px;color:#ffb38a;margin-top:6px;">
+              Strategy. Stories. Systems.
+            </div>
+          </div>
+
+          <!-- 4 Scannable Visual CV Proof Boxes (2x2 Grid) -->
+          <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="padding:20px;border-radius:20px;background:rgba(251,191,36,0.09);border:1.5px solid rgba(251,191,36,0.5);">
+              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#fbbf24;">3.86 GPA</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#fde68a;margin-top:4px;">ISI SURAKARTA CUM LAUDE · 50+ WORKS</div>
+            </div>
+            <div style="padding:20px;border-radius:20px;background:rgba(255,90,38,0.1);border:1.5px solid rgba(255,90,38,0.5);">
+              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#ff5a26;">7.9M VIEWS</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ff9c7a;margin-top:4px;">OPPO @DIOLOGTECH (5.5M VIEWERS)</div>
+            </div>
+            <div style="padding:20px;border-radius:20px;background:rgba(52,211,153,0.1);border:1.5px solid rgba(52,211,153,0.5);">
+              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#34d399;">~60% DM</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6ee7b7;margin-top:4px;">TIKTOK INBOX ➔ MEMBER CONVERSION</div>
+            </div>
+            <div style="padding:20px;border-radius:20px;background:rgba(56,189,248,0.1);border:1.5px solid rgba(56,189,248,0.5);">
+              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#38bdf8;">5D ➔ 5H</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7dd3fc;margin-top:4px;">BUILT CAKETING &amp; CAKVISUAL</div>
+            </div>
+          </div>
+
+          <!-- Interactive CTA Pill (Clicked by Cursor at 57.2s) -->
+          <div id="ch5-cta-btn" style="width:100%;padding:22px 28px;border-radius:999px;background:linear-gradient(90deg,#ff5a26,#ff7b52);color:#09090d;font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:800;letter-spacing:0.1em;box-shadow:0 20px 50px rgba(255,90,38,0.45);">
+            🌐 HAIDARGHAZY.COM · @haidarghazyarkan_
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         PORTAL #1 OVERLAY: ILLUSTRATED 35MM CAMERA LENS IRIS (7.3s – 8.1s)
+         ========================================================================= -->
+    <div id="lens-portal">
+      <svg width="900" height="900" viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="92" fill="#0d0e16" stroke="#ff5a26" stroke-width="5" />
+        <circle cx="100" cy="100" r="76" stroke="#38bdf8" stroke-width="2" stroke-dasharray="8 6" />
+        <circle id="lens-aperture" cx="100" cy="100" r="28" fill="#ff5a26" fill-opacity="0.25" stroke="#ff5a26" stroke-width="4" />
+        <text x="100" y="24" text-anchor="middle" fill="#f5f3ef" font-family="JetBrains Mono" font-size="7" letter-spacing="2">35MM ANAMORPHIC · F/1.4 · ISI SURAKARTA</text>
+      </svg>
+    </div>
+
+    <!-- =========================================================================
+         PORTAL #3 OVERLAY: SPINNING FACTORY GEAR SLICE (37.3s – 38.1s)
+         ========================================================================= -->
+    <div id="gear-portal">
+      <svg width="760" height="760" viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="68" fill="#0e1720" stroke="#34d399" stroke-width="8" stroke-dasharray="22 14" />
+        <circle cx="100" cy="100" r="36" fill="#0b0b10" stroke="#ff5a26" stroke-width="5" />
+      </svg>
+    </div>
+
+    <!-- =========================================================================
+         STORYTELLING CAPTION BAR & PROGRESS SCRUBBER (SAFE ZONE Y: 1390–1590px)
+         ========================================================================= -->
+    <div id="story-caption-bar">
+      <div id="cap-kicker">01 · THE 3-IN-1 QUESTION</div>
+      <div id="cap-headline">
+        FILMMAKER, GROWTH MARKETER, OR BUILDER? <span class="accent">I USE ALL 3.</span>
       </div>
     </div>
 
-    <div id="portal-flash"></div>
+    <div id="scrubber-track">
+      <div id="scrubber-fill"></div>
+    </div>
 
-    <!-- Safe-Zone Portrait HUD -->
-    <div id="portrait-hud">
-      <div class="p-hud-top">
-        <div class="p-rec">
-          <span class="p-dot"></span>
-          <span id="p-chapter-tag">CH 01 · THE CREATIVE ANOMALY</span>
-        </div>
-        <div id="p-tc" style="color:#f7f4ee;font-weight:700;">00:00 / 01:00</div>
-      </div>
-
-      <div id="p-caption-box">
-        <div id="p-eyebrow" class="p-cap-eyebrow">01 · THE PATTERN INTERRUPT</div>
-        <div id="p-title" class="p-cap-title">
-          EVERYONE CAN TYPE A PROMPT. <span class="accent">FEW CAN ENGINEER GROWTH.</span>
-        </div>
-        <div id="p-sub" class="p-cap-sub">
-          FILM DIRECTOR · AI MARKETING STRATEGIST · PRODUCTION SYSTEMS BUILDER
-        </div>
-      </div>
+    <!-- =========================================================================
+         INTERACTIVE VECTOR CURSOR & CLICK RIPPLE
+         ========================================================================= -->
+    <div id="interactive-cursor">
+      <div id="cursor-ripple"></div>
+      <svg width="48" height="48" viewBox="0 0 36 36" fill="none">
+        <path d="M6 4L29 15.5L17.5 19L14 30.5L6 4Z" fill="#ffffff" stroke="#ff5a26" stroke-width="2.5" stroke-linejoin="round" />
+      </svg>
     </div>
   </div>
 
@@ -645,249 +956,297 @@
     const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
     const lerp = (a, b, t) => a + (b - a) * clamp(t);
     const easeOutCubic = (t) => 1 - Math.pow(1 - clamp(t), 3);
-    const easeInOutExpo = (t) => {
-      t = clamp(t);
-      if (t === 0) return 0;
-      if (t === 1) return 1;
-      return t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2;
-    };
     const easeOutBack = (t) => {
       t = clamp(t);
       const c1 = 1.70158;
       const c3 = c1 + 1;
       return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
     };
+    const easeInOutCubic = (t) => {
+      t = clamp(t);
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
 
-    const world3d = document.getElementById("world-3d");
+    const gridEl = document.getElementById("blueprint-grid");
+    const hdrChapter = document.getElementById("hdr-chapter");
+    const hdrTc = document.getElementById("hdr-timecode");
+    const capKicker = document.getElementById("cap-kicker");
+    const capHeadline = document.getElementById("cap-headline");
+    const scrubberFill = document.getElementById("scrubber-fill");
+
     const ch1 = document.getElementById("ch-1");
     const ch2 = document.getElementById("ch-2");
     const ch3 = document.getElementById("ch-3");
     const ch4 = document.getElementById("ch-4");
     const ch5 = document.getElementById("ch-5");
 
-    const c2SubA = document.getElementById("c2-sub-a");
-    const c2SubB = document.getElementById("c2-sub-b");
-    const c2SubC = document.getElementById("c2-sub-c");
+    const ch2BeatA = document.getElementById("ch2-beat-a");
+    const ch2BeatB = document.getElementById("ch2-beat-b");
+    const ch2BeatC = document.getElementById("ch2-beat-c");
 
-    const c3SubA = document.getElementById("c3-sub-a");
-    const c3SubB = document.getElementById("c3-sub-b");
-    const c3SubC = document.getElementById("c3-sub-c");
+    const ch3BeatA = document.getElementById("ch3-beat-a");
+    const ch3BeatB = document.getElementById("ch3-beat-b");
+    const ch3BeatC = document.getElementById("ch3-beat-c");
 
-    const portalFlash = document.getElementById("portal-flash");
-    const pChapterTag = document.getElementById("p-chapter-tag");
-    const pTc = document.getElementById("p-tc");
-    const pEyebrow = document.getElementById("p-eyebrow");
-    const pTitle = document.getElementById("p-title");
-    const pSub = document.getElementById("p-sub");
+    const lensPortal = document.getElementById("lens-portal");
+    const gearPortal = document.getElementById("gear-portal");
+    const cursorEl = document.getElementById("interactive-cursor");
+    const rippleEl = document.getElementById("cursor-ripple");
 
-    // Canvas Ambient Particles & Vertical Neural Thread
+    // Canvas Living Story Thread & Subtle Blueprint Particles
     const canvas = document.getElementById("fx-canvas");
     const ctx = canvas.getContext("2d");
-    const particles = Array.from({ length: 64 }, (_, i) => ({
-      x: (i * 97.3) % 1080,
-      y: (i * 251.7) % 1920,
-      z: (i % 5) * 0.2 + 0.2,
+    const dots = Array.from({ length: 42 }, (_, i) => ({
+      x: (i * 137.5) % 1080,
+      y: (i * 293.1) % 1920,
       r: (i % 3) + 1.5,
-      hue: i % 3 === 0 ? "#ff5a26" : i % 3 === 1 ? "#38bdf8" : "#10b981"
+      color: i % 3 === 0 ? "#ff5a26" : i % 3 === 1 ? "#38bdf8" : "#34d399"
     }));
 
-    function drawCanvas(t) {
+    function drawBackgroundCanvas(t) {
       ctx.clearRect(0, 0, 1080, 1920);
-      for (const p of particles) {
-        const px = (p.x + Math.sin(t * 0.9 + p.y * 0.008) * 35 * p.z + 1080) % 1080;
-        const py = (p.y - t * 48 * p.z + 19200) % 1920;
+      for (const d of dots) {
+        const px = (d.x + Math.sin(t * 0.7 + d.y * 0.005) * 24 + 1080) % 1080;
+        const py = (d.y - t * 32 + 19200) % 1920;
         ctx.beginPath();
-        ctx.fillStyle = p.hue;
-        ctx.globalAlpha = 0.24 + 0.35 * p.z;
-        ctx.arc(px, py, p.r * (0.8 + p.z), 0, Math.PI * 2);
+        ctx.fillStyle = d.color;
+        ctx.globalAlpha = 0.25;
+        ctx.arc(px, py, d.r, 0, Math.PI * 2);
         ctx.fill();
       }
+      // Flowing Story Thread Wave
       ctx.save();
-      ctx.globalAlpha = 0.65;
-      ctx.strokeStyle = "#ff5a26";
-      ctx.lineWidth = 4;
-      ctx.shadowColor = "#ff5a26";
-      ctx.shadowBlur = 22;
+      ctx.globalAlpha = 0.45;
+      ctx.strokeStyle = t < 21 ? "#ff5a26" : t < 38 ? "#38bdf8" : "#34d399";
+      ctx.lineWidth = 3.5;
       ctx.beginPath();
-      for (let y = 0; y <= 1920; y += 28) {
-        const x = 540 + Math.sin(y * 0.0038 - t * 2.6) * 260;
-        if (y === 0) ctx.moveTo(x, y);
+      for (let y = 140; y <= 1600; y += 32) {
+        const x = 540 + Math.sin(y * 0.004 - t * 2.2) * 340;
+        if (y === 140) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
       ctx.restore();
     }
 
-    function renderAt(t) {
-      drawCanvas(t);
-      const sec = Math.floor(t);
-      pTc.textContent = `00:${String(sec).padStart(2, "0")} / 01:00`;
+    // Cursor Choreography Keyframes
+    const cursorKeys = [
+      { t: 0.0, x: 860, y: 420 },
+      { t: 0.5, x: 520, y: 215, click: true },
+      { t: 2.2, x: 280, y: 900 },
+      { t: 3.3, x: 800, y: 900 },
+      { t: 4.4, x: 540, y: 1150 },
+      { t: 5.3, x: 540, y: 1310, click: true },
+      { t: 9.2, x: 640, y: 1120 },
+      { t: 16.6, x: 540, y: 1290, click: true },
+      { t: 26.25, x: 540, y: 620, click: true },
+      { t: 34.4, x: 760, y: 940, click: true },
+      { t: 41.2, x: 680, y: 540 },
+      { t: 48.5, x: 740, y: 1295, click: true },
+      { t: 57.2, x: 540, y: 1290, click: true },
+      { t: 60.0, x: 880, y: 1340 }
+    ];
 
-      // 1. Z-AXIS CAMERA FLY-THROUGH (5 Chapters: Z = 0, 2400, 4800, 7200, 9600)
-      let camZ = 0;
-      let camX = Math.sin(t * 1.5) * 10;
-      let camY = Math.cos(t * 1.2) * 12;
-      let camRotZ = Math.sin(t * 0.8) * 0.5;
-      let flash = 0;
-
-      if (t < 5.6) {
-        camZ = lerp(-120, 90, easeOutCubic(t / 5.6));
-      } else if (t < 6.4) {
-        const p = easeInOutExpo((t - 5.6) / 0.8);
-        camZ = lerp(90, 2400, p);
-        camRotZ += Math.sin(p * Math.PI) * 5.0;
-        flash = Math.sin(p * Math.PI) * 0.78;
-      } else if (t < 17.6) {
-        camZ = lerp(2400, 2520, (t - 6.4) / 11.2);
-      } else if (t < 18.4) {
-        const p = easeInOutExpo((t - 17.6) / 0.8);
-        camZ = lerp(2520, 4800, p);
-        camRotZ -= Math.sin(p * Math.PI) * 5.0;
-        flash = Math.sin(p * Math.PI) * 0.78;
-      } else if (t < 35.6) {
-        camZ = lerp(4800, 4940, (t - 18.4) / 17.2);
-      } else if (t < 36.4) {
-        const p = easeInOutExpo((t - 35.6) / 0.8);
-        camZ = lerp(4940, 7200, p);
-        camRotZ += Math.sin(p * Math.PI) * 5.0;
-        flash = Math.sin(p * Math.PI) * 0.78;
-      } else if (t < 49.6) {
-        camZ = lerp(7200, 7320, (t - 36.4) / 13.2);
-      } else if (t < 50.4) {
-        const p = easeInOutExpo((t - 49.6) / 0.8);
-        camZ = lerp(7320, 9600, p);
-        camRotZ -= Math.sin(p * Math.PI) * 4.0;
-        flash = Math.sin(p * Math.PI) * 0.78;
-      } else {
-        camZ = lerp(9600, 9650, easeOutCubic((t - 50.4) / 9.6));
-      }
-
-      portalFlash.style.opacity = flash.toFixed(3);
-      world3d.style.transform = `translate3d(${camX.toFixed(1)}px, ${camY.toFixed(1)}px, ${camZ.toFixed(1)}px) rotateZ(${camRotZ.toFixed(2)}deg)`;
-
-      ch1.style.transform = `translate3d(0,0,0)`;
-      ch1.style.opacity = clamp(1 - (t - 5.8) / 0.4);
-
-      ch2.style.transform = `translate3d(0,0,-2400px)`;
-      ch2.style.opacity = clamp((t - 5.6) / 0.4) * clamp(1 - (t - 17.8) / 0.4);
-
-      ch3.style.transform = `translate3d(0,0,-4800px)`;
-      ch3.style.opacity = clamp((t - 17.6) / 0.4) * clamp(1 - (t - 35.8) / 0.4);
-
-      ch4.style.transform = `translate3d(0,0,-7200px)`;
-      ch4.style.opacity = clamp((t - 35.6) / 0.4) * clamp(1 - (t - 49.8) / 0.4);
-
-      ch5.style.transform = `translate3d(0,0,-9600px)`;
-      ch5.style.opacity = clamp((t - 49.6) / 0.4);
-
-      // CHAPTER 01 ANIMATION (0-6s)
-      const slopFade = clamp(1 - (t - 1.35) / 0.35);
-      document.getElementById("c1-slop-card").style.opacity = slopFade;
-      document.getElementById("c1-slop-card").style.transform = `scale(${lerp(1, 1.18, 1 - slopFade).toFixed(3)})`;
-
-      const heroIn = easeOutBack(clamp((t - 1.3) / 0.55));
-      document.getElementById("c1-hero-card").style.opacity = clamp((t - 1.3) / 0.25);
-      document.getElementById("c1-hero-card").style.transform = `translate3d(0, ${lerp(80, 0, heroIn).toFixed(1)}px, 40px)`;
-
-      const l1 = easeOutBack(clamp((t - 2.3) / 0.45));
-      const l2 = easeOutBack(clamp((t - 3.2) / 0.45));
-      const l3 = easeOutBack(clamp((t - 4.1) / 0.45));
-      document.getElementById("c1-lock-1").style.transform = `translate3d(${lerp(-120, 0, l1).toFixed(1)}px, 0, 50px)`;
-      document.getElementById("c1-lock-1").style.opacity = clamp((t - 2.3) / 0.2);
-      document.getElementById("c1-lock-2").style.transform = `translate3d(${lerp(120, 0, l2).toFixed(1)}px, 0, 50px)`;
-      document.getElementById("c1-lock-2").style.opacity = clamp((t - 3.2) / 0.2);
-      document.getElementById("c1-lock-3").style.transform = `translate3d(${lerp(-120, 0, l3).toFixed(1)}px, 0, 50px)`;
-      document.getElementById("c1-lock-3").style.opacity = clamp((t - 4.1) / 0.2);
-
-      // CHAPTER 02 SUB-STAGES (6-18s)
-      c2SubA.style.opacity = clamp(1 - (t - 9.8) / 0.4);
-      c2SubA.style.transform = `translate3d(0, 0, ${lerp(0, 120, clamp((t - 6.0) / 4.0)).toFixed(1)}px)`;
-
-      c2SubB.style.opacity = clamp((t - 9.6) / 0.4) * clamp(1 - (t - 13.8) / 0.4);
-      c2SubB.style.transform = `translate3d(0, 0, ${lerp(-80, 90, clamp((t - 10.0) / 4.0)).toFixed(1)}px)`;
-
-      c2SubC.style.opacity = clamp((t - 13.6) / 0.4);
-      c2SubC.style.transform = `translate3d(0, 0, ${lerp(-80, 90, clamp((t - 14.0) / 4.0)).toFixed(1)}px)`;
-
-      // CHAPTER 03 SUB-STAGES (18-36s)
-      c3SubA.style.opacity = clamp(1 - (t - 23.8) / 0.4);
-      const oppoCount = lerp(0, 7.9, easeOutCubic(clamp((t - 18.3) / 1.8)));
-      document.getElementById("p-oppo-views").textContent = `${oppoCount.toFixed(1)}M`;
-
-      c3SubB.style.opacity = clamp((t - 23.6) / 0.4) * clamp(1 - (t - 30.8) / 0.4);
-      for (let i = 1; i <= 4; i++) {
-        const dp = easeOutBack(clamp((t - (25.2 + i * 0.45)) / 0.4));
-        const el = document.getElementById(`p-dm-${i}`);
-        el.style.transform = `scale(${dp.toFixed(3)})`;
-        el.style.opacity = clamp((t - (25.2 + i * 0.45)) / 0.2);
-      }
-
-      c3SubC.style.opacity = clamp((t - 30.6) / 0.4);
-
-      // CHAPTER 04 ANIMATION (36-50s)
-      const c4a = easeOutBack(clamp((t - 36.2) / 0.55));
-      const c4b = easeOutBack(clamp((t - 36.5) / 0.55));
-      const c4c = easeOutBack(clamp((t - 36.8) / 0.55));
-      const cakVisualFocus = clamp((t - 42.0) / 0.5) * 35;
-      document.getElementById("c4-caketing").style.transform = `translate3d(${lerp(-50, 0, c4a).toFixed(1)}px, 0, ${(35 - cakVisualFocus * 0.5).toFixed(1)}px)`;
-      document.getElementById("c4-cakvisual").style.transform = `translate3d(${lerp(50, 0, c4b).toFixed(1)}px, 0, ${(25 + cakVisualFocus).toFixed(1)}px)`;
-      document.getElementById("c4-slam-bar").style.transform = `scale(${lerp(0.92, 1.0, c4c).toFixed(3)}) translateZ(50px)`;
-
-      // KINETIC CAPTIONS & SAFE-ZONE TELEMETRY
-      if (t < 6.0) {
-        pChapterTag.textContent = "CH 01 · THE PATTERN INTERRUPT";
-        pEyebrow.textContent = "01 · BEYOND GENERIC AI PROMPTS";
-        if (t < 2.2) {
-          pTitle.innerHTML = `ANYONE CAN TYPE A <span class="accent">PROMPT TODAY.</span>`;
-        } else {
-          pTitle.innerHTML = `MAKING AI MOVE MILLIONS TAKES A <span class="serif">Different Breed.</span>`;
+    function updateCursor(t) {
+      let k0 = cursorKeys[0];
+      let k1 = cursorKeys[cursorKeys.length - 1];
+      for (let i = 0; i < cursorKeys.length - 1; i++) {
+        if (t >= cursorKeys[i].t && t <= cursorKeys[i + 1].t) {
+          k0 = cursorKeys[i];
+          k1 = cursorKeys[i + 1];
+          break;
         }
-        pSub.textContent = "DIRECTOR’S EYE · STRATEGIST’S BRAIN · SYSTEMS BUILDER";
-      } else if (t < 10.0) {
-        pChapterTag.textContent = "ACT I · FILM & TV ROOTS";
-        pEyebrow.textContent = "02 · 5+ YEARS ON FILM & BROADCAST SETS";
-        pTitle.innerHTML = `ISI SURAKARTA FILM &amp; TV <span class="accent">CUM LAUDE (3.86).</span>`;
-        pSub.textContent = "DIRECTOR & EDITOR · BI QRIS CROSSBORDER · TV BROADCAST SWITCHER";
-      } else if (t < 14.0) {
-        pChapterTag.textContent = "ACT I · 3D WORLDS & VFX";
-        pEyebrow.textContent = "02 · FESTIVAL-RECOGNIZED VISUAL CRAFT";
-        pTitle.innerHTML = `3D ANIMATION, VFX &amp; <span class="cyan">FESTIVAL NOMINEE.</span>`;
-        pSub.textContent = "UCIFEST 12 & BOGOR FILM FESTIVAL · 3RD PLACE NITRAFEST DIGITAL ARTS";
-      } else if (t < 18.0) {
-        pChapterTag.textContent = "ACT I · LUMINARA VISUAL WORKS";
-        pEyebrow.textContent = "02 · CO-FOUNDER & CREATIVE LEAD";
-        pTitle.innerHTML = `ARCHITECTURAL <span class="serif">Projection Mapping</span> &amp; UNREAL 3D.`;
-        pSub.textContent = "BLENDER · AFTER EFFECTS · UNREAL ENGINE · RESOLUME ARENA";
-      } else if (t < 24.0) {
-        pChapterTag.textContent = "ACT II · VIRAL AI GROWTH";
-        pEyebrow.textContent = "03 · OPPO @DIOLOGTECH CAMPAIGN";
-        pTitle.innerHTML = `<span class="accent">7.9M POST VIEWS</span> &amp; 5.5M VIEWERS ON OPPO.`;
-        pSub.textContent = "100% AI VIRTUAL CREATOR ENGINEERED TO READ AS ORGANIC";
-      } else if (t < 31.0) {
-        pChapterTag.textContent = "ACT II · BUSINESS CONVERSION";
-        pEyebrow.textContent = "03 · CAK INVESTMENT CLUB (@LEO_RYANSYAH & @JO.DARSONO)";
-        pTitle.innerHTML = `2.3M+ VIEWS &amp; <span class="emerald">~60% DM CONVERSION.</span>`;
-        pSub.textContent = "96.2% FOR YOU TRAFFIC TURNING TIKTOK DMs INTO REAL MEMBERS";
-      } else if (t < 36.0) {
-        pChapterTag.textContent = "ACT II · MULTI-PERSONA SCALE";
-        pEyebrow.textContent = "03 · 5 BRAND ECOSYSTEMS DIRECTED SIMULTANEOUSLY";
-        pTitle.innerHTML = `<span class="accent">20 TO 90 AI PERSONAS</span> PER CLIENT.`;
-        pSub.textContent = "OPPO · ACEKID · SYAILENDRA · GOLDEN RAMA · RAHASIA BEAUTY";
-      } else if (t < 43.5) {
-        pChapterTag.textContent = "ACT III · THE SYSTEM ARCHITECT";
-        pEyebrow.textContent = "04 · IN-HOUSE PLATFORM 01: CAKETING";
-        pTitle.innerHTML = `CAKETING: <span class="accent">200 SCRIPTS IN 3 HOURS.</span>`;
-        pSub.textContent = "CONNECTED RESEARCH, STRATEGY & SCRIPTING · SAVED ~70% TIME";
-      } else if (t < 50.0) {
-        pChapterTag.textContent = "ACT III · THE PRODUCTION ENGINE";
-        pEyebrow.textContent = "04 · IN-HOUSE PLATFORM 02: CAKVISUAL & CAKAI PRO";
-        pTitle.innerHTML = `2,000 VIDEOS/MO · <span class="emerald">5 DAYS CUT TO 5 HOURS.</span>`;
-        pSub.textContent = "20+ PERSONAS IN ONE RUN · DUAL-PASS AI QUALITY CONTROL";
+      }
+      const span = Math.max(0.001, k1.t - k0.t);
+      const p = easeInOutCubic((t - k0.t) / span);
+      const cx = lerp(k0.x, k1.x, p);
+      const cy = lerp(k0.y, k1.y, p);
+      cursorEl.style.transform = `translate3d(${(cx - 540).toFixed(1)}px, ${(cy - 960).toFixed(1)}px, 0)`;
+
+      // Click Ripple Check
+      let rippleAlpha = 0;
+      let rippleScale = 0.3;
+      for (const k of cursorKeys) {
+        if (k.click && t >= k.t && t <= k.t + 0.45) {
+          const rp = (t - k.t) / 0.45;
+          rippleAlpha = 1 - rp;
+          rippleScale = lerp(0.4, 2.1, easeOutCubic(rp));
+        }
+      }
+      rippleEl.style.opacity = rippleAlpha.toFixed(2);
+      rippleEl.style.transform = `scale(${rippleScale.toFixed(2)})`;
+    }
+
+    function renderAt(t) {
+      drawBackgroundCanvas(t);
+      updateCursor(t);
+
+      // Subtle Blueprint Grid Parallax
+      const gx = Math.sin(t * 0.6) * 18;
+      const gy = -(t * 14) % 60;
+      gridEl.style.transform = `translate3d(${gx.toFixed(1)}px, ${gy.toFixed(1)}px, 0)`;
+
+      // Timecode & Progress Scrubber
+      const sec = Math.min(60, Math.floor(t));
+      hdrTc.textContent = `00:${String(sec).padStart(2, "0")} / 01:00`;
+      scrubberFill.style.width = `${((t / 60) * 100).toFixed(2)}%`;
+
+      // =====================================================================
+      // CHAPTER VISIBILITY & PORTAL TRANSITIONS
+      // =====================================================================
+      ch1.style.opacity = clamp(1 - (t - 7.45) / 0.35);
+      ch2.style.opacity = clamp((t - 7.55) / 0.35) * clamp(1 - (t - 20.55) / 0.35);
+      ch3.style.opacity = clamp((t - 20.65) / 0.35) * clamp(1 - (t - 37.55) / 0.35);
+      ch4.style.opacity = clamp((t - 37.65) / 0.35) * clamp(1 - (t - 51.25) / 0.35);
+      ch5.style.opacity = clamp((t - 51.35) / 0.40);
+
+      // Portal #1: Camera Lens Iris (7.25s - 8.05s)
+      if (t >= 7.25 && t <= 8.05) {
+        const lp = (t - 7.25) / 0.8;
+        lensPortal.style.opacity = Math.sin(lp * Math.PI).toFixed(3);
+        const lScale = lerp(0.4, 6.5, easeInOutCubic(lp));
+        const lRot = lp * 110;
+        lensPortal.style.transform = `scale(${lScale.toFixed(3)}) rotate(${lRot.toFixed(1)}deg)`;
       } else {
-        pChapterTag.textContent = "HAIDAR GHAZY ARKAN";
-        pEyebrow.textContent = "05 · LET'S BUILD WHAT SCALES";
-        pTitle.innerHTML = `STRATEGY. <span class="serif">Stories.</span> <span class="accent">SYSTEMS.</span>`;
-        pSub.textContent = "EXPLORE THE FULL PORTFOLIO AT HAIDARGHAZY.COM";
+        lensPortal.style.opacity = 0;
+      }
+
+      // Portal #3: Spinning Factory Gear (37.25s - 38.05s)
+      if (t >= 37.25 && t <= 38.05) {
+        const gp = (t - 37.25) / 0.8;
+        gearPortal.style.opacity = Math.sin(gp * Math.PI).toFixed(3);
+        const gScale = lerp(0.3, 5.8, easeInOutCubic(gp));
+        const gRot = gp * 180;
+        gearPortal.style.transform = `scale(${gScale.toFixed(3)}) rotate(${gRot.toFixed(1)}deg)`;
+      } else {
+        gearPortal.style.opacity = 0;
+      }
+
+      // =====================================================================
+      // CHAPTER 01 ANIMATION (0.0s – 8.0s)
+      // =====================================================================
+      const pPop = easeOutBack(clamp((t - 0.45) / 0.55));
+      document.getElementById("ch1-portrait").style.transform = `scale(${lerp(0.75, 1.0, pPop).toFixed(3)})`;
+      document.getElementById("ch1-portrait").style.opacity = clamp((t - 0.4) / 0.25);
+
+      const r1 = easeOutBack(clamp((t - 2.15) / 0.5));
+      const r2 = easeOutBack(clamp((t - 3.25) / 0.5));
+      const r3 = easeOutBack(clamp((t - 4.35) / 0.5));
+      document.getElementById("ch1-role-1").style.transform = `translate3d(${lerp(-60, 0, r1).toFixed(1)}px, 0, 0) scale(${lerp(0.85, 1, r1).toFixed(3)})`;
+      document.getElementById("ch1-role-1").style.opacity = clamp((t - 2.15) / 0.25);
+      document.getElementById("ch1-role-2").style.transform = `translate3d(${lerp(60, 0, r2).toFixed(1)}px, 0, 0) scale(${lerp(0.85, 1, r2).toFixed(3)})`;
+      document.getElementById("ch1-role-2").style.opacity = clamp((t - 3.25) / 0.25);
+      document.getElementById("ch1-role-3").style.transform = `translate3d(0, ${lerp(50, 0, r3).toFixed(1)}px, 0) scale(${lerp(0.88, 1, r3).toFixed(3)})`;
+      document.getElementById("ch1-role-3").style.opacity = clamp((t - 4.35) / 0.25);
+
+      // Self-drawing SVG wires
+      document.getElementById("ch1-wire-1").style.strokeDashoffset = (500 * (1 - clamp((t - 2.15) / 0.5))).toFixed(1);
+      document.getElementById("ch1-wire-2").style.strokeDashoffset = (500 * (1 - clamp((t - 3.25) / 0.5))).toFixed(1);
+      document.getElementById("ch1-wire-3").style.strokeDashoffset = (400 * (1 - clamp((t - 4.35) / 0.5))).toFixed(1);
+
+      const conv = easeOutBack(clamp((t - 5.25) / 0.45));
+      document.getElementById("ch1-converge").style.opacity = clamp((t - 5.25) / 0.25);
+      document.getElementById("ch1-converge").style.transform = `scale(${lerp(0.85, 1, conv).toFixed(3)})`;
+
+      // =====================================================================
+      // CHAPTER 02 ANIMATION (8.0s – 21.0s)
+      // =====================================================================
+      ch2BeatA.style.opacity = clamp(1 - (t - 12.0) / 0.35);
+      ch2BeatA.style.transform = `translate3d(0, ${lerp(30, 0, easeOutCubic(clamp((t - 8.0) / 0.6))).toFixed(1)}px, 0)`;
+      document.getElementById("ch2-highlight").style.strokeDashoffset = (620 * (1 - clamp((t - 9.15) / 0.65))).toFixed(1);
+
+      ch2BeatB.style.opacity = clamp((t - 11.95) / 0.35) * clamp(1 - (t - 16.35) / 0.35);
+      ch2BeatB.style.transform = `translate3d(0, ${lerp(35, 0, easeOutCubic(clamp((t - 12.1) / 0.55))).toFixed(1)}px, 0)`;
+
+      ch2BeatC.style.opacity = clamp((t - 16.3) / 0.35);
+      ch2BeatC.style.transform = `translate3d(0, ${lerp(35, 0, easeOutCubic(clamp((t - 16.4) / 0.55))).toFixed(1)}px, 0)`;
+      const beamAlpha = clamp((t - 16.65) / 0.45);
+      document.getElementById("ch2-beam-poly").style.opacity = beamAlpha.toFixed(2);
+
+      // =====================================================================
+      // CHAPTER 03 ANIMATION (21.0s – 38.0s)
+      // =====================================================================
+      ch3BeatA.style.opacity = clamp(1 - (t - 26.05) / 0.35);
+      ch3BeatB.style.opacity = clamp((t - 26.0) / 0.35) * clamp(1 - (t - 31.85) / 0.35);
+      ch3BeatC.style.opacity = clamp((t - 31.8) / 0.35);
+
+      const oppoVal = lerp(0.0, 7.9, easeOutCubic(clamp((t - 26.4) / 1.7)));
+      document.getElementById("oppo-counter").textContent = `${oppoVal.toFixed(1)}M`;
+
+      const b1 = easeOutBack(clamp((t - 32.75) / 0.4));
+      const b2 = easeOutBack(clamp((t - 33.85) / 0.4));
+      const b3 = easeOutBack(clamp((t - 34.95) / 0.4));
+      document.getElementById("dm-bub-1").style.transform = `scale(${lerp(0.7, 1, b1).toFixed(3)})`;
+      document.getElementById("dm-bub-1").style.opacity = clamp((t - 32.75) / 0.2);
+      document.getElementById("dm-bub-2").style.transform = `scale(${lerp(0.7, 1, b2).toFixed(3)})`;
+      document.getElementById("dm-bub-2").style.opacity = clamp((t - 33.85) / 0.2);
+      document.getElementById("dm-bub-3").style.transform = `scale(${lerp(0.7, 1, b3).toFixed(3)})`;
+      document.getElementById("dm-bub-3").style.opacity = clamp((t - 34.95) / 0.2);
+
+      // =====================================================================
+      // CHAPTER 04 ANIMATION (38.0s – 51.5s)
+      // =====================================================================
+      const c4a = easeOutBack(clamp((t - 38.1) / 0.55));
+      const c4b = easeOutBack(clamp((t - 38.45) / 0.55));
+      const c4c = easeOutBack(clamp((t - 38.8) / 0.55));
+      document.getElementById("ch4-caketing").style.transform = `translate3d(${lerp(-40, 0, c4a).toFixed(1)}px, 0, 0)`;
+      document.getElementById("ch4-cakvisual").style.transform = `translate3d(${lerp(40, 0, c4b).toFixed(1)}px, 0, 0)`;
+      document.getElementById("ch4-slam").style.transform = `scale(${lerp(0.9, 1.0, c4c).toFixed(3)})`;
+
+      // =====================================================================
+      // CHAPTER 05 ANIMATION (51.5s – 60.0s)
+      // =====================================================================
+      document.getElementById("ch5-orbit-svg").style.transform = `rotate(${((t - 51.5) * 28).toFixed(1)}deg)`;
+      const ctaPulse = t >= 57.2 ? 1 + Math.sin((t - 57.2) * 10) * 0.035 * Math.exp(-(t - 57.2) * 1.2) : 1;
+      document.getElementById("ch5-cta-btn").style.transform = `scale(${ctaPulse.toFixed(3)})`;
+
+      // =====================================================================
+      // STORYTELLING CAPTION BAR & HEADER UPDATES
+      // =====================================================================
+      if (t < 8.0) {
+        hdrChapter.textContent = "CHAPTER 01 // THE 3-IN-1 STORY";
+        capKicker.textContent = "01 · JUST BEING ME — INSIDE MY WORLD";
+        if (t < 4.8) {
+          capHeadline.innerHTML = `FILMMAKER, MARKETER, OR BUILDER? <span class="accent">I USE ALL 3.</span>`;
+        } else {
+          capHeadline.innerHTML = `THREE SKILLS COMBINED TO <span class="serif">Scale Real Stories.</span>`;
+        }
+      } else if (t < 12.2) {
+        hdrChapter.textContent = "CHAPTER 02 // VISUAL ROOTS & EDUCATION";
+        capKicker.textContent = "02 · ISI SURAKARTA FILM & TV (CUM LAUDE 3.86)";
+        capHeadline.innerHTML = `FIVE YEARS DIRECTING <span class="accent">REAL FILM &amp; TV SETS.</span>`;
+      } else if (t < 16.5) {
+        hdrChapter.textContent = "CHAPTER 02 // 3D WORLDS & FESTIVALS";
+        capKicker.textContent = "02 · UCIFEST 12 & BOGOR FILM FESTIVAL NOMINEE";
+        capHeadline.innerHTML = `CRAFTING 3D &amp; VFX <span class="cyan">BEFORE TOUCHING AI.</span>`;
+      } else if (t < 21.0) {
+        hdrChapter.textContent = "CHAPTER 02 // LUMINARA VISUAL WORKS";
+        capKicker.textContent = "02 · CO-FOUNDER & ARCHITECTURAL MAPPING";
+        capHeadline.innerHTML = `TURNING GIANT BUILDINGS INTO <span class="serif">Moving Art.</span>`;
+      } else if (t < 26.2) {
+        hdrChapter.textContent = "CHAPTER 03 // AI GROWTH STRATEGY";
+        capKicker.textContent = "03 · HEAD OF CREATOR & AI STRATEGIST AT CAK AI";
+        capHeadline.innerHTML = `DIRECTING <span class="accent">20–90 AI PERSONAS</span> ACROSS 5 BRANDS.`;
+      } else if (t < 32.0) {
+        hdrChapter.textContent = "CHAPTER 03 // VIRAL PROOF: OPPO";
+        capKicker.textContent = "03 · OPPO @DIOLOGTECH VIRTUAL CREATOR";
+        capHeadline.innerHTML = `<span class="accent">7.9M POST VIEWS</span> &amp; 5.5M VIEWERS ON OPPO.`;
+      } else if (t < 38.0) {
+        hdrChapter.textContent = "CHAPTER 03 // REAL BUSINESS CONVERSION";
+        capKicker.textContent = "03 · CAK INVESTMENT CLUB (2.3M+ VIEWS)";
+        capHeadline.innerHTML = `<span class="emerald">~60% OF TIKTOK DMs</span> BECAME REAL MEMBERS.`;
+      } else if (t < 44.0) {
+        hdrChapter.textContent = "CHAPTER 04 // THE AI FACTORY PIPELINE";
+        capKicker.textContent = "04 · BUILT IN-HOUSE ENGINE 01: CAKETING";
+        capHeadline.innerHTML = `CAKETING: <span class="accent">200 PERSONA SCRIPTS</span> IN 3 HOURS.`;
+      } else if (t < 51.5) {
+        hdrChapter.textContent = "CHAPTER 04 // 5 DAYS CUT TO 5 HOURS";
+        capKicker.textContent = "04 · BUILT IN-HOUSE ENGINE 02: CAKVISUAL";
+        capHeadline.innerHTML = `2,000 VIDEOS/MO · <span class="emerald">5 DAYS CUT TO 5 HOURS.</span>`;
+      } else {
+        hdrChapter.textContent = "CHAPTER 05 // LET'S BUILD TOGETHER";
+        capKicker.textContent = "05 · FILMMAKER · GROWTH STRATEGIST · BUILDER";
+        capHeadline.innerHTML = `STRATEGY. <span class="serif">Stories.</span> <span class="accent">SYSTEMS.</span>`;
       }
     }
 
