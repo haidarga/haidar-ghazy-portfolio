@@ -2,1267 +2,924 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=1080, height=1920, initial-scale=1.0" />
-  <title>Haidar Ghazy Arkan — The Story, The Growth, The Machine (9:16 Visual CV)</title>
+  <title>ENTER THE MULTIVERSE OF HAIDAR — 3D SPIDER-VERSE EDITION</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Syne:wght@700;800&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet" />
+  <script src="gsap.min.js"></script>
+  <script src="three.min.js"></script>
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
     html, body {
-      width: 1080px;
-      height: 1920px;
-      overflow: hidden;
-      background: #0b0b10;
-      color: #f5f3ef;
-      font-family: "Inter", sans-serif;
-      -webkit-font-smoothing: antialiased;
+      width: 1080px; height: 1920px; overflow: hidden;
+      background: #06030d; color: #f8f6f0;
+      font-family: 'Syne', sans-serif;
     }
-
-    #stage {
-      position: relative;
-      width: 1080px;
-      height: 1920px;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 50% 28%, rgba(255, 90, 38, 0.13) 0%, rgba(56, 189, 248, 0.06) 42%, rgba(11, 11, 16, 0.98) 78%),
-        linear-gradient(180deg, #0d0e15 0%, #090a0f 100%);
+    #root {
+      position: relative; width: 1080px; height: 1920px; overflow: hidden;
+      perspective: 1400px; background: #06030d;
     }
-
-    /* Architectural Blueprint Studio Grid */
-    #blueprint-grid {
-      position: absolute;
-      inset: -120px;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(rgba(255, 90, 38, 0.025) 2px, transparent 2px),
-        linear-gradient(90deg, rgba(255, 90, 38, 0.025) 2px, transparent 2px);
-      background-size: 60px 60px, 60px 60px, 300px 300px, 300px 300px;
-      pointer-events: none;
-      z-index: 1;
-      will-change: transform;
+    /* LAYER 0: FULL-BLEED THREE.JS 3D WEBGL STAGE */
+    #webgl-stage {
+      position: absolute; inset: 0; width: 1080px; height: 1920px; z-index: 1;
     }
-
-    #fx-canvas {
-      position: absolute;
-      inset: 0;
-      width: 1080px;
-      height: 1920px;
-      pointer-events: none;
-      z-index: 2;
+    /* LAYER 1: GIANT SPIDER-VERSE KINETIC TYPOGRAPHY (BEHIND 3D SUBJECTS) */
+    #bg-type-layer {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
     }
-
-    /* Top Safe-Zone Editorial Header (Y: 56px - 128px) */
-    #editorial-header {
-      position: absolute;
-      top: 56px;
-      left: 64px;
-      right: 64px;
-      height: 68px;
-      padding: 0 28px;
-      border-radius: 999px;
-      background: rgba(15, 16, 24, 0.86);
-      border: 1.5px solid rgba(255, 255, 255, 0.12);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      z-index: 40;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
-    }
-
-    .hdr-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: #ff7b52;
-    }
-
-    .hdr-dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      background: #ff5a26;
-      box-shadow: 0 0 14px #ff5a26;
-    }
-
-    /* Primary Safe-Zone Stage Container (Y: 150px - 1560px) */
-    #world-stage {
-      position: absolute;
-      inset: 0;
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    .chapter-layer {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
+    .giant-poster-text {
+      position: absolute; text-align: center; white-space: nowrap;
+      font-family: 'Anton', sans-serif; text-transform: uppercase;
+      line-height: 0.90; letter-spacing: -0.01em;
+      transform: rotate(-6deg);
+      text-shadow: -7px 0px 0px #ff0055, 7px 0px 0px #00f0ff, 0 22px 60px rgba(0,0,0,0.92);
       will-change: transform, opacity;
     }
-
-    /* Clean Editorial Surface Cards */
-    .ed-card {
-      background: linear-gradient(165deg, rgba(22, 24, 36, 0.95) 0%, rgba(12, 13, 20, 0.98) 100%);
-      border: 2px solid rgba(255, 255, 255, 0.14);
-      border-radius: 28px;
-      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.78);
-      overflow: hidden;
+    /* LAYER 2: 2.5D HERO SUBJECT RIG (CUTOUTS, 3D HOLOGRAM PLANES, COMIC BUBBLES) */
+    #subject-stage {
+      position: absolute; inset: 0; z-index: 3; pointer-events: none;
+      transform-style: preserve-3d;
     }
-    .ed-card.orange { border-color: rgba(255, 90, 38, 0.65); }
-    .ed-card.cyan { border-color: rgba(56, 189, 248, 0.65); }
-    .ed-card.emerald { border-color: rgba(52, 211, 153, 0.65); }
-    .ed-card.amber { border-color: rgba(251, 191, 36, 0.65); }
-
-    .ed-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 18px;
-      border-radius: 999px;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      background: rgba(255, 90, 38, 0.16);
-      border: 1.5px solid rgba(255, 90, 38, 0.55);
-      color: #ff9c7a;
+    .scene-rig {
+      position: absolute; inset: 0; transform-style: preserve-3d;
+      opacity: 0; pointer-events: none;
     }
-    .ed-pill.cyan {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: rgba(56, 189, 248, 0.55);
-      color: #7dd3fc;
+    /* SPIDER-VERSE HALFTONE HERO CUTOUT */
+    .hero-cutout-wrap {
+      position: absolute; left: 50%; bottom: 0;
+      transform: translateX(-50%);
+      width: 920px; height: 1280px;
+      display: flex; align-items: flex-end; justify-content: center;
     }
-    .ed-pill.emerald {
-      background: rgba(52, 211, 153, 0.15);
-      border-color: rgba(52, 211, 153, 0.55);
-      color: #6ee7b7;
+    .hero-cutout-img {
+      width: 100%; height: 100%; object-fit: contain; object-position: bottom center;
+      filter: drop-shadow(-8px -4px 0px #ff0055) drop-shadow(8px 4px 0px #00f0ff) drop-shadow(0 0 45px rgba(255,77,0,0.65)) contrast(1.12) saturate(1.15);
     }
-
-    /* Story Caption Strip (Inside Safe Zone Y: 1390px - 1555px) */
-    #story-caption-bar {
-      position: absolute;
-      left: 64px;
-      right: 64px;
-      top: 1390px;
-      height: 165px;
-      padding: 22px 32px;
-      border-radius: 26px;
-      background: linear-gradient(180deg, rgba(16, 17, 26, 0.95) 0%, rgba(10, 10, 16, 0.98) 100%);
-      border: 2px solid rgba(255, 90, 38, 0.5);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      z-index: 38;
+    /* COMIC STAMP BADGE (MAX 1 PER SCENE, BOLD GRAFFITI STYLE) */
+    .spider-stamp {
+      position: absolute; padding: 16px 32px; white-space: nowrap; max-width: 960px;
+      font-family: 'Anton', sans-serif; font-size: 40px; letter-spacing: 0.04em;
+      text-transform: uppercase; color: #06030d; background: #ffe600;
+      border: 5px solid #06030d; z-index: 10;
+      box-shadow: -8px 8px 0px #ff0055, 8px -8px 0px #00f0ff, 0 20px 50px rgba(0,0,0,0.85);
+      transform: rotate(-4deg);
     }
-
-    #cap-kicker {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.16em;
-      color: #ff7b52;
-      text-transform: uppercase;
-      margin-bottom: 8px;
+    /* FRAMELESS 3D HOLOGRAM MEDIA PLANE (TILTED IN 3D SPACE, NOT A DASHBOARD CARD) */
+    .holo-plane {
+      position: absolute; border-radius: 18px; overflow: hidden;
+      border: 4px solid #00f0ff;
+      box-shadow: -10px 10px 0px #ff0055, 0 0 65px rgba(0,240,255,0.45);
+      background: #090414; transform-style: preserve-3d;
     }
-
-    #cap-headline {
-      font-family: "Syne", sans-serif;
-      font-size: 36px;
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.025em;
-      color: #ffffff;
+    .holo-plane img, .holo-plane video {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: contrast(1.08) saturate(1.12);
     }
-    #cap-headline .accent { color: #ff5a26; }
-    #cap-headline .cyan { color: #38bdf8; }
-    #cap-headline .emerald { color: #34d399; }
-    #cap-headline .serif {
-      font-family: "Instrument Serif", serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: 44px;
-      color: #ffb38a;
+    .holo-scanline {
+      position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(0,240,255,0.08) 0px, rgba(0,240,255,0.08) 2px, transparent 2px, transparent 6px);
+      mix-blend-mode: screen;
     }
-
-    /* Timeline Scrubber Bar at Y: 1585px (Above IG/TikTok bottom UI) */
-    #scrubber-track {
-      position: absolute;
-      left: 64px;
-      right: 64px;
-      top: 1582px;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.1);
-      overflow: hidden;
-      z-index: 38;
+    /* SPIDER-VERSE COMIC SPEECH BALLOONS */
+    .comic-balloon {
+      position: absolute; padding: 22px 34px;
+      font-family: 'Anton', sans-serif; font-size: 42px; letter-spacing: 0.02em;
+      background: #f8f6f0; color: #06030d;
+      border: 6px solid #06030d; border-radius: 26px;
+      box-shadow: 12px 14px 0px #ff0055, -6px -6px 0px #00f0ff;
+      transform-origin: center center;
     }
-    #scrubber-fill {
-      width: 0%;
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #ff5a26, #38bdf8, #34d399);
+    /* LAYER 3: FOREGROUND IMPACT NUMBERS & SPIDER-VERSE FX CANVAS */
+    #fg-impact-layer {
+      position: absolute; inset: 0; z-index: 4; pointer-events: none;
     }
-
-    /* 35mm Filmstrip Sprocket Holes */
-    .film-rail {
-      position: absolute;
-      top: 150px;
-      bottom: 340px;
-      width: 44px;
-      background: rgba(10, 10, 15, 0.92);
-      border-left: 2px solid rgba(255, 90, 38, 0.35);
-      border-right: 2px solid rgba(255, 90, 38, 0.35);
-      background-image: repeating-linear-gradient(
-        180deg,
-        transparent 0px,
-        transparent 18px,
-        rgba(255, 245, 235, 0.22) 18px,
-        rgba(255, 245, 235, 0.22) 42px,
-        transparent 42px,
-        transparent 60px
-      );
-      background-size: 24px 60px;
-      background-position: center top;
-    }
-
-    /* Portal Overlays (Camera Lens Iris & Gear Slice) */
-    #lens-portal {
-      position: absolute;
-      left: 540px;
-      top: 780px;
-      width: 900px;
-      height: 900px;
-      margin-left: -450px;
-      margin-top: -450px;
-      z-index: 45;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    #gear-portal {
-      position: absolute;
-      left: 540px;
-      top: 780px;
-      width: 760px;
-      height: 760px;
-      margin-left: -380px;
-      margin-top: -380px;
-      z-index: 45;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* Interactive Vector Cursor */
-    #interactive-cursor {
-      position: absolute;
-      left: 540px;
-      top: 960px;
-      width: 64px;
-      height: 64px;
-      z-index: 50;
-      pointer-events: none;
-      will-change: transform;
-    }
-    #cursor-ripple {
-      position: absolute;
-      left: -18px;
-      top: -18px;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 3px solid #ff5a26;
-      opacity: 0;
-      transform: scale(0.3);
+    #fx-canvas {
+      position: absolute; inset: 0; width: 1080px; height: 1920px; z-index: 5; pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <div
-    id="stage"
-    data-composition-id="root"
-    data-start="0"
-    data-duration="60"
-    data-width="1080"
-    data-height="1920"
-  >
-    <!-- Master 3-Stem Audio -->
-    <audio id="master-audio" data-start="0" data-duration="60" data-media-start="0" src="./assets/master-social-60s.mp3" preload="auto"></audio>
+  <div id="root" data-composition-id="main" data-width="1080" data-height="1920" data-fps="30" data-duration="60">
+    <!-- Master 60s Audio Track -->
+    <audio id="master-audio" src="assets/master-social-60s.mp3" data-start="0" data-duration="60" preload="auto"></audio>
 
-    <div id="blueprint-grid"></div>
+    <!-- LAYER 0: Real Three.js 3D WebGL World -->
+    <canvas id="webgl-stage" width="1080" height="1920"></canvas>
+
+    <!-- LAYER 1: Giant Tilted Spider-Verse Backdrop Typography (Behind Subjects) -->
+    <div id="bg-type-layer">
+      <div id="bg-title-main" class="giant-poster-text" style="font-size: 185px; top: 150px; color: #f8f6f0;">
+        HAIDAR
+      </div>
+      <div id="bg-title-sub" class="giant-poster-text" style="font-size: 96px; top: 375px; color: #ffe600;">
+        ANOMALY #001
+      </div>
+    </div>
+
+    <!-- LAYER 2: 3D Subject Stage (1 Focal Subject Per Moment, 65%+ Open 3D Space) -->
+    <div id="subject-stage">
+
+      <!-- ================= SCENE 01 (0.0s - 9.0s): THE GLITCH PORTAL & 3 ARTIFACTS ================= -->
+      <div id="scene-01" class="scene-rig">
+        <!-- Haidar Central Hero Cutout overlapping giant background text -->
+        <div id="s1-hero-wrap" class="hero-cutout-wrap" style="height: 1240px; bottom: -20px;">
+          <img class="hero-cutout-img" src="assets/haidar-portrait-cutout.webp" alt="Haidar Hero Cutout" />
+        </div>
+        <!-- Floating 3D Role Callout Tag in Foreground Lower-Third (Never blocking Haidar's face) -->
+        <div id="s1-role-stamp" class="spider-stamp" style="bottom: 110px; left: 50%; transform: translateX(-50%) rotate(-3deg); font-size: 48px;">
+          FILM · GROWTH · AI SYSTEMS
+        </div>
+      </div>
+
+      <!-- ================= SCENE 02 (9.0s - 21.0s): THE 3D CINEMA & LUMINARA TOWER ================= -->
+      <div id="scene-02" class="scene-rig">
+        <!-- Beat 2A (9.0s - 13.0s): Single Angled 3D Cinema Screen in 3D Space -->
+        <div id="s2-cinema-plane" class="holo-plane" style="width: 780px; height: 520px; left: 150px; top: 690px; border-color: #ffe600;">
+          <img src="assets/haidar-directing-cameraman.webp" alt="Directing on Set" />
+          <div class="holo-scanline"></div>
+        </div>
+        <div id="s2-cinema-inset" class="holo-plane" style="width: 440px; height: 290px; right: 85px; top: 1080px; border-color: #ff4d00;">
+          <img src="assets/qris-01.webp" alt="Bank Indonesia TVC" />
+          <div class="holo-scanline"></div>
+        </div>
+
+        <!-- Beat 2B (13.0s - 17.0s): Single Angled 3D VFX Portal Frame next to 3D Blackhole -->
+        <div id="s2-vfx-plane" class="holo-plane" style="width: 760px; height: 490px; left: 160px; top: 740px; border-color: #00f0ff; opacity: 0;">
+          <img src="assets/hayo-loh-vfx.webp" alt="Hayo Loh Short Film" />
+          <div class="holo-scanline"></div>
+        </div>
+        <div id="s2-vfx-sub" class="holo-plane" style="width: 460px; height: 290px; left: 110px; top: 1130px; border-color: #ffe600; opacity: 0;">
+          <img src="assets/studenverse.webp" alt="StudenVerse 3D World" />
+          <div class="holo-scanline"></div>
+        </div>
+
+        <!-- Beat 2C (17.0s - 21.0s): Luminara 3D Skyscraper Projection Showcase -->
+        <div id="s2-lumi-plane" class="holo-plane" style="width: 820px; height: 540px; left: 130px; top: 720px; border-color: #ff0055; opacity: 0;">
+          <img src="assets/luminara-mapping.webp" alt="Luminara Building Projection" />
+          <div class="holo-scanline"></div>
+        </div>
+
+        <!-- Single Bold Comic Stamp at bottom of Scene 2 -->
+        <div id="s2-stamp" class="spider-stamp" style="bottom: 185px; left: 50%; transform: translateX(-50%) rotate(-3deg);">
+          ISI SURAKARTA · GPA 3.86 CUM LAUDE
+        </div>
+      </div>
+
+      <!-- ================= SCENE 03 (21.0s - 38.0s): THE 3D HOLOGRAM MONOLITH ================= -->
+      <div id="scene-03" class="scene-rig">
+        <!-- Beat 3A (21.0s - 26.5s): 3 Giant Frameless 3D Hologram Phones in 3D Carousel -->
+        <div id="s3-phone-left" class="holo-plane" style="width: 390px; height: 690px; left: 65px; top: 650px; border-color: #ff0055;">
+          <video id="vid-animasi" src="clips/acekid-animasi-cut.mp4" data-start="21" data-duration="5.5" muted playsinline preload="auto"></video>
+          <div class="holo-scanline"></div>
+        </div>
+        <div id="s3-phone-right" class="holo-plane" style="width: 390px; height: 690px; right: 65px; top: 650px; border-color: #ffe600;">
+          <video id="vid-rahasia" src="clips/rahasia-ad-cut.mp4" data-start="21" data-duration="5.5" muted playsinline preload="auto"></video>
+          <div class="holo-scanline"></div>
+        </div>
+        <div id="s3-phone-center" class="holo-plane" style="width: 450px; height: 800px; left: 315px; top: 580px; border-color: #00f0ff;">
+          <video id="vid-dracin" src="clips/acekid-dracin-cut.mp4" data-start="21" data-duration="5.5" muted playsinline preload="auto"></video>
+          <div class="holo-scanline"></div>
+        </div>
+
+        <!-- Beat 3B (26.5s - 32.5s): 1 Single Hero Monolith for OPPO 7.9M VIEWS -->
+        <div id="s3-oppo-monolith" class="holo-plane" style="width: 780px; height: 740px; left: 150px; top: 640px; border-color: #ff4d00; opacity: 0;">
+          <img src="assets/oppo-7-9m.webp" alt="Oppo 7.9M Views Proof" />
+          <div class="holo-scanline"></div>
+        </div>
+
+        <!-- Beat 3C (32.5s - 38.0s): 1 Flipped Monolith + 3 Flying Comic Speech Balloons -->
+        <div id="s3-dm-monolith" class="holo-plane" style="width: 680px; height: 740px; left: 200px; top: 620px; border-color: #00ff88; opacity: 0;">
+          <img src="assets/leo-dm.webp" alt="TikTok DM Funnel Conversion" />
+          <div class="holo-scanline"></div>
+        </div>
+        <div id="s3-balloon-1" class="comic-balloon" style="left: 75px; top: 660px; opacity: 0;">
+          "BANG MAU JOIN CAK IC!" 🔥
+        </div>
+        <div id="s3-balloon-2" class="comic-balloon" style="right: 65px; top: 890px; background: #ffe600; opacity: 0;">
+          ⚡ AUTO-LINK: CAKINVESTMENTCLUB
+        </div>
+        <div id="s3-balloon-3" class="comic-balloon" style="left: 95px; top: 1120px; background: #00ff88; opacity: 0;">
+          "UDAH JOIN WA & IG BRO!" ✅
+        </div>
+
+        <div id="s3-stamp" class="spider-stamp" style="bottom: 175px; left: 50%; transform: translateX(-50%) rotate(3deg); background: #00f0ff;">
+          CAK AI · HEAD OF CREATOR & AI MARKETING
+        </div>
+      </div>
+
+      <!-- ================= SCENE 04 (38.0s - 51.5s): THE 3D CYBER-REACTOR & KATANA SLASH ================= -->
+      <div id="scene-04" class="scene-rig">
+        <!-- Beat 4A (38.0s - 43.5s): Single Angled 3D Reactor Screen — CAKETING -->
+        <div id="s4-caketing-holo" class="holo-plane" style="width: 840px; height: 540px; left: 120px; top: 690px; border-color: #ff4d00;">
+          <video id="vid-caketing" src="clips/caketing-cut.mp4" data-start="38" data-duration="5.5" muted playsinline preload="auto"></video>
+          <div class="holo-scanline"></div>
+        </div>
+
+        <!-- Beat 4B (43.5s - 48.0s): Single Angled 3D Reactor Screen — CAKVISUAL -->
+        <div id="s4-cakvisual-holo" class="holo-plane" style="width: 840px; height: 540px; left: 120px; top: 690px; border-color: #00f0ff; opacity: 0;">
+          <video id="vid-cakvisual" src="clips/cakvisual-cut.mp4" data-start="43.5" data-duration="4.5" muted playsinline preload="auto"></video>
+          <div class="holo-scanline"></div>
+        </div>
+
+        <!-- Beat 4C (48.0s - 51.5s): SPIDER-VERSE KATANA SLASH ("5 DAYS" SLICED INTO "5 HOURS") -->
+        <div id="s4-slash-stage" style="position: absolute; inset: 0; opacity: 0;">
+          <!-- Top-Left & Bottom-Right Halves of "5 DAYS" getting sliced apart at center screen -->
+          <div id="s4-five-days-top" class="giant-poster-text" style="font-size: 220px; left: 0; right: 0; top: 690px; color: #ff0055; clip-path: polygon(0 0, 100% 0, 100% 42%, 0 62%);">
+            5 DAYS
+          </div>
+          <div id="s4-five-days-bot" class="giant-poster-text" style="font-size: 220px; left: 0; right: 0; top: 690px; color: #ff0055; clip-path: polygon(0 62%, 100% 42%, 100% 100%, 0 100%);">
+            5 DAYS
+          </div>
+          <!-- Giant Explosive "5 HOURS!" emerging cleanly below the katana slash -->
+          <div id="s4-five-hours" class="giant-poster-text" style="font-size: 235px; left: 0; right: 0; top: 1090px; color: #00ff88; opacity: 0;">
+            5 HOURS!
+          </div>
+        </div>
+
+        <div id="s4-stamp" class="spider-stamp" style="bottom: 185px; left: 50%; transform: translateX(-50%) rotate(-4deg); background: #ffe600;">
+          200 SCRIPTS / 3 HRS · 2,000 VIDEOS / MO
+        </div>
+      </div>
+
+      <!-- ================= SCENE 05 (51.5s - 60.0s): SPIDER-VERSE FREEZE-FRAME HERO POSTER ================= -->
+      <div id="scene-05" class="scene-rig">
+        <!-- Haidar Transparent Hero Cutout Large & Proud in Foreground with Neon Rim-Light -->
+        <div id="s5-hero-wrap" class="hero-cutout-wrap" style="height: 1260px; bottom: -20px;">
+          <img class="hero-cutout-img" src="assets/haidar-hero-cutout-finale.webp" alt="Haidar Signoff Cutout" />
+        </div>
+        <!-- Single Bold CTA Comic Stamp at Bottom Foreground -->
+        <div id="s5-cta-stamp" class="spider-stamp" style="bottom: 105px; left: 50%; transform: translateX(-50%) rotate(-3deg); font-size: 46px; background: #ffe600; padding: 20px 44px;">
+          HAIDARGHAZY.COM · @haidarghazyarkan_
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LAYER 3: 2D Spider-Verse Halftone / Speedline / Katana Slash / Glitch Canvas -->
     <canvas id="fx-canvas" width="1080" height="1920"></canvas>
-
-    <!-- Top Safe-Zone Editorial Header -->
-    <div id="editorial-header">
-      <div class="hdr-left">
-        <span class="hdr-dot"></span>
-        <span id="hdr-chapter">CHAPTER 01 // THE 3-IN-1 STORY</span>
-      </div>
-      <div id="hdr-timecode" style="color:#f5f3ef;">00:00 / 01:00</div>
-    </div>
-
-    <!-- =========================================================================
-         PRIMARY STAGE: 5 EDITORIAL MIXED-MEDIA CHAPTERS
-         ========================================================================= -->
-    <div id="world-stage">
-
-      <!-- =======================================================================
-           CHAPTER 01 (0.0s – 8.0s): THE INTRODUCTION — THREE BRAINS IN ONE PERSON
-           ======================================================================= -->
-      <div id="ch-1" class="chapter-layer">
-        <!-- Folder Tab (Clicked at 0.5s) -->
-        <div id="ch1-folder" style="position:absolute;left:220px;top:175px;width:640px;padding:16px 26px;border-radius:20px;background:rgba(255,90,38,0.14);border:2px dashed rgba(255,90,38,0.65);display:flex;align-items:center;justify-content:space-between;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ff5a26" stroke-width="2.2">
-              <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-            </svg>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:#fff;">Haidar_Ghazy_Arkan_CV.world</span>
-          </div>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399;font-weight:800;">OPENING...</span>
-        </div>
-
-        <!-- Central Hero Studio Cutout Frame -->
-        <div id="ch1-portrait" class="ed-card orange" style="position:absolute;left:310px;top:270px;width:460px;height:480px;padding:16px;">
-          <div style="width:100%;height:375px;border-radius:20px;overflow:hidden;position:relative;">
-            <img src="./assets/haidar-portrait-ai-studio.webp" alt="Haidar Ghazy Arkan" style="width:100%;height:100%;object-fit:cover;" />
-            <div style="position:absolute;left:14px;bottom:14px;padding:7px 14px;border-radius:999px;background:rgba(10,12,18,0.9);border:1.5px solid #34d399;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#6ee7b7;">
-              ● AVAILABLE · JAKARTA / TANGERANG
-            </div>
-          </div>
-          <div style="text-align:center;margin-top:14px;">
-            <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.02em;">HAIDAR GHAZY ARKAN</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ff9c7a;margin-top:3px;">THE 3-IN-1 CREATIVE &amp; GROWTH ARCHITECT</div>
-          </div>
-        </div>
-
-        <!-- Self-Drawing SVG Connector Cables -->
-        <svg style="position:absolute;left:0;top:0;width:1080px;height:1920px;pointer-events:none;" viewBox="0 0 1080 1920" fill="none">
-          <path id="ch1-wire-1" d="M 310 520 C 180 520, 180 780, 260 830" stroke="#ff5a26" stroke-width="4" stroke-dasharray="500" stroke-dashoffset="500" stroke-linecap="round" />
-          <path id="ch1-wire-2" d="M 770 520 C 900 520, 900 780, 820 830" stroke="#38bdf8" stroke-width="4" stroke-dasharray="500" stroke-dashoffset="500" stroke-linecap="round" />
-          <path id="ch1-wire-3" d="M 540 750 L 540 1055" stroke="#34d399" stroke-width="4" stroke-dasharray="400" stroke-dashoffset="400" stroke-linecap="round" />
-        </svg>
-
-        <!-- Role 01: Filmmaker & 3D Artist (Left Illustrated Card) -->
-        <div id="ch1-role-1" class="ed-card orange" style="position:absolute;left:64px;top:790px;width:460px;height:230px;padding:24px;display:flex;align-items:center;gap:22px;">
-          <div style="width:110px;height:110px;border-radius:22px;background:rgba(255,90,38,0.14);border:2px solid #ff5a26;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <!-- Custom SVG 35mm Cinema Camera Illustration -->
-            <svg width="68" height="68" viewBox="0 0 64 64" fill="none" stroke="#ff5a26" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="22" cy="18" r="9" />
-              <circle cx="42" cy="18" r="9" />
-              <rect x="12" y="28" width="36" height="24" rx="5" />
-              <polygon points="48,34 60,27 60,53 48,46" />
-              <circle cx="30" cy="40" r="5" />
-            </svg>
-          </div>
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#ff7b52;">PILLAR 01 · THE EYE</div>
-            <div style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#fff;line-height:1.05;margin-top:6px;">Filmmaker &amp; 3D Artist</div>
-            <div style="font-family:'Inter',sans-serif;font-size:15px;color:#cbd5e1;margin-top:6px;">ISI Surakarta Cum Laude · 50+ Works</div>
-          </div>
-        </div>
-
-        <!-- Role 02: AI Growth Marketer (Right Illustrated Card) -->
-        <div id="ch1-role-2" class="ed-card cyan" style="position:absolute;right:64px;top:790px;width:460px;height:230px;padding:24px;display:flex;align-items:center;gap:22px;">
-          <div style="width:110px;height:110px;border-radius:22px;background:rgba(56,189,248,0.14);border:2px solid #38bdf8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <!-- Custom SVG Viral Trend Rocket & Graph -->
-            <svg width="68" height="68" viewBox="0 0 64 64" fill="none" stroke="#38bdf8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="8,48 24,34 36,40 54,16" />
-              <polyline points="42,16 54,16 54,28" />
-              <rect x="12" y="52" width="40" height="4" rx="2" />
-              <circle cx="24" cy="34" r="3.5" fill="#38bdf8" />
-              <circle cx="54" cy="16" r="4" fill="#38bdf8" />
-            </svg>
-          </div>
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#38bdf8;">PILLAR 02 · THE BRAIN</div>
-            <div style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#fff;line-height:1.05;margin-top:6px;">AI Growth Strategist</div>
-            <div style="font-family:'Inter',sans-serif;font-size:15px;color:#cbd5e1;margin-top:6px;">7.9M Oppo Views · ~60% DM Conversion</div>
-          </div>
-        </div>
-
-        <!-- Role 03: AI Systems Builder (Bottom Centered Illustrated Card) -->
-        <div id="ch1-role-3" class="ed-card emerald" style="position:absolute;left:150px;top:1050px;width:780px;height:215px;padding:24px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
-          <div style="display:flex;align-items:center;gap:24px;">
-            <div style="width:110px;height:110px;border-radius:22px;background:rgba(52,211,153,0.14);border:2px solid #34d399;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <!-- Custom SVG Gear & Automation Node Illustration -->
-              <svg width="68" height="68" viewBox="0 0 64 64" fill="none" stroke="#34d399" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="32" cy="32" r="11" />
-                <path d="M32 10v6M32 48v6M10 32h6M48 32h6M16.4 16.4l4.2 4.2M43.4 43.4l4.2 4.2M47.6 16.4l-4.2 4.2M20.6 43.4l-4.2 4.2" />
-              </svg>
-            </div>
-            <div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#34d399;">PILLAR 03 · THE ENGINE</div>
-              <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;line-height:1.05;margin-top:6px;">Production Systems Builder</div>
-              <div style="font-family:'Inter',sans-serif;font-size:16px;color:#cbd5e1;margin-top:6px;">Built CAKETING &amp; CakVisual · 5 Days Cut to 5 Hours</div>
-            </div>
-          </div>
-          <div style="padding:14px 20px;border-radius:16px;background:rgba(52,211,153,0.18);border:1.5px solid #34d399;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#6ee7b7;flex-shrink:0;">
-            3-IN-1
-          </div>
-        </div>
-
-        <!-- Convergence Banner (5.2s - 7.4s) -->
-        <div id="ch1-converge" style="position:absolute;left:150px;top:1285px;width:780px;padding:18px 28px;border-radius:999px;background:linear-gradient(90deg,#ff5a26,#e11d48,#0284c7);text-align:center;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;letter-spacing:0.15em;color:#fff;box-shadow:0 16px 40px rgba(255,90,38,0.45);">
-          STORY + GROWTH + SYSTEMS = UNFAIR ADVANTAGE
-        </div>
-      </div>
-
-      <!-- =======================================================================
-           CHAPTER 02 (8.0s – 21.0s): THE VISUAL ROOTS — FILM, 3D & LUMINARA
-           ======================================================================= -->
-      <div id="ch-2" class="chapter-layer">
-        <!-- 35mm Perforated Filmstrip Rails -->
-        <div class="film-rail" style="left:64px;"></div>
-        <div class="film-rail" style="right:64px;"></div>
-
-        <!-- BEAT 2A (8.0s - 12.2s): On-Set Directing & ISI Surakarta Cum Laude -->
-        <div id="ch2-beat-a" style="position:absolute;left:128px;right:128px;top:165px;height:1190px;">
-          <div class="ed-card orange" style="width:100%;height:780px;padding:24px;display:flex;flex-direction:column;gap:18px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="ed-pill">01 · ON-SET FILM &amp; TV DIRECTOR</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#cbd5e1;font-weight:700;">2021 – 2025 · 50+ PROJECTS</span>
-            </div>
-            <!-- Main Directing Hero Photo -->
-            <div style="width:100%;height:420px;border-radius:20px;overflow:hidden;position:relative;border:1.5px solid rgba(255,255,255,0.16);">
-              <img src="./assets/haidar-directing-cameraman.webp" alt="Haidar Directing On Set" style="width:100%;height:100%;object-fit:cover;object-position:center 28%;" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(8,8,12,0.92) 100%);"></div>
-              <div style="position:absolute;left:22px;bottom:18px;font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#fff;">
-                Started Behind Real Cinema Cameras
-              </div>
-            </div>
-            <!-- 2 Secondary Film/TV Frames -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;flex:1;min-height:0;">
-              <div style="border-radius:18px;overflow:hidden;position:relative;border:1.5px solid rgba(255,90,38,0.45);">
-                <img src="./assets/qris-01.webp" alt="BI Digital QRIS Crossborder" style="width:100%;height:100%;object-fit:cover;" />
-                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.94) 100%);"></div>
-                <div style="position:absolute;left:16px;bottom:14px;">
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ff9c7a;font-weight:800;">DIRECTOR &amp; EDITOR</div>
-                  <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;">BI Digital: QRIS Crossborder</div>
-                </div>
-              </div>
-              <div style="border-radius:18px;overflow:hidden;position:relative;border:1.5px solid rgba(56,189,248,0.45);">
-                <img src="./assets/tv-switcher.webp" alt="TV Broadcast Switcher" style="width:100%;height:100%;object-fit:cover;" />
-                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.94) 100%);"></div>
-                <div style="position:absolute;left:16px;bottom:14px;">
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7dd3fc;font-weight:800;">LIVE TV SWITCHER &amp; CAM</div>
-                  <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;">Mozaik &amp; Warna Warni TV</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- CV Education Stamp with Self-Drawing Highlighter -->
-          <div class="ed-card amber" style="margin-top:22px;width:100%;height:365px;padding:28px 32px;display:flex;flex-direction:column;justify-content:space-between;position:relative;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="ed-pill" style="background:rgba(251,191,36,0.16);border-color:#fbbf24;color:#fde68a;">🎓 ACADEMIC CREDENTIAL · CV VERIFIED</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#fde68a;font-weight:800;">GRADUATED IN 3.5 YEARS</span>
-            </div>
-            <div>
-              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#fff;line-height:1.08;">
-                ISI SURAKARTA — FILM &amp; TV
-              </div>
-              <div style="position:relative;display:inline-block;margin-top:10px;">
-                <span style="font-family:'Syne',sans-serif;font-size:46px;font-weight:800;color:#fbbf24;position:relative;z-index:2;">
-                  GPA 3.86 / 4.00 · CUM LAUDE
-                </span>
-                <svg style="position:absolute;left:0;bottom:-6px;width:100%;height:18px;z-index:1;" viewBox="0 0 600 18" fill="none">
-                  <path id="ch2-highlight" d="M 4 12 Q 300 4 596 12" stroke="#ff5a26" stroke-width="10" stroke-linecap="round" stroke-dasharray="620" stroke-dashoffset="620" />
-                </svg>
-              </div>
-            </div>
-            <div style="font-family:'Inter',sans-serif;font-size:17px;color:#cbd5e1;">
-              Trained in Cinema Directing, Narrative Pacing, 3D Animation, and Visual Effects before entering AI.
-            </div>
-          </div>
-        </div>
-
-        <!-- BEAT 2B (12.2s - 16.5s): 3D/VFX Viewport & Festival Laurel Wreaths -->
-        <div id="ch2-beat-b" style="position:absolute;left:128px;right:128px;top:165px;height:1190px;opacity:0;">
-          <div class="ed-card cyan" style="width:100%;height:780px;padding:24px;display:flex;flex-direction:column;gap:18px;position:relative;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="ed-pill cyan">02 · 3D ANIMATION &amp; VFX VIEWPORT</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#7dd3fc;font-weight:800;">BLENDER · UNREAL · AFTER EFFECTS</span>
-            </div>
-            <!-- 3D Viewport Hero (Hayo Loh! VFX) -->
-            <div style="width:100%;height:420px;border-radius:20px;overflow:hidden;position:relative;border:2px solid #38bdf8;">
-              <img src="./assets/hayo-loh-vfx.webp" alt="Hayo Loh Short Film VFX" style="width:100%;height:100%;object-fit:cover;" />
-              <!-- Illustrated 3D XYZ Gizmo Overlay -->
-              <svg style="position:absolute;right:20px;top:20px;width:84px;height:84px;background:rgba(10,12,20,0.85);border-radius:16px;padding:8px;border:1px solid rgba(255,255,255,0.2);" viewBox="0 0 64 64" fill="none" stroke-width="3" stroke-linecap="round">
-                <line x1="32" y1="32" x2="32" y2="8" stroke="#38bdf8" />
-                <line x1="32" y1="32" x2="54" y2="44" stroke="#ef4444" />
-                <line x1="32" y1="32" x2="10" y2="44" stroke="#34d399" />
-                <circle cx="32" cy="32" r="4" fill="#fff" />
-              </svg>
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(8,8,12,0.94) 100%);"></div>
-              <div style="position:absolute;left:22px;bottom:18px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7dd3fc;font-weight:800;">CAMERAMAN · EDITOR · 3D &amp; VFX ARTIST</div>
-                <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">Short Film "Hayo Loh!" (2022)</div>
-              </div>
-            </div>
-            <!-- 2 Secondary 3D Worlds -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;flex:1;min-height:0;">
-              <div style="border-radius:18px;overflow:hidden;position:relative;border:1.5px solid rgba(255,255,255,0.18);">
-                <img src="./assets/leap-of-faith.webp" alt="Leap of Faith 3D" style="width:100%;height:100%;object-fit:cover;" />
-                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.94) 100%);"></div>
-                <div style="position:absolute;left:16px;bottom:14px;">
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ff9c7a;font-weight:800;">3D ANIMATED SHORT</div>
-                  <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;">Leap of Faith &amp; Kampung Seni</div>
-                </div>
-              </div>
-              <div style="border-radius:18px;overflow:hidden;position:relative;border:1.5px solid rgba(255,255,255,0.18);">
-                <img src="./assets/studenverse.webp" alt="StudenVerse Blackhole 3D" style="width:100%;height:100%;object-fit:cover;" />
-                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.94) 100%);"></div>
-                <div style="position:absolute;left:16px;bottom:14px;">
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7dd3fc;font-weight:800;">3D SPACE &amp; VFX COMPOSITING</div>
-                  <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;">StudenVerse &amp; Speed(mon)Ster</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Festival Recognition Card with Custom SVG Laurel Wreaths -->
-          <div class="ed-card amber" style="margin-top:22px;width:100%;height:365px;padding:28px 32px;display:flex;align-items:center;gap:28px;">
-            <div style="width:125px;height:125px;border-radius:26px;background:rgba(251,191,36,0.14);border:2px solid #fbbf24;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <svg width="84" height="84" viewBox="0 0 64 64" fill="none" stroke="#fbbf24" stroke-width="2.6" stroke-linecap="round">
-                <path d="M22 50 C 12 42, 10 26, 18 14" />
-                <path d="M42 50 C 52 42, 54 26, 46 14" />
-                <polygon points="32,14 35,23 44,23 37,28 39,37 32,32 25,37 27,28 20,23 29,23" fill="rgba(251,191,36,0.35)" />
-                <path d="M20 52 L44 52" />
-              </svg>
-            </div>
-            <div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fde68a;letter-spacing:0.14em;">🏆 NATIONAL FESTIVAL RECOGNITION</div>
-              <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;line-height:1.12;margin-top:8px;">
-                Nominee — UCIFEST 12 &amp; Bogor Film Festival (2022)
-              </div>
-              <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:#fbbf24;margin-top:10px;">
-                + 3rd Place Digital Arts Competition, Nitrafest (2021)
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BEAT 2C (16.5s - 20.5s): Luminara Architectural Projection Mapping + SVG Projector -->
-        <div id="ch2-beat-c" style="position:absolute;left:128px;right:128px;top:165px;height:1190px;opacity:0;">
-          <div class="ed-card orange" style="width:100%;height:840px;padding:24px;display:flex;flex-direction:column;gap:18px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="ed-pill">03 · CO-FOUNDER — LUMINARA VISUAL WORKS</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ff9c7a;font-weight:800;">2024 – PRESENT · 10+ SHOWS</span>
-            </div>
-            <div style="width:100%;height:460px;border-radius:20px;overflow:hidden;position:relative;border:2px solid #ff5a26;">
-              <img src="./assets/luminara-mapping.webp" alt="Luminara Projection Mapping" style="width:100%;height:100%;object-fit:cover;" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(8,8,12,0.92) 100%);"></div>
-              <div style="position:absolute;left:22px;bottom:18px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ff9c7a;font-weight:800;">ARCHITECTURAL VIDEO MAPPING &amp; LIVE VJ</div>
-                <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">Turning Giant Buildings Into Moving Art</div>
-              </div>
-            </div>
-            <div style="width:100%;flex:1;min-height:0;border-radius:20px;overflow:hidden;position:relative;border:1.5px solid rgba(56,189,248,0.5);">
-              <img src="./assets/luminara-unreal.webp" alt="Luminara Unreal 3D Stage" style="width:100%;height:100%;object-fit:cover;" />
-              <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,12,0.92) 100%);"></div>
-              <div style="position:absolute;left:22px;bottom:16px;font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#7dd3fc;">
-                Unreal Engine 3D Pre-Vis · Blender · Resolume Arena
-              </div>
-            </div>
-          </div>
-
-          <!-- Illustrated SVG Projector Unit Shooting Volumetric Beam Upward -->
-          <div style="position:relative;margin-top:20px;height:330px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;">
-            <svg style="position:absolute;left:0;top:-110px;width:824px;height:340px;pointer-events:none;" viewBox="0 0 824 340" fill="none">
-              <defs>
-                <linearGradient id="projBeam" x1="412" y1="320" x2="412" y2="0" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#ff5a26" stop-opacity="0.65" />
-                  <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.28" />
-                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.0" />
-                </linearGradient>
-              </defs>
-              <polygon id="ch2-beam-poly" points="370,300 454,300 790,10 34,10" fill="url(#projBeam)" />
-            </svg>
-            <div class="ed-card" style="width:100%;padding:22px 30px;display:flex;align-items:center;justify-content:space-between;border:2px solid #ff5a26;position:relative;z-index:2;">
-              <div style="display:flex;align-items:center;gap:20px;">
-                <svg width="58" height="58" viewBox="0 0 64 64" fill="none" stroke="#ff5a26" stroke-width="2.8">
-                  <rect x="10" y="24" width="44" height="24" rx="6" />
-                  <circle cx="32" cy="20" r="10" fill="#181824" stroke="#38bdf8" stroke-width="3" />
-                  <line x1="20" y1="48" x2="14" y2="58" />
-                  <line x1="44" y1="48" x2="50" y2="58" />
-                </svg>
-                <div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#34d399;font-weight:800;">● LUMINARA PROJECTOR RIG ONLINE</div>
-                  <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;">Real-World Spatial Visual Storytelling</div>
-                </div>
-              </div>
-              <span class="ed-pill emerald">ACTIVE BEAM</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- =======================================================================
-           CHAPTER 03 (21.0s – 38.0s): THE GROWTH IMPACT — CAK AI, 7.9M OPPO & 60% DM
-           ======================================================================= -->
-      <div id="ch-3" class="chapter-layer">
-
-        <!-- BEAT 3A (21.0s - 26.2s): 3-Phone Live Video Stage + CAK AI Role -->
-        <div id="ch3-beat-a" style="position:absolute;left:64px;right:64px;top:165px;height:1190px;">
-          <div class="ed-card orange" style="width:100%;height:830px;padding:26px;display:flex;flex-direction:column;gap:18px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="ed-pill">HEAD OF CREATOR &amp; AI STRATEGIST · CAK AI</span>
-              <span class="ed-pill cyan">20–90 AI PERSONAS / BRAND</span>
-            </div>
-            <!-- 3 Smartphone Rigs Playing Live Clips -->
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1;min-height:0;">
-              <!-- Phone 1: AceKid 3D Animation -->
-              <div style="border-radius:26px;overflow:hidden;border:3px solid #ff5a26;background:#000;position:relative;box-shadow:0 18px 40px rgba(0,0,0,0.8);">
-                <video id="v-ed-animasi" data-start="20.8" data-duration="6.0" data-media-start="0" src="./clips/acekid-animasi-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-                <div style="position:absolute;left:10px;right:10px;bottom:12px;padding:10px;border-radius:12px;background:rgba(10,10,16,0.9);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#ff9c7a;text-align:center;">
-                  ACEKID · 3D ANIMATION
-                </div>
-              </div>
-              <!-- Phone 2: AceKid Dracin Drama UGC -->
-              <div style="border-radius:26px;overflow:hidden;border:3px solid #38bdf8;background:#000;position:relative;box-shadow:0 18px 40px rgba(0,0,0,0.8);">
-                <video id="v-ed-dracin" data-start="20.8" data-duration="6.0" data-media-start="0" src="./clips/acekid-dracin-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-                <div style="position:absolute;left:10px;right:10px;bottom:12px;padding:10px;border-radius:12px;background:rgba(10,10,16,0.9);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#7dd3fc;text-align:center;">
-                  ACEKID · DRAMA STORY UGC
-                </div>
-              </div>
-              <!-- Phone 3: Rahasia Beauty Commercial -->
-              <div style="border-radius:26px;overflow:hidden;border:3px solid #f472b6;background:#000;position:relative;box-shadow:0 18px 40px rgba(0,0,0,0.8);">
-                <video id="v-ed-rahasia" data-start="20.8" data-duration="6.0" data-media-start="0" src="./clips/rahasia-ad-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-                <div style="position:absolute;left:10px;right:10px;bottom:12px;padding:10px;border-radius:12px;background:rgba(10,10,16,0.9);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#f9a8d4;text-align:center;">
-                  RAHASIA BEAUTY · AI AD
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 5 Brand Ecosystems Summary Card -->
-          <div class="ed-card cyan" style="margin-top:22px;width:100%;height:335px;padding:28px 34px;display:flex;flex-direction:column;justify-content:space-between;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:800;color:#38bdf8;letter-spacing:0.15em;">
-              5 BRAND ECOSYSTEMS DIRECTED SIMULTANEOUSLY (2025 – PRESENT)
-            </div>
-            <div style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#fff;line-height:1.1;">
-              Oppo · AceKid · Syailendra · Golden Rama · Cak Investment Club
-            </div>
-            <div style="font-family:'Inter',sans-serif;font-size:18px;color:#cbd5e1;">
-              Applying cinema directing &amp; audience retention psychology so AI characters feel 100% human.
-            </div>
-          </div>
-        </div>
-
-        <!-- BEAT 3B (26.2s - 32.0s): Hero Proof #1 — 7.9M Views on Oppo @diologtech -->
-        <div id="ch3-beat-b" style="position:absolute;left:64px;right:64px;top:165px;height:1190px;opacity:0;">
-          <div class="ed-card orange" style="width:100%;height:1190px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="ed-pill">VERIFIED CASE 01 · OPPO @DIOLOGTECH</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#38bdf8;font-weight:800;">100% AI VIRTUAL CREATOR</span>
-            </div>
-
-            <!-- Clean Non-Overlapping 2-Column Proof Grid -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;height:730px;min-height:0;overflow:hidden;position:relative;">
-              <div style="border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,0.18);background:#000;height:100%;">
-                <img src="./assets/diologtech-feed.webp" alt="Oppo Diologtech Profile" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
-              </div>
-              <div style="display:flex;flex-direction:column;gap:20px;height:100%;min-height:0;overflow:hidden;">
-                <div style="flex:1;min-height:0;border-radius:20px;overflow:hidden;border:2px solid #ff5a26;background:#000;">
-                  <img src="./assets/oppo-7-9m.webp" alt="Oppo 7.9M Views Analytics" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
-                </div>
-                <div style="flex:1;min-height:0;border-radius:20px;overflow:hidden;border:2px solid #38bdf8;background:#000;">
-                  <img src="./assets/oppo-5-5m.webp" alt="Oppo 5.5M Viewers Analytics" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Massive Single-Focal-Point Odometer Metric Deck -->
-            <div style="padding:26px 30px;border-radius:24px;background:#191210;border:2.5px solid #ff5a26;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:16px;align-items:center;text-align:center;">
-              <div style="text-align:left;border-right:1.5px solid rgba(255,255,255,0.14);padding-right:16px;">
-                <div id="oppo-counter" style="font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:#ff5a26;line-height:0.95;">7.9M</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fff;margin-top:6px;">ORGANIC POST VIEWS</div>
-              </div>
-              <div>
-                <div style="font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:#fff;">5.5M</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;margin-top:4px;">TOTAL VIEWERS</div>
-              </div>
-              <div>
-                <div style="font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:#38bdf8;">167K</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;margin-top:4px;">LIKES (11K CMTS)</div>
-              </div>
-              <div>
-                <div style="font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:#34d399;">3.6K+</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;margin-top:4px;">NEW FOLLOWERS</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BEAT 3C (32.0s - 38.0s): Hero Proof #2 — Cak Investment Club 2.3M+ Views & ~60% DM Conversion -->
-        <div id="ch3-beat-c" style="position:absolute;left:64px;right:64px;top:165px;height:1190px;opacity:0;">
-          <div class="ed-card emerald" style="width:100%;height:1190px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="ed-pill emerald">VERIFIED CASE 02 · CAK INVESTMENT CLUB</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#34d399;font-weight:800;">96.2% FOR YOU PAGE TRAFFIC</span>
-            </div>
-
-            <!-- Top Row: Verified Analytics (@leo_ryansyah 1.1M & @jo.darsono 1.2M) -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;height:360px;overflow:hidden;">
-              <div style="border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.16);background:#000;position:relative;">
-                <img src="./assets/leo-1-1m.webp" alt="Leo Ryansyah 1.1M Views" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
-                <div style="position:absolute;left:12px;right:12px;bottom:10px;padding:8px 14px;border-radius:10px;background:rgba(8,8,12,0.9);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fff;">
-                  @leo_ryansyah · 1.1M Views (61K Likes)
-                </div>
-              </div>
-              <div style="border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.16);background:#000;position:relative;">
-                <img src="./assets/jo-1-2m.webp" alt="Jonathan Darsono 1.2M Views" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
-                <div style="position:absolute;left:12px;right:12px;bottom:10px;padding:8px 14px;border-radius:10px;background:rgba(8,8,12,0.9);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fff;">
-                  @jo.darsono · 1.2M Views (43K Likes)
-                </div>
-              </div>
-            </div>
-
-            <!-- Middle Row: Real TikTok DM Screenshot + Interactive Animated Chat Bubbles -->
-            <div style="display:grid;grid-template-columns:0.92fr 1.08fr;gap:18px;height:455px;overflow:hidden;">
-              <div style="border-radius:18px;overflow:hidden;border:2px solid #34d399;background:#000;">
-                <img src="./assets/leo-dm.webp" alt="Real TikTok DM Proof" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
-              </div>
-              <div style="border-radius:18px;background:rgba(12,15,24,0.96);border:1.5px solid rgba(255,255,255,0.14);padding:22px;display:flex;flex-direction:column;justify-content:center;gap:16px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399;font-weight:800;letter-spacing:0.14em;">
-                  LIVE TIKTOK INBOX CONVERSION FUNNEL
-                </div>
-                <div id="dm-bub-1" style="padding:16px 20px;border-radius:20px 20px 20px 6px;background:#1e2230;border:1.5px solid rgba(255,255,255,0.18);font-size:17px;font-weight:600;color:#fff;">
-                  💬 "Halo mas Leo, mau JOIN CAK IC gimana yaa?"
-                </div>
-                <div id="dm-bub-2" style="padding:16px 20px;border-radius:20px 20px 6px 20px;background:linear-gradient(135deg,#0284c7,#2563eb);font-size:17px;font-weight:700;color:#fff;align-self:flex-end;">
-                  🔗 link.cakinvestmentclub.com
-                </div>
-                <div id="dm-bub-3" style="padding:16px 20px;border-radius:20px 20px 20px 6px;background:rgba(16,185,129,0.2);border:2px solid #34d399;font-size:17px;font-weight:700;color:#d1fae5;">
-                  ✅ "Saya udah connect via WA &amp; IG ya pak Leo 🙏"
-                </div>
-              </div>
-            </div>
-
-            <!-- Bottom Conversion Impact Banner -->
-            <div style="padding:24px 30px;border-radius:22px;background:#0e211b;border:2.5px solid #34d399;display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <div style="font-family:'Syne',sans-serif;font-size:58px;font-weight:800;color:#34d399;line-height:0.95;">~60% CONVERTED</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#d1fae5;margin-top:6px;">
-                  INBOUND TIKTOK DMs TURNED INTO REGISTERED COMMUNITY MEMBERS
-                </div>
-              </div>
-              <div style="text-align:right;">
-                <div style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:#fff;">2.3M+</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6ee7b7;">COMBINED VIEWS</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- =======================================================================
-           CHAPTER 04 (38.0s – 51.5s): THE SYSTEM BUILDER — CAKETING & CAKVISUAL
-           ======================================================================= -->
-      <div id="ch-4" class="chapter-layer">
-        <!-- Top Illustrated SVG Factory Node Pipeline Header (Y: 160px - 265px) -->
-        <div style="position:absolute;left:64px;right:64px;top:160px;height:98px;padding:0 28px;border-radius:22px;background:rgba(16,18,28,0.95);border:2px solid rgba(255,90,38,0.55);display:flex;align-items:center;justify-content:space-between;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <span style="padding:8px 14px;border-radius:10px;background:rgba(255,90,38,0.2);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#ff9c7a;">1. BRIEF 📄</span>
-            <span style="color:#ff5a26;font-weight:800;">➔</span>
-            <span style="padding:8px 14px;border-radius:10px;background:rgba(56,189,248,0.2);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#7dd3fc;">2. CAKETING (SCRIPTS)</span>
-            <span style="color:#38bdf8;font-weight:800;">➔</span>
-            <span style="padding:8px 14px;border-radius:10px;background:rgba(52,211,153,0.2);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#6ee7b7;">3. CAKVISUAL (VIDEOS)</span>
-          </div>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#fbbf24;font-weight:800;">AI FACTORY</span>
-        </div>
-
-        <!-- Engine 01: CAKETING Bulk Scriptwriting Platform (Y: 278px - 738px) -->
-        <div id="ch4-caketing" class="ed-card orange" style="position:absolute;left:64px;right:64px;top:278px;height:460px;padding:22px 26px;display:flex;flex-direction:column;justify-content:space-between;">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <span class="ed-pill">IN-HOUSE ENGINE 01 · CAKETING</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#34d399;font-weight:800;">SAVED ~70% SCRIPTING TIME</span>
-          </div>
-          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:18px;height:270px;overflow:hidden;">
-            <div style="border-radius:16px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.18);background:#000;">
-              <img src="./assets/caketing-studio-showcase.webp" alt="CAKETING UI" style="width:100%;height:100%;object-fit:cover;object-position:left top;" />
-            </div>
-            <div style="border-radius:16px;overflow:hidden;border:2px solid #ff5a26;background:#000;">
-              <video id="v-ed-caketing" data-start="37.8" data-duration="14.0" data-media-start="0" src="./clips/caketing-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-            </div>
-          </div>
-          <div style="padding:14px 22px;border-radius:16px;background:rgba(255,90,38,0.15);border:1.5px solid #ff5a26;display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">
-              200 PERSONA SCRIPTS <span style="color:#ff5a26;">IN 3 HOURS</span>
-            </span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ffb088;font-weight:800;">RESEARCH ➔ DRAFTS</span>
-          </div>
-        </div>
-
-        <!-- Engine 02: CakVisual & CakAI Pro Video Platform (Y: 758px - 1218px) -->
-        <div id="ch4-cakvisual" class="ed-card cyan" style="position:absolute;left:64px;right:64px;top:758px;height:460px;padding:22px 26px;display:flex;flex-direction:column;justify-content:space-between;">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <span class="ed-pill cyan">IN-HOUSE ENGINE 02 · CAKVISUAL &amp; CAKAI PRO</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#7dd3fc;font-weight:800;">BUILT CAKAI PRO SOLO IN 2 WEEKS</span>
-          </div>
-          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:18px;height:270px;overflow:hidden;">
-            <div style="border-radius:16px;overflow:hidden;border:1.5px solid rgba(56,189,248,0.35);background:#000;">
-              <img src="./assets/cakvisual-featured-crop.webp" alt="CakVisual UI" style="width:100%;height:100%;object-fit:cover;object-position:left top;" />
-            </div>
-            <div style="border-radius:16px;overflow:hidden;border:2px solid #38bdf8;background:#000;">
-              <video id="v-ed-cakvisual" data-start="37.8" data-duration="14.0" data-media-start="0" src="./clips/cakvisual-cut.mp4" muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-            </div>
-          </div>
-          <div style="padding:14px 22px;border-radius:16px;background:rgba(56,189,248,0.15);border:1.5px solid #38bdf8;display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;">
-              2,000 AI VIDEOS <span style="color:#38bdf8;">/ MONTH</span>
-            </span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#bae6fd;font-weight:800;">20+ PERSONAS / RUN · QC</span>
-          </div>
-        </div>
-
-        <!-- Bottom Compression Slam Bar: 5 DAYS -> 5 HOURS (Y: 1238px - 1368px) -->
-        <div id="ch4-slam" class="ed-card emerald" style="position:absolute;left:64px;right:64px;top:1238px;height:128px;padding:0 32px;background:linear-gradient(90deg,#1b1214 0%,#0e221b 100%);border:2.5px solid #34d399;display:flex;align-items:center;justify-content:space-between;">
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;color:#fde68a;letter-spacing:0.14em;">WEEKLY KPI PRODUCTION TIME</div>
-            <div style="font-family:'Inter',sans-serif;font-size:15px;color:#cbd5e1;margin-top:4px;">Daily Output Scaled 6× (20 ➔ 120 Assets/Day)</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:18px;font-family:'Syne',sans-serif;font-weight:800;">
-            <span style="position:relative;font-size:34px;color:#f87171;">
-              ~5 DAYS
-              <svg style="position:absolute;left:-6px;top:45%;width:110%;height:12px;" viewBox="0 0 160 12">
-                <line x1="0" y1="10" x2="160" y2="2" stroke="#ef4444" stroke-width="5" stroke-linecap="round" />
-              </svg>
-            </span>
-            <span style="font-size:36px;color:#fff;">➔</span>
-            <span style="font-size:48px;color:#34d399;">~5 HOURS</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- =======================================================================
-           CHAPTER 05 (51.5s – 60.0s): THE HUMAN SIGN-OFF & INTERACTIVE VISUAL CV CARD
-           ======================================================================= -->
-      <div id="ch-5" class="chapter-layer">
-        <div class="ed-card orange" style="position:absolute;left:64px;right:64px;top:170px;height:1195px;padding:42px 38px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;">
-          <!-- Orbital Studio Portrait with SVG Constellation Ring -->
-          <div style="position:relative;width:320px;height:320px;display:flex;align-items:center;justify-content:center;">
-            <svg id="ch5-orbit-svg" style="position:absolute;inset:-34px;width:388px;height:388px;" viewBox="0 0 388 388" fill="none">
-              <circle cx="194" cy="194" r="184" stroke="rgba(255,90,38,0.45)" stroke-width="2" stroke-dasharray="10 8" />
-              <circle cx="194" cy="10" r="9" fill="#ff5a26" />
-              <circle cx="353" cy="286" r="9" fill="#38bdf8" />
-              <circle cx="35" cy="286" r="9" fill="#34d399" />
-            </svg>
-            <div style="width:280px;height:280px;border-radius:36px;overflow:hidden;border:3px solid #ff5a26;box-shadow:0 24px 70px rgba(255,90,38,0.35);position:relative;z-index:2;">
-              <img src="./assets/haidar-portrait-signoff.webp" alt="Haidar Ghazy Arkan" style="width:100%;height:100%;object-fit:cover;" />
-            </div>
-          </div>
-
-          <!-- Name & Tagline -->
-          <div>
-            <span class="ed-pill">HEAD OF CREATOR &amp; AI MARKETING STRATEGIST · FILMMAKER</span>
-            <div style="font-family:'Syne',sans-serif;font-size:62px;font-weight:800;color:#fff;line-height:0.98;letter-spacing:-0.03em;margin-top:16px;">
-              HAIDAR GHAZY ARKAN
-            </div>
-            <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:52px;color:#ffb38a;margin-top:6px;">
-              Strategy. Stories. Systems.
-            </div>
-          </div>
-
-          <!-- 4 Scannable Visual CV Proof Boxes (2x2 Grid) -->
-          <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-            <div style="padding:20px;border-radius:20px;background:rgba(251,191,36,0.09);border:1.5px solid rgba(251,191,36,0.5);">
-              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#fbbf24;">3.86 GPA</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#fde68a;margin-top:4px;">ISI SURAKARTA CUM LAUDE · 50+ WORKS</div>
-            </div>
-            <div style="padding:20px;border-radius:20px;background:rgba(255,90,38,0.1);border:1.5px solid rgba(255,90,38,0.5);">
-              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#ff5a26;">7.9M VIEWS</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ff9c7a;margin-top:4px;">OPPO @DIOLOGTECH (5.5M VIEWERS)</div>
-            </div>
-            <div style="padding:20px;border-radius:20px;background:rgba(52,211,153,0.1);border:1.5px solid rgba(52,211,153,0.5);">
-              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#34d399;">~60% DM</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6ee7b7;margin-top:4px;">TIKTOK INBOX ➔ MEMBER CONVERSION</div>
-            </div>
-            <div style="padding:20px;border-radius:20px;background:rgba(56,189,248,0.1);border:1.5px solid rgba(56,189,248,0.5);">
-              <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#38bdf8;">5D ➔ 5H</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7dd3fc;margin-top:4px;">BUILT CAKETING &amp; CAKVISUAL</div>
-            </div>
-          </div>
-
-          <!-- Interactive CTA Pill (Clicked by Cursor at 57.2s) -->
-          <div id="ch5-cta-btn" style="width:100%;padding:22px 28px;border-radius:999px;background:linear-gradient(90deg,#ff5a26,#ff7b52);color:#09090d;font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:800;letter-spacing:0.1em;box-shadow:0 20px 50px rgba(255,90,38,0.45);">
-            🌐 HAIDARGHAZY.COM · @haidarghazyarkan_
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- =========================================================================
-         PORTAL #1 OVERLAY: ILLUSTRATED 35MM CAMERA LENS IRIS (7.3s – 8.1s)
-         ========================================================================= -->
-    <div id="lens-portal">
-      <svg width="900" height="900" viewBox="0 0 200 200" fill="none">
-        <circle cx="100" cy="100" r="92" fill="#0d0e16" stroke="#ff5a26" stroke-width="5" />
-        <circle cx="100" cy="100" r="76" stroke="#38bdf8" stroke-width="2" stroke-dasharray="8 6" />
-        <circle id="lens-aperture" cx="100" cy="100" r="28" fill="#ff5a26" fill-opacity="0.25" stroke="#ff5a26" stroke-width="4" />
-        <text x="100" y="24" text-anchor="middle" fill="#f5f3ef" font-family="JetBrains Mono" font-size="7" letter-spacing="2">35MM ANAMORPHIC · F/1.4 · ISI SURAKARTA</text>
-      </svg>
-    </div>
-
-    <!-- =========================================================================
-         PORTAL #3 OVERLAY: SPINNING FACTORY GEAR SLICE (37.3s – 38.1s)
-         ========================================================================= -->
-    <div id="gear-portal">
-      <svg width="760" height="760" viewBox="0 0 200 200" fill="none">
-        <circle cx="100" cy="100" r="68" fill="#0e1720" stroke="#34d399" stroke-width="8" stroke-dasharray="22 14" />
-        <circle cx="100" cy="100" r="36" fill="#0b0b10" stroke="#ff5a26" stroke-width="5" />
-      </svg>
-    </div>
-
-    <!-- =========================================================================
-         STORYTELLING CAPTION BAR & PROGRESS SCRUBBER (SAFE ZONE Y: 1390–1590px)
-         ========================================================================= -->
-    <div id="story-caption-bar">
-      <div id="cap-kicker">01 · THE 3-IN-1 QUESTION</div>
-      <div id="cap-headline">
-        FILMMAKER, GROWTH MARKETER, OR BUILDER? <span class="accent">I USE ALL 3.</span>
-      </div>
-    </div>
-
-    <div id="scrubber-track">
-      <div id="scrubber-fill"></div>
-    </div>
-
-    <!-- =========================================================================
-         INTERACTIVE VECTOR CURSOR & CLICK RIPPLE
-         ========================================================================= -->
-    <div id="interactive-cursor">
-      <div id="cursor-ripple"></div>
-      <svg width="48" height="48" viewBox="0 0 36 36" fill="none">
-        <path d="M6 4L29 15.5L17.5 19L14 30.5L6 4Z" fill="#ffffff" stroke="#ff5a26" stroke-width="2.5" stroke-linejoin="round" />
-      </svg>
-    </div>
   </div>
 
-  <script src="./gsap.min.js"></script>
   <script>
-    const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
-    const lerp = (a, b, t) => a + (b - a) * clamp(t);
-    const easeOutCubic = (t) => 1 - Math.pow(1 - clamp(t), 3);
-    const easeOutBack = (t) => {
-      t = clamp(t);
-      const c1 = 1.70158;
-      const c3 = c1 + 1;
-      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
-    };
-    const easeInOutCubic = (t) => {
-      t = clamp(t);
-      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    };
+    (function () {
+      const W = 1080, H = 1920;
 
-    const gridEl = document.getElementById("blueprint-grid");
-    const hdrChapter = document.getElementById("hdr-chapter");
-    const hdrTc = document.getElementById("hdr-timecode");
-    const capKicker = document.getElementById("cap-kicker");
-    const capHeadline = document.getElementById("cap-headline");
-    const scrubberFill = document.getElementById("scrubber-fill");
+      // =========================================================================
+      // 1. THREE.JS 3D WEBGL MULTIVERSE ENGINE (preserveDrawingBuffer: true)
+      // =========================================================================
+      const webglCanvas = document.getElementById('webgl-stage');
+      const renderer = new THREE.WebGLRenderer({
+        canvas: webglCanvas,
+        antialias: true,
+        alpha: false,
+        preserveDrawingBuffer: true
+      });
+      renderer.setSize(W, H, false);
+      renderer.setPixelRatio(1);
+      renderer.setClearColor(0x06030d, 1);
 
-    const ch1 = document.getElementById("ch-1");
-    const ch2 = document.getElementById("ch-2");
-    const ch3 = document.getElementById("ch-3");
-    const ch4 = document.getElementById("ch-4");
-    const ch5 = document.getElementById("ch-5");
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x06030d, 0.032);
 
-    const ch2BeatA = document.getElementById("ch2-beat-a");
-    const ch2BeatB = document.getElementById("ch2-beat-b");
-    const ch2BeatC = document.getElementById("ch2-beat-c");
+      const camera = new THREE.PerspectiveCamera(58, W / H, 0.1, 200);
+      camera.position.set(0, 1.5, 11);
 
-    const ch3BeatA = document.getElementById("ch3-beat-a");
-    const ch3BeatB = document.getElementById("ch3-beat-b");
-    const ch3BeatC = document.getElementById("ch3-beat-c");
+      // Dramatic Cyberpunk / Spider-Verse 3-Point Neon Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+      const keyLight = new THREE.PointLight(0xff0055, 4.5, 45);
+      keyLight.position.set(-7, 6, 8);
+      scene.add(keyLight);
+      const rimLight = new THREE.PointLight(0x00f0ff, 4.5, 45);
+      rimLight.position.set(7, 5, 7);
+      scene.add(rimLight);
+      const bounceLight = new THREE.PointLight(0xffe600, 3.0, 35);
+      bounceLight.position.set(0, -5, 6);
+      scene.add(bounceLight);
 
-    const lensPortal = document.getElementById("lens-portal");
-    const gearPortal = document.getElementById("gear-portal");
-    const cursorEl = document.getElementById("interactive-cursor");
-    const rippleEl = document.getElementById("cursor-ripple");
+      // Infinite 3D Cyberpunk Perspective Grid Floor & Ceiling
+      const floorGrid = new THREE.GridHelper(90, 45, 0xff0055, 0x261042);
+      floorGrid.position.y = -4.8;
+      scene.add(floorGrid);
 
-    // Canvas Living Story Thread & Subtle Blueprint Particles
-    const canvas = document.getElementById("fx-canvas");
-    const ctx = canvas.getContext("2d");
-    const dots = Array.from({ length: 42 }, (_, i) => ({
-      x: (i * 137.5) % 1080,
-      y: (i * 293.1) % 1920,
-      r: (i % 3) + 1.5,
-      color: i % 3 === 0 ? "#ff5a26" : i % 3 === 1 ? "#38bdf8" : "#34d399"
-    }));
+      const ceilGrid = new THREE.GridHelper(90, 45, 0x00f0ff, 0x122238);
+      ceilGrid.position.y = 9.5;
+      scene.add(ceilGrid);
 
-    function drawBackgroundCanvas(t) {
-      ctx.clearRect(0, 0, 1080, 1920);
-      for (const d of dots) {
-        const px = (d.x + Math.sin(t * 0.7 + d.y * 0.005) * 24 + 1080) % 1080;
-        const py = (d.y - t * 32 + 19200) % 1920;
-        ctx.beginPath();
-        ctx.fillStyle = d.color;
-        ctx.globalAlpha = 0.25;
-        ctx.arc(px, py, d.r, 0, Math.PI * 2);
-        ctx.fill();
+      // 3D Multiverse Floating Shards / Particle Field
+      const shardGroup = new THREE.Group();
+      scene.add(shardGroup);
+      const shardGeo = new THREE.OctahedronGeometry(0.22, 0);
+      const shardColors = [0xff0055, 0x00f0ff, 0xffe600, 0xff4d00, 0x00ff88];
+      for (let i = 0; i < 65; i++) {
+        const mat = new THREE.MeshStandardMaterial({
+          color: shardColors[i % shardColors.length],
+          emissive: shardColors[i % shardColors.length],
+          emissiveIntensity: 0.55,
+          wireframe: i % 2 === 0
+        });
+        const m = new THREE.Mesh(shardGeo, mat);
+        m.position.set(
+          Math.sin(i * 17.3) * 11,
+          Math.cos(i * 9.7) * 8 + 1.5,
+          - (i * 0.85) + 6
+        );
+        shardGroup.add(m);
       }
-      // Flowing Story Thread Wave
-      ctx.save();
-      ctx.globalAlpha = 0.45;
-      ctx.strokeStyle = t < 21 ? "#ff5a26" : t < 38 ? "#38bdf8" : "#34d399";
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      for (let y = 140; y <= 1600; y += 32) {
-        const x = 540 + Math.sin(y * 0.004 - t * 2.2) * 340;
-        if (y === 140) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+
+      // --- SCENE 1 3D HERO MESHES: 3 Orbiting 3D Artifacts (Camera, Viral Crystal, AI Gear) ---
+      const s1Group = new THREE.Group();
+      scene.add(s1Group);
+
+      // Artifact 1: 3D Anamorphic Cinema Camera Rig
+      const camArtifact = new THREE.Group();
+      const bodyMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(1.7, 1.2, 2.1),
+        new THREE.MeshStandardMaterial({ color: 0xff4d00, emissive: 0xff2200, emissiveIntensity: 0.4, wireframe: true })
+      );
+      const lensMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.75, 0.95, 1.3, 16),
+        new THREE.MeshStandardMaterial({ color: 0x00f0ff, emissive: 0x00f0ff, emissiveIntensity: 0.6, wireframe: true })
+      );
+      lensMesh.rotation.x = Math.PI / 2;
+      lensMesh.position.z = 1.4;
+      camArtifact.add(bodyMesh, lensMesh);
+      s1Group.add(camArtifact);
+
+      // Artifact 2: 3D Viral Growth Crystal
+      const viralArtifact = new THREE.Mesh(
+        new THREE.OctahedronGeometry(1.25, 1),
+        new THREE.MeshStandardMaterial({ color: 0xffe600, emissive: 0xff9900, emissiveIntensity: 0.65, wireframe: true })
+      );
+      s1Group.add(viralArtifact);
+
+      // Artifact 3: 3D AI Reactor Torus Gear
+      const gearArtifact = new THREE.Mesh(
+        new THREE.TorusKnotGeometry(0.95, 0.28, 48, 8, 2, 3),
+        new THREE.MeshStandardMaterial({ color: 0x00ff88, emissive: 0x00f0ff, emissiveIntensity: 0.55, wireframe: true })
+      );
+      s1Group.add(gearArtifact);
+
+      // --- SCENE 2 3D HERO MESHES: 3D TorusKnot Blackhole + 3D Luminara Skyscraper Tower ---
+      const s2Group = new THREE.Group();
+      scene.add(s2Group);
+
+      const blackholeMesh = new THREE.Mesh(
+        new THREE.TorusKnotGeometry(2.6, 0.55, 90, 14, 3, 5),
+        new THREE.MeshStandardMaterial({ color: 0x00f0ff, emissive: 0x7b2cbf, emissiveIntensity: 0.7, wireframe: true })
+      );
+      blackholeMesh.position.set(0, 1.2, 0);
+      s2Group.add(blackholeMesh);
+
+      const towerGroup = new THREE.Group();
+      const towerMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(3.4, 11.0, 3.4, 4, 12, 4),
+        new THREE.MeshStandardMaterial({ color: 0xff0055, emissive: 0xff4d00, emissiveIntensity: 0.5, wireframe: true })
+      );
+      const beamCone = new THREE.Mesh(
+        new THREE.ConeGeometry(4.2, 9.5, 24, 1, true),
+        new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true, transparent: true, opacity: 0.35 })
+      );
+      beamCone.position.set(0, 2.0, 2.0);
+      beamCone.rotation.x = -0.35;
+      towerGroup.add(towerMesh, beamCone);
+      s2Group.add(towerGroup);
+
+      // --- SCENE 3 3D HERO MESHES: 3D Hologram Energy Rings & Diamond Core ---
+      const s3Group = new THREE.Group();
+      scene.add(s3Group);
+      for (let r = 0; r < 3; r++) {
+        const ring = new THREE.Mesh(
+          new THREE.TorusGeometry(3.2 + r * 0.9, 0.08, 12, 60),
+          new THREE.MeshBasicMaterial({ color: r % 2 === 0 ? 0x00f0ff : 0xff0055, wireframe: true })
+        );
+        ring.position.set(0, 0.8, 0);
+        s3Group.add(ring);
       }
-      ctx.stroke();
-      ctx.restore();
-    }
 
-    // Cursor Choreography Keyframes
-    const cursorKeys = [
-      { t: 0.0, x: 860, y: 420 },
-      { t: 0.5, x: 520, y: 215, click: true },
-      { t: 2.2, x: 280, y: 900 },
-      { t: 3.3, x: 800, y: 900 },
-      { t: 4.4, x: 540, y: 1150 },
-      { t: 5.3, x: 540, y: 1310, click: true },
-      { t: 9.2, x: 640, y: 1120 },
-      { t: 16.6, x: 540, y: 1290, click: true },
-      { t: 26.25, x: 540, y: 620, click: true },
-      { t: 34.4, x: 760, y: 940, click: true },
-      { t: 41.2, x: 680, y: 540 },
-      { t: 48.5, x: 740, y: 1295, click: true },
-      { t: 57.2, x: 540, y: 1290, click: true },
-      { t: 60.0, x: 880, y: 1340 }
-    ];
+      // --- SCENE 4 3D HERO MESHES: 3D Cyberpunk Reactor Tunnel (14 Torus Rings) ---
+      const s4TunnelGroup = new THREE.Group();
+      scene.add(s4TunnelGroup);
+      for (let i = 0; i < 14; i++) {
+        const tRing = new THREE.Mesh(
+          new THREE.TorusGeometry(4.1, 0.12, 8, 24),
+          new THREE.MeshStandardMaterial({
+            color: i % 2 === 0 ? 0xff4d00 : 0x00f0ff,
+            emissive: i % 2 === 0 ? 0xff0055 : 0x00f0ff,
+            emissiveIntensity: 0.7,
+            wireframe: true
+          })
+        );
+        tRing.position.set(0, 1.2, -i * 2.2 + 5.0);
+        s4TunnelGroup.add(tRing);
+      }
 
-    function updateCursor(t) {
-      let k0 = cursorKeys[0];
-      let k1 = cursorKeys[cursorKeys.length - 1];
-      for (let i = 0; i < cursorKeys.length - 1; i++) {
-        if (t >= cursorKeys[i].t && t <= cursorKeys[i + 1].t) {
-          k0 = cursorKeys[i];
-          k1 = cursorKeys[i + 1];
-          break;
+      // --- SCENE 5 3D HERO MESHES: Giant Spider-Verse Starburst Halo behind Haidar ---
+      const s5HaloGroup = new THREE.Group();
+      scene.add(s5HaloGroup);
+      const haloStar = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(4.2, 1),
+        new THREE.MeshBasicMaterial({ color: 0xffe600, wireframe: true })
+      );
+      haloStar.position.set(0, 2.2, -1.5);
+      s5HaloGroup.add(haloStar);
+
+      // =========================================================================
+      // 2. 2D SPIDER-VERSE SHADER OVERLAY (HALFTONE, SPEEDLINES, KATANA SLASH, RGB GLITCH)
+      // =========================================================================
+      const fxCanvas = document.getElementById('fx-canvas');
+      const ctx = fxCanvas.getContext('2d');
+
+      function drawSpiderVerseFX(t, steppedT) {
+        ctx.clearRect(0, 0, W, H);
+
+        // 1. Subtle Comic Ben-Day Halftone Dots in Corners
+        ctx.save();
+        const dotSpacing = 28;
+        for (let x = 20; x < W; x += dotSpacing) {
+          for (let y = 20; y < H; y += dotSpacing) {
+            const dx = (x - W * 0.5) / (W * 0.5);
+            const dy = (y - H * 0.5) / (H * 0.5);
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > 0.72) {
+              const r = Math.min(6.5, (dist - 0.72) * 14);
+              ctx.fillStyle = ((x + y) % 56 === 0) ? 'rgba(255, 0, 85, 0.22)' : 'rgba(0, 240, 255, 0.18)';
+              ctx.beginPath();
+              ctx.arc(x, y, r, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
         }
-      }
-      const span = Math.max(0.001, k1.t - k0.t);
-      const p = easeInOutCubic((t - k0.t) / span);
-      const cx = lerp(k0.x, k1.x, p);
-      const cy = lerp(k0.y, k1.y, p);
-      cursorEl.style.transform = `translate3d(${(cx - 540).toFixed(1)}px, ${(cy - 960).toFixed(1)}px, 0)`;
+        ctx.restore();
 
-      // Click Ripple Check
-      let rippleAlpha = 0;
-      let rippleScale = 0.3;
-      for (const k of cursorKeys) {
-        if (k.click && t >= k.t && t <= k.t + 0.45) {
-          const rp = (t - k.t) / 0.45;
-          rippleAlpha = 1 - rp;
-          rippleScale = lerp(0.4, 2.1, easeOutCubic(rp));
+        // 2. Radial Anime / Spider-Verse Action Speedlines around edges
+        const isHighEnergy = (t > 6.8 && t < 9.3) || (t > 26.4 && t < 29.0) || (t > 48.0 && t < 51.8);
+        const numLines = isHighEnergy ? 68 : 32;
+        ctx.save();
+        ctx.translate(W * 0.5, H * 0.5);
+        for (let i = 0; i < numLines; i++) {
+          const angle = (i / numLines) * Math.PI * 2 + steppedT * 0.35;
+          const innerR = isHighEnergy ? 390 + (i % 5) * 35 : 530 + (i % 4) * 45;
+          const outerR = 1150;
+          ctx.strokeStyle = i % 3 === 0 ? 'rgba(255, 230, 0, 0.34)' : (i % 2 === 0 ? 'rgba(0, 240, 255, 0.26)' : 'rgba(255, 0, 85, 0.28)');
+          ctx.lineWidth = isHighEnergy ? 4.5 : 2.5;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(angle) * innerR, Math.sin(angle) * innerR);
+          ctx.lineTo(Math.cos(angle) * outerR, Math.sin(angle) * outerR);
+          ctx.stroke();
         }
-      }
-      rippleEl.style.opacity = rippleAlpha.toFixed(2);
-      rippleEl.style.transform = `scale(${rippleScale.toFixed(2)})`;
-    }
+        ctx.restore();
 
-    function renderAt(t) {
-      drawBackgroundCanvas(t);
-      updateCursor(t);
+        // 3. KATANA / LASER SLASH AT 48.0s - 51.5s ("5 DAYS" SLICED INTO "5 HOURS")
+        if (t >= 48.0 && t <= 51.5) {
+          const st = t - 48.0;
+          const slashProg = Math.min(1, st / 0.22);
+          const yStart = H * 0.455;
+          const yEnd = H * 0.365;
+          const xCur = W * slashProg;
+          const yCur = yStart + (yEnd - yStart) * slashProg;
+          ctx.save();
+          ctx.strokeStyle = '#00ff88';
+          ctx.shadowColor = '#00f0ff';
+          ctx.shadowBlur = 45;
+          ctx.lineWidth = Math.max(5, 30 * (1 - st * 0.22));
+          ctx.beginPath();
+          ctx.moveTo(0, yStart);
+          ctx.lineTo(xCur, yCur);
+          ctx.stroke();
 
-      // Subtle Blueprint Grid Parallax
-      const gx = Math.sin(t * 0.6) * 18;
-      const gy = -(t * 14) % 60;
-      gridEl.style.transform = `translate3d(${gx.toFixed(1)}px, ${gy.toFixed(1)}px, 0)`;
-
-      // Timecode & Progress Scrubber
-      const sec = Math.min(60, Math.floor(t));
-      hdrTc.textContent = `00:${String(sec).padStart(2, "0")} / 01:00`;
-      scrubberFill.style.width = `${((t / 60) * 100).toFixed(2)}%`;
-
-      // =====================================================================
-      // CHAPTER VISIBILITY & PORTAL TRANSITIONS
-      // =====================================================================
-      ch1.style.opacity = clamp(1 - (t - 7.45) / 0.35);
-      ch2.style.opacity = clamp((t - 7.55) / 0.35) * clamp(1 - (t - 20.55) / 0.35);
-      ch3.style.opacity = clamp((t - 20.65) / 0.35) * clamp(1 - (t - 37.55) / 0.35);
-      ch4.style.opacity = clamp((t - 37.65) / 0.35) * clamp(1 - (t - 51.25) / 0.35);
-      ch5.style.opacity = clamp((t - 51.35) / 0.40);
-
-      // Portal #1: Camera Lens Iris (7.25s - 8.05s)
-      if (t >= 7.25 && t <= 8.05) {
-        const lp = (t - 7.25) / 0.8;
-        lensPortal.style.opacity = Math.sin(lp * Math.PI).toFixed(3);
-        const lScale = lerp(0.4, 6.5, easeInOutCubic(lp));
-        const lRot = lp * 110;
-        lensPortal.style.transform = `scale(${lScale.toFixed(3)}) rotate(${lRot.toFixed(1)}deg)`;
-      } else {
-        lensPortal.style.opacity = 0;
-      }
-
-      // Portal #3: Spinning Factory Gear (37.25s - 38.05s)
-      if (t >= 37.25 && t <= 38.05) {
-        const gp = (t - 37.25) / 0.8;
-        gearPortal.style.opacity = Math.sin(gp * Math.PI).toFixed(3);
-        const gScale = lerp(0.3, 5.8, easeInOutCubic(gp));
-        const gRot = gp * 180;
-        gearPortal.style.transform = `scale(${gScale.toFixed(3)}) rotate(${gRot.toFixed(1)}deg)`;
-      } else {
-        gearPortal.style.opacity = 0;
-      }
-
-      // =====================================================================
-      // CHAPTER 01 ANIMATION (0.0s – 8.0s)
-      // =====================================================================
-      const pPop = easeOutBack(clamp((t - 0.45) / 0.55));
-      document.getElementById("ch1-portrait").style.transform = `scale(${lerp(0.75, 1.0, pPop).toFixed(3)})`;
-      document.getElementById("ch1-portrait").style.opacity = clamp((t - 0.4) / 0.25);
-
-      const r1 = easeOutBack(clamp((t - 2.15) / 0.5));
-      const r2 = easeOutBack(clamp((t - 3.25) / 0.5));
-      const r3 = easeOutBack(clamp((t - 4.35) / 0.5));
-      document.getElementById("ch1-role-1").style.transform = `translate3d(${lerp(-60, 0, r1).toFixed(1)}px, 0, 0) scale(${lerp(0.85, 1, r1).toFixed(3)})`;
-      document.getElementById("ch1-role-1").style.opacity = clamp((t - 2.15) / 0.25);
-      document.getElementById("ch1-role-2").style.transform = `translate3d(${lerp(60, 0, r2).toFixed(1)}px, 0, 0) scale(${lerp(0.85, 1, r2).toFixed(3)})`;
-      document.getElementById("ch1-role-2").style.opacity = clamp((t - 3.25) / 0.25);
-      document.getElementById("ch1-role-3").style.transform = `translate3d(0, ${lerp(50, 0, r3).toFixed(1)}px, 0) scale(${lerp(0.88, 1, r3).toFixed(3)})`;
-      document.getElementById("ch1-role-3").style.opacity = clamp((t - 4.35) / 0.25);
-
-      // Self-drawing SVG wires
-      document.getElementById("ch1-wire-1").style.strokeDashoffset = (500 * (1 - clamp((t - 2.15) / 0.5))).toFixed(1);
-      document.getElementById("ch1-wire-2").style.strokeDashoffset = (500 * (1 - clamp((t - 3.25) / 0.5))).toFixed(1);
-      document.getElementById("ch1-wire-3").style.strokeDashoffset = (400 * (1 - clamp((t - 4.35) / 0.5))).toFixed(1);
-
-      const conv = easeOutBack(clamp((t - 5.25) / 0.45));
-      document.getElementById("ch1-converge").style.opacity = clamp((t - 5.25) / 0.25);
-      document.getElementById("ch1-converge").style.transform = `scale(${lerp(0.85, 1, conv).toFixed(3)})`;
-
-      // =====================================================================
-      // CHAPTER 02 ANIMATION (8.0s – 21.0s)
-      // =====================================================================
-      ch2BeatA.style.opacity = clamp(1 - (t - 12.0) / 0.35);
-      ch2BeatA.style.transform = `translate3d(0, ${lerp(30, 0, easeOutCubic(clamp((t - 8.0) / 0.6))).toFixed(1)}px, 0)`;
-      document.getElementById("ch2-highlight").style.strokeDashoffset = (620 * (1 - clamp((t - 9.15) / 0.65))).toFixed(1);
-
-      ch2BeatB.style.opacity = clamp((t - 11.95) / 0.35) * clamp(1 - (t - 16.35) / 0.35);
-      ch2BeatB.style.transform = `translate3d(0, ${lerp(35, 0, easeOutCubic(clamp((t - 12.1) / 0.55))).toFixed(1)}px, 0)`;
-
-      ch2BeatC.style.opacity = clamp((t - 16.3) / 0.35);
-      ch2BeatC.style.transform = `translate3d(0, ${lerp(35, 0, easeOutCubic(clamp((t - 16.4) / 0.55))).toFixed(1)}px, 0)`;
-      const beamAlpha = clamp((t - 16.65) / 0.45);
-      document.getElementById("ch2-beam-poly").style.opacity = beamAlpha.toFixed(2);
-
-      // =====================================================================
-      // CHAPTER 03 ANIMATION (21.0s – 38.0s)
-      // =====================================================================
-      ch3BeatA.style.opacity = clamp(1 - (t - 26.05) / 0.35);
-      ch3BeatB.style.opacity = clamp((t - 26.0) / 0.35) * clamp(1 - (t - 31.85) / 0.35);
-      ch3BeatC.style.opacity = clamp((t - 31.8) / 0.35);
-
-      const oppoVal = lerp(0.0, 7.9, easeOutCubic(clamp((t - 26.4) / 1.7)));
-      document.getElementById("oppo-counter").textContent = `${oppoVal.toFixed(1)}M`;
-
-      const b1 = easeOutBack(clamp((t - 32.75) / 0.4));
-      const b2 = easeOutBack(clamp((t - 33.85) / 0.4));
-      const b3 = easeOutBack(clamp((t - 34.95) / 0.4));
-      document.getElementById("dm-bub-1").style.transform = `scale(${lerp(0.7, 1, b1).toFixed(3)})`;
-      document.getElementById("dm-bub-1").style.opacity = clamp((t - 32.75) / 0.2);
-      document.getElementById("dm-bub-2").style.transform = `scale(${lerp(0.7, 1, b2).toFixed(3)})`;
-      document.getElementById("dm-bub-2").style.opacity = clamp((t - 33.85) / 0.2);
-      document.getElementById("dm-bub-3").style.transform = `scale(${lerp(0.7, 1, b3).toFixed(3)})`;
-      document.getElementById("dm-bub-3").style.opacity = clamp((t - 34.95) / 0.2);
-
-      // =====================================================================
-      // CHAPTER 04 ANIMATION (38.0s – 51.5s)
-      // =====================================================================
-      const c4a = easeOutBack(clamp((t - 38.1) / 0.55));
-      const c4b = easeOutBack(clamp((t - 38.45) / 0.55));
-      const c4c = easeOutBack(clamp((t - 38.8) / 0.55));
-      document.getElementById("ch4-caketing").style.transform = `translate3d(${lerp(-40, 0, c4a).toFixed(1)}px, 0, 0)`;
-      document.getElementById("ch4-cakvisual").style.transform = `translate3d(${lerp(40, 0, c4b).toFixed(1)}px, 0, 0)`;
-      document.getElementById("ch4-slam").style.transform = `scale(${lerp(0.9, 1.0, c4c).toFixed(3)})`;
-
-      // =====================================================================
-      // CHAPTER 05 ANIMATION (51.5s – 60.0s)
-      // =====================================================================
-      document.getElementById("ch5-orbit-svg").style.transform = `rotate(${((t - 51.5) * 28).toFixed(1)}deg)`;
-      const ctaPulse = t >= 57.2 ? 1 + Math.sin((t - 57.2) * 10) * 0.035 * Math.exp(-(t - 57.2) * 1.2) : 1;
-      document.getElementById("ch5-cta-btn").style.transform = `scale(${ctaPulse.toFixed(3)})`;
-
-      // =====================================================================
-      // STORYTELLING CAPTION BAR & HEADER UPDATES
-      // =====================================================================
-      if (t < 8.0) {
-        hdrChapter.textContent = "CHAPTER 01 // THE 3-IN-1 STORY";
-        capKicker.textContent = "01 · JUST BEING ME — INSIDE MY WORLD";
-        if (t < 4.8) {
-          capHeadline.innerHTML = `FILMMAKER, MARKETER, OR BUILDER? <span class="accent">I USE ALL 3.</span>`;
-        } else {
-          capHeadline.innerHTML = `THREE SKILLS COMBINED TO <span class="serif">Scale Real Stories.</span>`;
+          // White hot core of the katana blade
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = Math.max(2, 11 * (1 - st * 0.22));
+          ctx.beginPath();
+          ctx.moveTo(0, yStart);
+          ctx.lineTo(xCur, yCur);
+          ctx.stroke();
+          ctx.restore();
         }
-      } else if (t < 12.2) {
-        hdrChapter.textContent = "CHAPTER 02 // VISUAL ROOTS & EDUCATION";
-        capKicker.textContent = "02 · ISI SURAKARTA FILM & TV (CUM LAUDE 3.86)";
-        capHeadline.innerHTML = `FIVE YEARS DIRECTING <span class="accent">REAL FILM &amp; TV SETS.</span>`;
-      } else if (t < 16.5) {
-        hdrChapter.textContent = "CHAPTER 02 // 3D WORLDS & FESTIVALS";
-        capKicker.textContent = "02 · UCIFEST 12 & BOGOR FILM FESTIVAL NOMINEE";
-        capHeadline.innerHTML = `CRAFTING 3D &amp; VFX <span class="cyan">BEFORE TOUCHING AI.</span>`;
-      } else if (t < 21.0) {
-        hdrChapter.textContent = "CHAPTER 02 // LUMINARA VISUAL WORKS";
-        capKicker.textContent = "02 · CO-FOUNDER & ARCHITECTURAL MAPPING";
-        capHeadline.innerHTML = `TURNING GIANT BUILDINGS INTO <span class="serif">Moving Art.</span>`;
-      } else if (t < 26.2) {
-        hdrChapter.textContent = "CHAPTER 03 // AI GROWTH STRATEGY";
-        capKicker.textContent = "03 · HEAD OF CREATOR & AI STRATEGIST AT CAK AI";
-        capHeadline.innerHTML = `DIRECTING <span class="accent">20–90 AI PERSONAS</span> ACROSS 5 BRANDS.`;
-      } else if (t < 32.0) {
-        hdrChapter.textContent = "CHAPTER 03 // VIRAL PROOF: OPPO";
-        capKicker.textContent = "03 · OPPO @DIOLOGTECH VIRTUAL CREATOR";
-        capHeadline.innerHTML = `<span class="accent">7.9M POST VIEWS</span> &amp; 5.5M VIEWERS ON OPPO.`;
-      } else if (t < 38.0) {
-        hdrChapter.textContent = "CHAPTER 03 // REAL BUSINESS CONVERSION";
-        capKicker.textContent = "03 · CAK INVESTMENT CLUB (2.3M+ VIEWS)";
-        capHeadline.innerHTML = `<span class="emerald">~60% OF TIKTOK DMs</span> BECAME REAL MEMBERS.`;
-      } else if (t < 44.0) {
-        hdrChapter.textContent = "CHAPTER 04 // THE AI FACTORY PIPELINE";
-        capKicker.textContent = "04 · BUILT IN-HOUSE ENGINE 01: CAKETING";
-        capHeadline.innerHTML = `CAKETING: <span class="accent">200 PERSONA SCRIPTS</span> IN 3 HOURS.`;
-      } else if (t < 51.5) {
-        hdrChapter.textContent = "CHAPTER 04 // 5 DAYS CUT TO 5 HOURS";
-        capKicker.textContent = "04 · BUILT IN-HOUSE ENGINE 02: CAKVISUAL";
-        capHeadline.innerHTML = `2,000 VIDEOS/MO · <span class="emerald">5 DAYS CUT TO 5 HOURS.</span>`;
-      } else {
-        hdrChapter.textContent = "CHAPTER 05 // LET'S BUILD TOGETHER";
-        capKicker.textContent = "05 · FILMMAKER · GROWTH STRATEGIST · BUILDER";
-        capHeadline.innerHTML = `STRATEGY. <span class="serif">Stories.</span> <span class="accent">SYSTEMS.</span>`;
+
+        // 4. Transition Glitch / Chromatic Split Bars on Beat Boundaries
+        const transitionTimes = [0.15, 8.9, 20.9, 26.6, 37.9, 48.1, 51.5];
+        for (let k = 0; k < transitionTimes.length; k++) {
+          const dt = Math.abs(t - transitionTimes[k]);
+          if (dt < 0.22) {
+            const intensity = (0.22 - dt) / 0.22;
+            ctx.save();
+            for (let b = 0; b < 8; b++) {
+              const by = ((b * 237 + Math.floor(t * 90) * 73) % H);
+              const bh = 18 + (b % 3) * 24;
+              ctx.fillStyle = b % 2 === 0 ? `rgba(255, 0, 85, ${0.45 * intensity})` : `rgba(0, 240, 255, ${0.45 * intensity})`;
+              ctx.fillRect(0, by, W, bh);
+            }
+            ctx.restore();
+          }
+        }
+
+        // 5. Crisp Spider-Verse Comic Frame Border
+        ctx.save();
+        ctx.strokeStyle = 'rgba(248, 246, 240, 0.22)';
+        ctx.lineWidth = 10;
+        ctx.strokeRect(18, 18, W - 36, H - 36);
+        ctx.restore();
       }
-    }
 
-    renderAt(0);
+      // =========================================================================
+      // 3. DETERMINISTIC SCENE CHOREOGRAPHY & HYPERFRAMES TIMELINE
+      // =========================================================================
+      const bgTitleMain = document.getElementById('bg-title-main');
+      const bgTitleSub = document.getElementById('bg-title-sub');
 
-    const state = { t: 0 };
-    const tl = gsap.timeline({ paused: true });
-    tl.to(state, {
-      t: 60,
-      duration: 60,
-      ease: "none",
-      onUpdate: () => renderAt(state.t)
-    }, 0);
+      const sceneEls = [
+        document.getElementById('scene-01'),
+        document.getElementById('scene-02'),
+        document.getElementById('scene-03'),
+        document.getElementById('scene-04'),
+        document.getElementById('scene-05')
+      ];
 
-    window.__timelines = window.__timelines || {};
-    window.__timelines["root"] = tl;
+      const s1HeroWrap = document.getElementById('s1-hero-wrap');
+      const s1RoleStamp = document.getElementById('s1-role-stamp');
+
+      const s2CinemaPlane = document.getElementById('s2-cinema-plane');
+      const s2CinemaInset = document.getElementById('s2-cinema-inset');
+      const s2VfxPlane = document.getElementById('s2-vfx-plane');
+      const s2VfxSub = document.getElementById('s2-vfx-sub');
+      const s2LumiPlane = document.getElementById('s2-lumi-plane');
+      const s2Stamp = document.getElementById('s2-stamp');
+
+      const s3PhoneLeft = document.getElementById('s3-phone-left');
+      const s3PhoneRight = document.getElementById('s3-phone-right');
+      const s3PhoneCenter = document.getElementById('s3-phone-center');
+      const s3OppoMonolith = document.getElementById('s3-oppo-monolith');
+      const s3DmMonolith = document.getElementById('s3-dm-monolith');
+      const s3Balloon1 = document.getElementById('s3-balloon-1');
+      const s3Balloon2 = document.getElementById('s3-balloon-2');
+      const s3Balloon3 = document.getElementById('s3-balloon-3');
+      const s3Stamp = document.getElementById('s3-stamp');
+
+      const s4CaketingHolo = document.getElementById('s4-caketing-holo');
+      const s4CakvisualHolo = document.getElementById('s4-cakvisual-holo');
+      const s4SlashStage = document.getElementById('s4-slash-stage');
+      const s4FiveDaysTop = document.getElementById('s4-five-days-top');
+      const s4FiveDaysBot = document.getElementById('s4-five-days-bot');
+      const s4FiveHours = document.getElementById('s4-five-hours');
+      const s4Stamp = document.getElementById('s4-stamp');
+
+      const s5HeroWrap = document.getElementById('s5-hero-wrap');
+      const s5CtaStamp = document.getElementById('s5-cta-stamp');
+
+      function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+      function easeOutBack(x) {
+        const c1 = 1.70158, c3 = c1 + 1;
+        return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+      }
+
+      function renderSceneAt(t) {
+        const steppedT = Math.floor(t * 12) / 12;
+
+        // Reset visibility of all 5 scene rigs and 3D groups
+        for (let i = 0; i < sceneEls.length; i++) sceneEls[i].style.opacity = '0';
+        s1Group.visible = false;
+        s2Group.visible = false;
+        s3Group.visible = false;
+        s4TunnelGroup.visible = false;
+        s5HaloGroup.visible = false;
+
+        // Global 3D grid & shard motion
+        floorGrid.position.z = (t * 4.5) % 2;
+        ceilGrid.position.z = (t * 4.5) % 2;
+        shardGroup.rotation.y = t * 0.18;
+
+        // =====================================================================
+        // SCENE 01 (0.0s - 9.0s): THE GLITCH PORTAL & 3 ORBITING 3D ARTIFACTS
+        // =====================================================================
+        if (t < 9.0) {
+          sceneEls[0].style.opacity = '1';
+          s1Group.visible = true;
+
+          // Orbit the 3 Three.js 3D artifacts around Haidar in 3D space
+          camArtifact.position.set(Math.cos(t * 1.6) * 3.6, 2.5 + Math.sin(t * 2.2) * 0.6, Math.sin(t * 1.6) * 2.5);
+          camArtifact.rotation.set(steppedT * 1.4, steppedT * 1.8, 0);
+
+          viralArtifact.position.set(Math.cos(t * 1.6 + 2.1) * 3.8, 3.6 + Math.cos(t * 2.0) * 0.6, Math.sin(t * 1.6 + 2.1) * 2.5);
+          viralArtifact.rotation.set(steppedT * 1.8, steppedT * 1.2, 0);
+
+          gearArtifact.position.set(Math.cos(t * 1.6 + 4.2) * 3.6, 1.4 + Math.sin(t * 1.8) * 0.6, Math.sin(t * 1.6 + 4.2) * 2.5);
+          gearArtifact.rotation.set(steppedT * 1.5, steppedT * 2.1, 0);
+
+          // Dynamic Giant Background Title switching on the 3 roles
+          if (t < 2.4) {
+            bgTitleMain.textContent = 'HAIDAR';
+            bgTitleSub.textContent = '3 WORLDS · 1 BRAIN';
+            s1RoleStamp.textContent = 'MULTIVERSE ANOMALY #001';
+            s1RoleStamp.style.background = '#ffe600';
+          } else if (t < 4.4) {
+            bgTitleMain.textContent = 'DIRECTOR';
+            bgTitleSub.textContent = 'CINEMA & 3D VFX';
+            s1RoleStamp.textContent = 'PILLAR 01 · FILM & VISUAL CRAFT';
+            s1RoleStamp.style.background = '#ff4d00';
+          } else if (t < 6.4) {
+            bgTitleMain.textContent = 'STRATEGIST';
+            bgTitleSub.textContent = '7.9M VIRAL GROWTH';
+            s1RoleStamp.textContent = 'PILLAR 02 · VIRAL TECH MARKETING';
+            s1RoleStamp.style.background = '#00f0ff';
+          } else {
+            bgTitleMain.textContent = 'BUILDER';
+            bgTitleSub.textContent = 'AI SYSTEMS ARCHITECT';
+            s1RoleStamp.textContent = 'PILLAR 03 · IN-HOUSE AI ENGINES';
+            s1RoleStamp.style.background = '#00ff88';
+          }
+
+          // Camera & Subject Z-axis dive at 7.2s - 9.0s
+          const dive = t > 7.2 ? Math.pow((t - 7.2) / 1.8, 2.5) : 0;
+          camera.position.set(Math.sin(t * 1.2) * 0.6, 1.6, 11.0 - dive * 9.5);
+          camera.lookAt(0, 1.6, 0);
+
+          const entryPop = easeOutBack(clamp(t / 0.55, 0, 1));
+          const heroScale = entryPop * (1 + dive * 1.35);
+          const tiltDeg = Math.sin(steppedT * 2.5) * 2.2;
+          s1HeroWrap.style.transform = `translateX(-50%) scale(${heroScale.toFixed(3)}) rotate(${tiltDeg.toFixed(2)}deg)`;
+          bgTitleMain.style.transform = `rotate(-7deg) scale(${(1 + Math.sin(steppedT * 4) * 0.04).toFixed(3)})`;
+          bgTitleSub.style.transform = `rotate(-7deg) translateY(15px)`;
+        }
+
+        // =====================================================================
+        // SCENE 02 (9.0s - 21.0s): THE 3D CINEMA & LUMINARA SKYSCRAPER TOWER
+        // =====================================================================
+        else if (t < 21.0) {
+          sceneEls[1].style.opacity = '1';
+          s2Group.visible = true;
+          const lt = t - 9.0;
+
+          s2CinemaPlane.style.opacity = '0';
+          s2CinemaInset.style.opacity = '0';
+          s2VfxPlane.style.opacity = '0';
+          s2VfxSub.style.opacity = '0';
+          s2LumiPlane.style.opacity = '0';
+          blackholeMesh.visible = false;
+          towerGroup.visible = false;
+
+          // Beat 2A (9.0s - 13.0s): Directing & Cum Laude 3.86
+          if (lt < 4.0) {
+            const p = easeOutBack(clamp(lt / 0.5, 0, 1));
+            bgTitleMain.textContent = '3.86 GPA';
+            bgTitleSub.textContent = 'CUM LAUDE · 3.5 YRS';
+            s2Stamp.textContent = 'ISI SURAKARTA · FILM & TELEVISION';
+            s2Stamp.style.background = '#ffe600';
+
+            s2CinemaPlane.style.opacity = '1';
+            s2CinemaInset.style.opacity = '1';
+            s2CinemaPlane.style.transform = `rotateY(14deg) rotateX(5deg) rotateZ(-4deg) scale(${p.toFixed(3)})`;
+            s2CinemaInset.style.transform = `rotateY(-16deg) rotateZ(6deg) scale(${p.toFixed(3)}) translateZ(50px)`;
+
+            blackholeMesh.visible = true;
+            blackholeMesh.rotation.set(t * 0.8, t * 1.1, 0);
+            camera.position.set(Math.sin(lt) * 1.2, 1.5, 10.2);
+            camera.lookAt(0, 1.2, 0);
+          }
+          // Beat 2B (13.0s - 17.0s): 50+ Works & Festival Nominee + 3D Blackhole
+          else if (lt < 8.0) {
+            const bt = lt - 4.0;
+            const p = easeOutBack(clamp(bt / 0.5, 0, 1));
+            bgTitleMain.textContent = '50+ WORKS';
+            bgTitleSub.textContent = 'FESTIVAL NOMINEE';
+            s2Stamp.textContent = 'UCIFEST 12 & BOGOR FILM FESTIVAL';
+            s2Stamp.style.background = '#00f0ff';
+
+            s2VfxPlane.style.opacity = '1';
+            s2VfxSub.style.opacity = '1';
+            s2VfxPlane.style.transform = `rotateY(-14deg) rotateX(6deg) rotateZ(3deg) scale(${p.toFixed(3)})`;
+            s2VfxSub.style.transform = `rotateY(16deg) rotateZ(-5deg) scale(${p.toFixed(3)}) translateZ(60px)`;
+
+            blackholeMesh.visible = true;
+            blackholeMesh.scale.setScalar(1.35);
+            blackholeMesh.rotation.set(t * 1.5, t * 2.0, 0);
+            camera.position.set(-Math.sin(bt) * 1.4, 1.6, 9.5);
+            camera.lookAt(0, 1.2, 0);
+          }
+          // Beat 2C (17.0s - 21.0s): Luminara 3D Skyscraper Projection Mapping
+          else {
+            const bt = lt - 8.0;
+            const p = easeOutBack(clamp(bt / 0.5, 0, 1));
+            bgTitleMain.textContent = 'LUMINARA';
+            bgTitleSub.textContent = 'CO-FOUNDER · MAPPING';
+            s2Stamp.textContent = 'ARCHITECTURAL PROJECTION & LIVE SHOWS';
+            s2Stamp.style.background = '#ff0055';
+            s2Stamp.style.color = '#f8f6f0';
+
+            s2LumiPlane.style.opacity = '1';
+            s2LumiPlane.style.transform = `rotateY(10deg) rotateX(-6deg) rotateZ(-3deg) scale(${p.toFixed(3)})`;
+
+            towerGroup.visible = true;
+            towerGroup.position.y = -3.5 + Math.min(4.5, bt * 3.5);
+            towerGroup.rotation.y = t * 0.65;
+            camera.position.set(0, 0.8 + bt * 0.4, 11.2 - bt * 0.5);
+            camera.lookAt(0, 1.8, 0);
+          }
+        }
+
+        // =====================================================================
+        // SCENE 03 (21.0s - 38.0s): THE 3D HOLOGRAM MONOLITH (7.9M & 60% DM)
+        // =====================================================================
+        else if (t < 38.0) {
+          sceneEls[2].style.opacity = '1';
+          s3Group.visible = true;
+          const lt = t - 21.0;
+
+          s3Group.rotation.y = t * 0.9;
+          s3Group.rotation.x = Math.sin(t * 0.7) * 0.35;
+
+          s3PhoneLeft.style.opacity = '0';
+          s3PhoneRight.style.opacity = '0';
+          s3PhoneCenter.style.opacity = '0';
+          s3OppoMonolith.style.opacity = '0';
+          s3DmMonolith.style.opacity = '0';
+          s3Balloon1.style.opacity = '0';
+          s3Balloon2.style.opacity = '0';
+          s3Balloon3.style.opacity = '0';
+
+          // Beat 3A (21.0s - 26.5s): 3 Giant Hologram Phones in 3D Carousel (90 Personas / 5 Brands)
+          if (lt < 5.5) {
+            const p = easeOutBack(clamp(lt / 0.55, 0, 1));
+            bgTitleMain.textContent = '90 PERSONAS';
+            bgTitleSub.textContent = '5 BRAND ECOSYSTEMS';
+            s3Stamp.textContent = 'CAK AI · HEAD OF CREATOR & AI MARKETING';
+            s3Stamp.style.background = '#00f0ff';
+
+            s3PhoneLeft.style.opacity = '1';
+            s3PhoneRight.style.opacity = '1';
+            s3PhoneCenter.style.opacity = '1';
+
+            const sway = Math.sin(steppedT * 2.5) * 6;
+            s3PhoneLeft.style.transform = `translate3d(-30px, 40px, -120px) rotateY(26deg) rotateZ(-6deg) scale(${(p * 0.92).toFixed(3)})`;
+            s3PhoneRight.style.transform = `translate3d(30px, 40px, -120px) rotateY(-26deg) rotateZ(6deg) scale(${(p * 0.92).toFixed(3)})`;
+            s3PhoneCenter.style.transform = `translate3d(0px, ${sway}px, 80px) rotateY(${(sway * 1.5).toFixed(1)}deg) scale(${p.toFixed(3)})`;
+
+            camera.position.set(Math.sin(t) * 0.9, 1.4, 10.5);
+            camera.lookAt(0, 1.2, 0);
+          }
+          // Beat 3B (26.5s - 32.5s): 7.9M VIEWS OPPO HERO MONOLITH + IMPACT COUNTER
+          else if (lt < 11.5) {
+            const bt = lt - 5.5;
+            const p = easeOutBack(clamp(bt / 0.45, 0, 1));
+            const countVal = Math.min(7.9, (bt / 1.1) * 7.9).toFixed(1);
+            bgTitleMain.textContent = `${countVal}M VIEWS`;
+            bgTitleSub.textContent = 'OPPO @DIOLOGTECH';
+            s3Stamp.textContent = '5.5M UNIQUE VIEWERS · 192K LIKES · 98.7% FYP';
+            s3Stamp.style.background = '#ff4d00';
+
+            s3OppoMonolith.style.opacity = '1';
+            const shakeX = bt < 0.35 ? Math.sin(bt * 90) * 14 : 0;
+            s3OppoMonolith.style.transform = `translate3d(${shakeX.toFixed(1)}px, 0, 60px) rotateY(-12deg) rotateX(6deg) rotateZ(-3deg) scale(${p.toFixed(3)})`;
+
+            camera.position.set(Math.cos(t * 1.5) * 1.1, 1.5, 9.6);
+            camera.lookAt(0, 1.2, 0);
+          }
+          // Beat 3C (32.5s - 38.0s): 60% DM CONVERSION + 3 FLYING COMIC CHAT BALLOONS
+          else {
+            const bt = lt - 11.5;
+            const p = easeOutBack(clamp(bt / 0.45, 0, 1));
+            const dmPct = Math.round(Math.min(60, (bt / 1.0) * 60));
+            bgTitleMain.textContent = `${dmPct}% DM RATE`;
+            bgTitleSub.textContent = '2.3M+ FUNNEL VIEWS';
+            s3Stamp.textContent = 'TIKTOK DM -> ACTIVE COMMUNITY MEMBERS';
+            s3Stamp.style.background = '#00ff88';
+
+            s3DmMonolith.style.opacity = '1';
+            s3DmMonolith.style.transform = `rotateY(12deg) rotateX(4deg) rotateZ(2deg) scale(${p.toFixed(3)})`;
+
+            if (bt > 0.3) {
+              const b1 = easeOutBack(clamp((bt - 0.3) / 0.35, 0, 1));
+              s3Balloon1.style.opacity = '1';
+              s3Balloon1.style.transform = `translateZ(120px) rotate(-6deg) scale(${b1.toFixed(3)})`;
+            }
+            if (bt > 1.1) {
+              const b2 = easeOutBack(clamp((bt - 1.1) / 0.35, 0, 1));
+              s3Balloon2.style.opacity = '1';
+              s3Balloon2.style.transform = `translateZ(150px) rotate(5deg) scale(${b2.toFixed(3)})`;
+            }
+            if (bt > 1.9) {
+              const b3 = easeOutBack(clamp((bt - 1.9) / 0.35, 0, 1));
+              s3Balloon3.style.opacity = '1';
+              s3Balloon3.style.transform = `translateZ(180px) rotate(-4deg) scale(${b3.toFixed(3)})`;
+            }
+
+            camera.position.set(Math.sin(t * 1.3) * 0.9, 1.4, 9.8);
+            camera.lookAt(0, 1.2, 0);
+          }
+        }
+
+        // =====================================================================
+        // SCENE 04 (38.0s - 51.5s): THE 3D CYBER-REACTOR & KATANA SLASH
+        // =====================================================================
+        else if (t < 51.5) {
+          sceneEls[3].style.opacity = '1';
+          s4TunnelGroup.visible = true;
+          const lt = t - 38.0;
+
+          // Fly camera through the spinning 3D Cyberpunk Torus Reactor Tunnel
+          for (let i = 0; i < s4TunnelGroup.children.length; i++) {
+            const ring = s4TunnelGroup.children[i];
+            ring.rotation.z = t * (i % 2 === 0 ? 1.4 : -1.4);
+            ring.position.z = ((i * 2.2 + t * 8.0) % 28) - 18;
+          }
+
+          s4CaketingHolo.style.opacity = '0';
+          s4CakvisualHolo.style.opacity = '0';
+          s4SlashStage.style.opacity = '0';
+
+          // Beat 4A (38.0s - 43.5s): CAKETING (200 SCRIPTS / 3 HRS)
+          if (lt < 5.5) {
+            const p = easeOutBack(clamp(lt / 0.45, 0, 1));
+            bgTitleMain.textContent = 'CAKETING';
+            bgTitleSub.textContent = '200 SCRIPTS / 3 HRS';
+            s4Stamp.textContent = 'IN-HOUSE AI MARKETING & SCRIPT ENGINE';
+            s4Stamp.style.background = '#ff4d00';
+
+            s4CaketingHolo.style.opacity = '1';
+            s4CaketingHolo.style.transform = `rotateY(14deg) rotateX(6deg) rotateZ(-3deg) scale(${p.toFixed(3)})`;
+          }
+          // Beat 4B (43.5s - 48.0s): CAKVISUAL (2,000 VIDEOS / MO)
+          else if (lt < 10.0) {
+            const bt = lt - 5.5;
+            const p = easeOutBack(clamp(bt / 0.45, 0, 1));
+            bgTitleMain.textContent = 'CAKVISUAL';
+            bgTitleSub.textContent = '2,000 VIDEOS / MO';
+            s4Stamp.textContent = 'AUTOMATED MULTI-BRAND VIDEO PRODUCTION';
+            s4Stamp.style.background = '#00f0ff';
+
+            s4CakvisualHolo.style.opacity = '1';
+            s4CakvisualHolo.style.transform = `rotateY(-14deg) rotateX(6deg) rotateZ(3deg) scale(${p.toFixed(3)})`;
+          }
+          // Beat 4C (48.0s - 51.5s): KATANA SLASH ("5 DAYS" SLICED IN HALF -> "5 HOURS!")
+          else {
+            const st = lt - 10.0;
+            bgTitleMain.textContent = '10X FASTER';
+            bgTitleSub.textContent = 'AI WORKFLOW';
+            s4Stamp.textContent = '5 DAYS OF MANUAL WORK CRUSHED INTO 5 HOURS';
+            s4Stamp.style.background = '#00ff88';
+
+            s4SlashStage.style.opacity = '1';
+            const splitDist = Math.min(75, Math.max(0, (st - 0.12) * 180));
+            s4FiveDaysTop.style.transform = `rotate(-6deg) translate(${-splitDist * 0.9}px, ${-splitDist * 0.45}px)`;
+            s4FiveDaysBot.style.transform = `rotate(-6deg) translate(${splitDist * 0.9}px, ${splitDist * 0.45}px)`;
+
+            if (st > 0.22) {
+              const hp = easeOutBack(clamp((st - 0.22) / 0.4, 0, 1));
+              s4FiveHours.style.opacity = '1';
+              s4FiveHours.style.transform = `rotate(-5deg) scale(${hp.toFixed(3)})`;
+            } else {
+              s4FiveHours.style.opacity = '0';
+            }
+          }
+
+          camera.position.set(Math.sin(t * 2) * 0.5, 1.2, 8.8);
+          camera.lookAt(0, 1.2, -10);
+        }
+
+        // =====================================================================
+        // SCENE 05 (51.5s - 60.0s): SPIDER-VERSE FREEZE-FRAME HERO LANDING POSTER
+        // =====================================================================
+        else {
+          sceneEls[4].style.opacity = '1';
+          s5HaloGroup.visible = true;
+          const lt = t - 51.5;
+
+          haloStar.rotation.set(steppedT * 0.8, steppedT * 1.1, 0);
+
+          bgTitleMain.textContent = 'HAIDAR GHAZY';
+          bgTitleSub.textContent = 'STRATEGY · STORIES · SYSTEMS';
+
+          const p = easeOutBack(clamp(lt / 0.55, 0, 1));
+          const breathe = 1 + Math.sin(steppedT * 3) * 0.02;
+          s5HeroWrap.style.transform = `translateX(-50%) scale(${(p * breathe).toFixed(3)})`;
+          s5CtaStamp.style.transform = `translateX(-50%) rotate(-3deg) scale(${p.toFixed(3)})`;
+
+          camera.position.set(Math.sin(t * 0.8) * 0.5, 1.6, 9.8);
+          camera.lookAt(0, 1.8, 0);
+        }
+
+        // Render Three.js 3D WebGL World & 2D Spider-Verse Shader Overlay
+        renderer.render(scene, camera);
+        drawSpiderVerseFX(t, steppedT);
+      }
+
+      // Build Master GSAP Timeline (60.0s) & Bind to HyperFrames Window Contract
+      const masterTl = gsap.timeline({ paused: true });
+      const proxy = { t: 0 };
+      masterTl.to(proxy, {
+        t: 60.0,
+        duration: 60.0,
+        ease: 'none',
+        onUpdate: function () {
+          renderSceneAt(proxy.t);
+        }
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = masterTl;
+      renderSceneAt(0);
+    })();
   </script>
 </body>
 </html>

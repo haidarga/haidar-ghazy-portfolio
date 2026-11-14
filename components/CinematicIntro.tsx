@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, ArrowUpRight, FilmStrip, Play, SpeakerHigh, SpeakerSlash } from '@phosphor-icons/react';
 import { useAppContext } from '@/components/AppProviders';
 
-const INTRO_STORAGE_KEY = 'hga_intro_choice_v4';
+const INTRO_STORAGE_KEY = 'hga_intro_choice_v5';
 
 export function CinematicIntro() {
   const { setScrollLocked } = useAppContext();
@@ -143,7 +143,7 @@ export function CinematicIntro() {
                 Step inside Haidar&apos;s world — from directing on-set cinema, 3D &amp; VFX to driving <strong className="text-white">7.9M+ AI views</strong>, <strong className="text-white">~60% DM conversions</strong>, and building <strong className="text-white">CAKETING &amp; CakVisual</strong>.
               </p>
 
-              <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm: flex-wrap sm:items-center sm:justify-center sm:gap-3.5">
+              <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3.5">
                 <button
                   type="button"
                   onClick={() => handleEnterShowreel('intro')}
@@ -237,7 +237,9 @@ export function CinematicIntro() {
 
                 <div className="mt-4 flex w-full flex-wrap items-center justify-between gap-2 text-xs text-white/75">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-white">The Anomaly — Inside Haidar&apos;s World · {durationLabel}</span>
+                    <span className="font-semibold text-white">
+                      {reelKind === 'intro' ? 'Warp Drive — Inside Haidar’s World' : 'Inside Haidar’s World'} · {durationLabel}
+                    </span>
                     <button
                       type="button"
                       onClick={handleToggleMute}
